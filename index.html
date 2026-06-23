@@ -572,6 +572,8 @@
   .access-err { background:rgba(233,69,96,.1); border:1px solid rgba(233,69,96,.3); border-radius:8px; padding:12px 14px; font-size:13px; color:#ff6b6b; margin-bottom:14px; display:none; }
   .access-err.show { display:block; }
   .form-field input[type=password] { letter-spacing:2px; }
+  .access-btn:disabled { background:#2a2a4a; color:#4a4a6a; cursor:not-allowed; border:1px solid #3a3a5a; }
+  .access-btn:disabled:hover { background:#2a2a4a; }
 </style>
 
 <section class="access" id="access">
@@ -648,22 +650,33 @@
               <div class="liability-section-lbl">Platform Role</div>
               <p>Private Chauffeur Connect connects vehicle owners with chauffeurs. Any disputes over fines, damage, or money are between the owner and chauffeur directly. The platform is not liable for what happens during a booking.</p>
             </div>
-            <div class="consent-row" onclick="toggleConsent('ch-liability-check')">
+            <div class="consent-row" onclick="toggleConsent('ch-liability-check', 'ch-btn', 'ch-tc-check')">
               <div class="consent-box" id="ch-liability-check"></div>
               <p>I have read and agree to the Transfer of Liability terms above</p>
             </div>
           </div>
           <!-- T&C -->
           <div class="liability-box">
-            <div class="liability-header">
+            <div class="liability-header" onclick="toggleLiability('ch-tc')">
               <span>📜 Terms &amp; Conditions</span>
+              <button class="liability-toggle" id="ch-tc-btn">▼ Read</button>
             </div>
-            <div class="consent-row" onclick="toggleConsent('ch-tc-check')">
+            <div class="liability-body" id="ch-tc">
+              <div class="liability-section-lbl">Use of Platform</div>
+              <p>By registering you agree to use Private Chauffeur Connect solely for lawful purposes. You must not misuse the platform, impersonate others, or submit false information.</p>
+              <div class="liability-section-lbl">Bookings &amp; Payments</div>
+              <p>All bookings are subject to availability. Payments are processed securely through the platform. Cancellation terms apply as stated at time of booking.</p>
+              <div class="liability-section-lbl">Account Responsibility</div>
+              <p>You are responsible for maintaining the confidentiality of your account credentials. Private Chauffeur Connect reserves the right to suspend accounts that breach these terms.</p>
+              <div class="liability-section-lbl">Changes to Terms</div>
+              <p>We may update these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
+            </div>
+            <div class="consent-row" onclick="toggleConsent('ch-tc-check', 'ch-btn', 'ch-liability-check')">
               <div class="consent-box" id="ch-tc-check"></div>
               <p>I have read and agree to the Terms &amp; Conditions of Private Chauffeur Connect</p>
             </div>
           </div>
-          <button class="access-btn" id="ch-btn" onclick="webRegister('chauffeur')">Register as Chauffeur</button>
+          <button class="access-btn" id="ch-btn" onclick="webRegister('chauffeur')" disabled>Register as Chauffeur</button>
         </div>
         <div class="access-success" id="chauffeur-success">
           <div class="s-icon">📧</div>
@@ -708,22 +721,33 @@
               <div class="liability-section-lbl">Platform Role</div>
               <p>Private Chauffeur Connect connects vehicle owners with chauffeurs. Any disputes over fines, damage, or money are between the owner and chauffeur directly. The platform is not liable for what happens during a booking.</p>
             </div>
-            <div class="consent-row" onclick="toggleConsent('ow-liability-check')">
+            <div class="consent-row" onclick="toggleConsent('ow-liability-check', 'ow-btn', 'ow-tc-check')">
               <div class="consent-box" id="ow-liability-check"></div>
               <p>I have read and agree to the Transfer of Liability terms above</p>
             </div>
           </div>
           <!-- T&C -->
           <div class="liability-box">
-            <div class="liability-header">
+            <div class="liability-header" onclick="toggleLiability('ow-tc')">
               <span>📜 Terms &amp; Conditions</span>
+              <button class="liability-toggle" id="ow-tc-btn">▼ Read</button>
             </div>
-            <div class="consent-row" onclick="toggleConsent('ow-tc-check')">
+            <div class="liability-body" id="ow-tc">
+              <div class="liability-section-lbl">Use of Platform</div>
+              <p>By registering you agree to use Private Chauffeur Connect solely for lawful purposes. You must not misuse the platform, impersonate others, or submit false information.</p>
+              <div class="liability-section-lbl">Bookings &amp; Payments</div>
+              <p>All bookings are subject to availability. Payments are processed securely through the platform. Cancellation terms apply as stated at time of booking.</p>
+              <div class="liability-section-lbl">Account Responsibility</div>
+              <p>You are responsible for maintaining the confidentiality of your account credentials. Private Chauffeur Connect reserves the right to suspend accounts that breach these terms.</p>
+              <div class="liability-section-lbl">Changes to Terms</div>
+              <p>We may update these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
+            </div>
+            <div class="consent-row" onclick="toggleConsent('ow-tc-check', 'ow-btn', 'ow-liability-check')">
               <div class="consent-box" id="ow-tc-check"></div>
               <p>I have read and agree to the Terms &amp; Conditions of Private Chauffeur Connect</p>
             </div>
           </div>
-          <button class="access-btn" id="ow-btn" onclick="webRegister('owner')">Register as Vehicle Owner</button>
+          <button class="access-btn" id="ow-btn" onclick="webRegister('owner')" disabled>Register as Vehicle Owner</button>
         </div>
         <div class="access-success" id="owner-success">
           <div class="s-icon">📧</div>
@@ -744,8 +768,13 @@ function toggleLiability(id) {
   const open = body.classList.toggle('open');
   if (btn) btn.textContent = open ? '▲ Hide' : '▼ Read';
 }
-function toggleConsent(id) {
+function toggleConsent(id, btnId, otherId) {
   document.getElementById(id).classList.toggle('checked');
+  if (btnId) {
+    const bothChecked = document.getElementById(id).classList.contains('checked') &&
+                        document.getElementById(otherId).classList.contains('checked');
+    document.getElementById(btnId).disabled = !bothChecked;
+  }
 }
 function isChecked(id) { return document.getElementById(id).classList.contains('checked'); }
 function showErr(id, msg) { const e = document.getElementById(id); e.textContent = msg; e.classList.add('show'); }
