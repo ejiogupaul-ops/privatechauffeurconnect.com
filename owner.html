@@ -224,7 +224,7 @@
           <input type="text" id="p-name" placeholder="Your full name" />
         </div>
         <div class="field">
-          <label>Phone Number</label>
+          <label>Phone Number <span style="color:#e94560;">*</span></label>
           <input type="tel" id="p-phone" placeholder="+44 7XXX XXXXXX" />
         </div>
       </div>
@@ -234,7 +234,7 @@
       </div>
       <div class="form-row">
         <div class="field">
-          <label>Home Address</label>
+          <label>Home Address <span style="color:#e94560;">*</span></label>
           <input type="text" id="p-home-addr" placeholder="Street address" />
         </div>
         <div class="field">
@@ -252,7 +252,7 @@
           <input type="text" id="p-work-post" placeholder="e.g. M1 2AB" />
         </div>
       </div>
-      <button class="btn" id="profile-btn" onclick="doSaveProfile()">Save Profile &amp; Go to Dashboard →</button>
+      <button class="btn" id="profile-btn" onclick="doSaveProfile()">Save Profile →</button>
     </div>
   </div>
 
@@ -480,25 +480,26 @@
     const work_address = document.getElementById('p-work-addr').value.trim();
     const work_postcode = document.getElementById('p-work-post').value.trim();
     if (!phone) return showErr('profile-err', 'Phone number is required.');
-    setLoading('profile-btn', true, 'Save Profile & Go to Dashboard →');
+    if (!home_address) return showErr('profile-err', 'Home address is required.');
+    setLoading('profile-btn', true, 'Saving…');
     try {
       const res = await fetch(`${API}/owners/profile`, {
         method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ phone, bio, home_address, home_postcode, work_address, work_postcode })
+        body: JSON.stringify({ phone, home_address, home_postcode, work_address, work_postcode })
       });
+      let d = {};
+      try { d = await res.json(); } catch {}
       if (!res.ok) {
-        const d = await res.json();
-        showErr('profile-err', d.error || d.message || 'Failed to save profile.');
+        showErr('profile-err', d.error || d.message || `Server error (${res.status}). Please try again.`);
         return;
       }
-      // Get vehicle for done page
       const vr = await fetch(`${API}/vehicles`, { headers: { Authorization: `Bearer ${token}` } });
       const vehicles = vr.ok ? await vr.json() : [];
       if (vehicles[0]) document.getElementById('done-vehicle').textContent = `${vehicles[0].make} ${vehicles[0].model || ''} · ${vehicles[0].registration}`;
       document.getElementById('done-name').textContent = (userName || '').split(' ')[0];
       showPage('page-done');
-    } catch { showErr('profile-err', 'Cannot reach server. Please try again.'); }
-    finally { setLoading('profile-btn', false, 'Save Profile & Go to Dashboard →'); }
+    } catch (err) { showErr('profile-err', 'Cannot reach server. Please check your connection and try again.'); }
+    finally { setLoading('profile-btn', false, 'Save Profile →'); }
   }
 
   // Allow Enter key on login
