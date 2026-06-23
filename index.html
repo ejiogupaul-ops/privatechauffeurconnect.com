@@ -344,7 +344,7 @@
     <a href="#chauffeurs">Top Chauffeurs</a>
     <a href="#owners">Vehicle Owners</a>
     <a href="#contact">Contact</a>
-    <a href="#access" class="nav-login">Login</a>
+    <a href="/login.html" class="nav-login">Login</a>
   </div>
   <div class="nav-hamburger" onclick="document.querySelector('.nav-links').style.display='flex';document.querySelector('.nav-links').style.flexDirection='column';document.querySelector('.nav-links').style.position='fixed';document.querySelector('.nav-links').style.top='68px';document.querySelector('.nav-links').style.right='0';document.querySelector('.nav-links').style.background='#0f0f1e';document.querySelector('.nav-links').style.padding='24px';document.querySelector('.nav-links').style.gap='20px';document.querySelector('.nav-links').style.borderLeft='1px solid rgba(201,168,76,.2)';">
     <span></span><span></span><span></span>
@@ -592,34 +592,6 @@
     </div>
     <div class="access-grid">
 
-      <!-- LOGIN -->
-      <div class="access-card reveal">
-        <div id="login-form-area">
-          <h3>Login</h3>
-          <p>Welcome back. Sign in to your account.</p>
-          <div class="access-err" id="web-login-err"></div>
-          <div class="form-field">
-            <label>Email Address</label>
-            <input type="email" id="web-login-email" placeholder="your@email.com" />
-          </div>
-          <div class="form-field">
-            <label>Password</label>
-            <div class="pw-wrap">
-              <input type="password" id="web-login-pw" placeholder="••••••••" />
-              <button class="pw-eye" type="button" onclick="togglePw('web-login-pw',this)" title="Show/hide password">👁</button>
-            </div>
-          </div>
-          <button class="access-btn" id="web-login-btn" onclick="webLogin()">Sign In</button>
-          <div class="access-divider">— or —</div>
-          <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="access-link">📱 Download the App Instead</a>
-        </div>
-        <div class="access-success" id="login-success">
-          <div class="s-icon">✅</div>
-          <h4>Signed In!</h4>
-          <p>Redirecting you to your dashboard…</p>
-        </div>
-      </div>
-
       <!-- REGISTER AS CHAUFFEUR -->
       <div class="access-card reveal reveal-delay-1" id="chauffeur-register">
         <div id="chauffeur-form-area">
@@ -798,26 +770,6 @@ function toggleConsent(id, btnId, otherId) {
 function isChecked(id) { return document.getElementById(id).classList.contains('checked'); }
 function showErr(id, msg) { const e = document.getElementById(id); e.textContent = msg; e.classList.add('show'); }
 function hideErr(id) { document.getElementById(id).classList.remove('show'); }
-
-async function webLogin() {
-  hideErr('web-login-err');
-  const email = document.getElementById('web-login-email').value.trim();
-  const pw = document.getElementById('web-login-pw').value;
-  if (!email || !pw) return showErr('web-login-err', 'Please enter your email and password.');
-  const btn = document.getElementById('web-login-btn');
-  btn.disabled = true; btn.textContent = 'Signing in…';
-  try {
-    const res = await fetch(`${API}/auth/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password: pw }) });
-    const data = await res.json();
-    if (!res.ok) { showErr('web-login-err', data.message || data.error || 'Login failed.'); return; }
-    document.getElementById('login-form-area').style.display = 'none';
-    document.getElementById('login-success').style.display = 'block';
-    setTimeout(() => {
-      if (data.user.role === 'owner') window.location.href = '/owner.html';
-    }, 1500);
-  } catch { showErr('web-login-err', 'Cannot reach server. Please try again.'); }
-  finally { btn.disabled = false; btn.textContent = 'Sign In'; }
-}
 
 async function webRegister(role) {
   const prefix = role === 'chauffeur' ? 'ch' : 'ow';
