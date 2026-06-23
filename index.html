@@ -571,7 +571,10 @@
   .access-success p { font-size:13px; color:var(--muted); line-height:1.6; }
   .access-err { background:rgba(233,69,96,.1); border:1px solid rgba(233,69,96,.3); border-radius:8px; padding:12px 14px; font-size:13px; color:#ff6b6b; margin-bottom:14px; display:none; }
   .access-err.show { display:block; }
-  .form-field input[type=password] { letter-spacing:2px; }
+  .pw-wrap { position:relative; }
+  .pw-wrap input { width:100%; padding-right:48px; }
+  .pw-eye { position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--muted); font-size:18px; line-height:1; padding:4px; }
+  .pw-eye:hover { color:var(--gold); }
   .access-btn:disabled { background:#2a2a4a; color:#4a4a6a; cursor:not-allowed; border:1px solid #3a3a5a; }
   .access-btn:disabled:hover { background:#2a2a4a; }
 </style>
@@ -601,7 +604,10 @@
           </div>
           <div class="form-field">
             <label>Password</label>
-            <input type="password" id="web-login-pw" placeholder="••••••••" />
+            <div class="pw-wrap">
+              <input type="password" id="web-login-pw" placeholder="••••••••" />
+              <button class="pw-eye" type="button" onclick="togglePw('web-login-pw',this)" title="Show/hide password">👁</button>
+            </div>
           </div>
           <button class="access-btn" id="web-login-btn" onclick="webLogin()">Sign In</button>
           <div class="access-divider">— or —</div>
@@ -634,7 +640,10 @@
           </div>
           <div class="form-field">
             <label>Password</label>
-            <input type="password" id="ch-pw" placeholder="Min. 8 characters" />
+            <div class="pw-wrap">
+              <input type="password" id="ch-pw" placeholder="Min. 8 characters" />
+              <button class="pw-eye" type="button" onclick="togglePw('ch-pw',this)" title="Show/hide password">👁</button>
+            </div>
           </div>
           <!-- Transfer of Liability -->
           <div class="liability-box">
@@ -705,7 +714,10 @@
           </div>
           <div class="form-field">
             <label>Password</label>
-            <input type="password" id="ow-pw" placeholder="Min. 8 characters" />
+            <div class="pw-wrap">
+              <input type="password" id="ow-pw" placeholder="Min. 8 characters" />
+              <button class="pw-eye" type="button" onclick="togglePw('ow-pw',this)" title="Show/hide password">👁</button>
+            </div>
           </div>
           <!-- Transfer of Liability -->
           <div class="liability-box">
@@ -761,6 +773,13 @@
 
 <script>
 const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
+
+function togglePw(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+}
 
 function toggleLiability(id) {
   const body = document.getElementById(id);
