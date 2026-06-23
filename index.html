@@ -551,6 +551,29 @@
 </section>
 
 <!-- ══ SEAMLESS ACCESS ════════════════════════════ -->
+<style>
+  .liability-box { background:rgba(201,168,76,.05); border:1px solid rgba(201,168,76,.2); border-radius:12px; margin-bottom:14px; overflow:hidden; }
+  .liability-header { display:flex; justify-content:space-between; align-items:center; padding:13px 16px; cursor:pointer; }
+  .liability-header span { font-size:13px; color:var(--gold); font-weight:600; }
+  .liability-toggle { font-size:12px; color:var(--gold); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; }
+  .liability-body { padding:0 16px 14px; border-top:1px solid rgba(255,255,255,.06); display:none; }
+  .liability-body.open { display:block; }
+  .liability-section-lbl { font-size:10px; color:var(--gold); font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin:14px 0 6px; }
+  .liability-body p { font-size:12px; color:var(--muted); line-height:1.8; }
+  .consent-row { display:flex; align-items:flex-start; gap:12px; padding:13px 16px; border-top:1px solid rgba(255,255,255,.06); cursor:pointer; }
+  .consent-box { width:20px; height:20px; border-radius:5px; border:2px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; transition:all .2s; }
+  .consent-box.checked { background:var(--gold); border-color:var(--gold); }
+  .consent-box.checked::after { content:'✓'; color:#000; font-size:12px; font-weight:bold; }
+  .consent-row p { font-size:12px; color:var(--muted); line-height:1.6; }
+  .access-success { display:none; text-align:center; padding:20px 0; }
+  .access-success .s-icon { font-size:52px; margin-bottom:16px; }
+  .access-success h4 { font-size:18px; color:#fff; margin-bottom:8px; }
+  .access-success p { font-size:13px; color:var(--muted); line-height:1.6; }
+  .access-err { background:rgba(233,69,96,.1); border:1px solid rgba(233,69,96,.3); border-radius:8px; padding:12px 14px; font-size:13px; color:#ff6b6b; margin-bottom:14px; display:none; }
+  .access-err.show { display:block; }
+  .form-field input[type=password] { letter-spacing:2px; }
+</style>
+
 <section class="access" id="access">
   <div class="inner">
     <div class="section-center reveal">
@@ -560,81 +583,222 @@
         <div class="line"></div>
       </div>
       <h2 class="section-title">Get Started<br><em>In Minutes</em></h2>
-      <p class="section-sub">Download the app to log in or register. Use the links below to get straight to it.</p>
+      <p class="section-sub">Register directly on the website or download the app — your account works on both.</p>
     </div>
     <div class="access-grid">
 
-      <!-- Login -->
+      <!-- LOGIN -->
       <div class="access-card reveal">
-        <h3>Login</h3>
-        <p>Welcome back. Sign in to your account to manage your bookings and profile.</p>
-        <div class="form-field">
-          <label>Email Address</label>
-          <input type="email" placeholder="your@email.com" />
+        <div id="login-form-area">
+          <h3>Login</h3>
+          <p>Welcome back. Sign in to your account.</p>
+          <div class="access-err" id="web-login-err"></div>
+          <div class="form-field">
+            <label>Email Address</label>
+            <input type="email" id="web-login-email" placeholder="your@email.com" />
+          </div>
+          <div class="form-field">
+            <label>Password</label>
+            <input type="password" id="web-login-pw" placeholder="••••••••" />
+          </div>
+          <button class="access-btn" id="web-login-btn" onclick="webLogin()">Sign In</button>
+          <div class="access-divider">— or —</div>
+          <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="access-link">📱 Download the App Instead</a>
         </div>
-        <div class="form-field">
-          <label>Password</label>
-          <input type="password" placeholder="••••••••" />
+        <div class="access-success" id="login-success">
+          <div class="s-icon">✅</div>
+          <h4>Signed In!</h4>
+          <p>Redirecting you to your dashboard…</p>
         </div>
-        <button class="access-btn" onclick="alert('Please use the Private Chauffeur Connect mobile app to log in.')">Sign In</button>
-        <div class="access-divider">— or —</div>
-        <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="access-link">📱 Download the App Instead</a>
       </div>
 
-      <!-- Register as Chauffeur -->
+      <!-- REGISTER AS CHAUFFEUR -->
       <div class="access-card reveal reveal-delay-1" id="chauffeur-register">
-        <h3>Register as Chauffeur</h3>
-        <p>Join our network of professional chauffeurs and start earning with better clients.</p>
-        <div class="form-field">
-          <label>Full Name</label>
-          <input type="text" placeholder="Your full name" />
+        <div id="chauffeur-form-area">
+          <h3>Register as Chauffeur</h3>
+          <p>Join our network and start earning with professional clients.</p>
+          <div class="access-err" id="ch-err"></div>
+          <div class="form-field">
+            <label>Full Name</label>
+            <input type="text" id="ch-name" placeholder="Your full name" />
+          </div>
+          <div class="form-field">
+            <label>Email Address</label>
+            <input type="email" id="ch-email" placeholder="your@email.com" />
+          </div>
+          <div class="form-field">
+            <label>Phone Number</label>
+            <input type="tel" id="ch-phone" placeholder="+44 7XXX XXXXXX" />
+          </div>
+          <div class="form-field">
+            <label>Password</label>
+            <input type="password" id="ch-pw" placeholder="Min. 8 characters" />
+          </div>
+          <!-- Transfer of Liability -->
+          <div class="liability-box">
+            <div class="liability-header" onclick="toggleLiability('ch-liability')">
+              <span>📋 Transfer of Liability Agreement</span>
+              <button class="liability-toggle" id="ch-liability-btn">▼ Read</button>
+            </div>
+            <div class="liability-body" id="ch-liability">
+              <div class="liability-section-lbl">Chauffeur Liability</div>
+              <p>The chauffeur accepts full responsibility for any traffic violations, PCNs, or parking fines incurred during a booking; any damage to the vehicle during the booking; loss of income to the owner if the vehicle is seized; any liability from operating without a valid driving licence, private hire badge, or hire & reward insurance.</p>
+              <div class="liability-section-lbl">Vehicle Owner Responsibility</div>
+              <p>The vehicle owner is responsible for providing a roadworthy vehicle with valid MOT, road tax, and hire & reward insurance; any fines received when the vehicle is not on a booking; ensuring the vehicle is licensed for private hire use.</p>
+              <div class="liability-section-lbl">Platform Role</div>
+              <p>Private Chauffeur Connect connects vehicle owners with chauffeurs. Any disputes over fines, damage, or money are between the owner and chauffeur directly. The platform is not liable for what happens during a booking.</p>
+            </div>
+            <div class="consent-row" onclick="toggleConsent('ch-liability-check')">
+              <div class="consent-box" id="ch-liability-check"></div>
+              <p>I have read and agree to the Transfer of Liability terms above</p>
+            </div>
+          </div>
+          <!-- T&C -->
+          <div class="liability-box">
+            <div class="liability-header">
+              <span>📜 Terms &amp; Conditions</span>
+            </div>
+            <div class="consent-row" onclick="toggleConsent('ch-tc-check')">
+              <div class="consent-box" id="ch-tc-check"></div>
+              <p>I have read and agree to the Terms &amp; Conditions of Private Chauffeur Connect</p>
+            </div>
+          </div>
+          <button class="access-btn" id="ch-btn" onclick="webRegister('chauffeur')">Register as Chauffeur</button>
         </div>
-        <div class="form-field">
-          <label>Email Address</label>
-          <input type="email" placeholder="your@email.com" />
+        <div class="access-success" id="chauffeur-success">
+          <div class="s-icon">📧</div>
+          <h4>Check Your Email!</h4>
+          <p>We've sent a verification link to <strong id="ch-success-email"></strong>. Click it to activate your account.</p>
         </div>
-        <div class="form-field">
-          <label>Phone Number</label>
-          <input type="tel" placeholder="+44 7XXX XXXXXX" />
-        </div>
-        <div class="form-field">
-          <label>Driving Licence Number</label>
-          <input type="text" placeholder="e.g. SMITH801234AB9CD" />
-        </div>
-        <button class="access-btn" onclick="alert('Please register via the Private Chauffeur Connect mobile app.')">Register as Chauffeur</button>
-        <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="access-link">📱 Get the App to Register</a>
       </div>
 
-      <!-- Register as Vehicle Owner -->
+      <!-- REGISTER AS VEHICLE OWNER -->
       <div class="access-card reveal reveal-delay-2" id="owner-register">
-        <h3>Register as Vehicle Owner</h3>
-        <p>List your vehicle on our platform and earn from every booking we arrange.</p>
-        <div class="form-field">
-          <label>Full Name</label>
-          <input type="text" placeholder="Your full name" />
+        <div id="owner-form-area">
+          <h3>Register as Vehicle Owner</h3>
+          <p>List your vehicle and earn from every booking we arrange.</p>
+          <div class="access-err" id="ow-err"></div>
+          <div class="form-field">
+            <label>Full Name</label>
+            <input type="text" id="ow-name" placeholder="Your full name" />
+          </div>
+          <div class="form-field">
+            <label>Email Address</label>
+            <input type="email" id="ow-email" placeholder="your@email.com" />
+          </div>
+          <div class="form-field">
+            <label>Phone Number</label>
+            <input type="tel" id="ow-phone" placeholder="+44 7XXX XXXXXX" />
+          </div>
+          <div class="form-field">
+            <label>Password</label>
+            <input type="password" id="ow-pw" placeholder="Min. 8 characters" />
+          </div>
+          <!-- Transfer of Liability -->
+          <div class="liability-box">
+            <div class="liability-header" onclick="toggleLiability('ow-liability')">
+              <span>📋 Transfer of Liability Agreement</span>
+              <button class="liability-toggle" id="ow-liability-btn">▼ Read</button>
+            </div>
+            <div class="liability-body" id="ow-liability">
+              <div class="liability-section-lbl">Vehicle Owner Responsibility</div>
+              <p>The vehicle owner is responsible for providing a roadworthy vehicle with valid MOT, road tax, and hire & reward insurance; any fines received when the vehicle is not on a booking; ensuring the vehicle is licensed for private hire use.</p>
+              <div class="liability-section-lbl">Chauffeur Liability</div>
+              <p>The chauffeur accepts full responsibility for any traffic violations, PCNs, or parking fines during a booking; any damage to the vehicle; and any liability from operating without valid documentation.</p>
+              <div class="liability-section-lbl">Platform Role</div>
+              <p>Private Chauffeur Connect connects vehicle owners with chauffeurs. Any disputes over fines, damage, or money are between the owner and chauffeur directly. The platform is not liable for what happens during a booking.</p>
+            </div>
+            <div class="consent-row" onclick="toggleConsent('ow-liability-check')">
+              <div class="consent-box" id="ow-liability-check"></div>
+              <p>I have read and agree to the Transfer of Liability terms above</p>
+            </div>
+          </div>
+          <!-- T&C -->
+          <div class="liability-box">
+            <div class="liability-header">
+              <span>📜 Terms &amp; Conditions</span>
+            </div>
+            <div class="consent-row" onclick="toggleConsent('ow-tc-check')">
+              <div class="consent-box" id="ow-tc-check"></div>
+              <p>I have read and agree to the Terms &amp; Conditions of Private Chauffeur Connect</p>
+            </div>
+          </div>
+          <button class="access-btn" id="ow-btn" onclick="webRegister('owner')">Register as Vehicle Owner</button>
         </div>
-        <div class="form-field">
-          <label>Email Address</label>
-          <input type="email" placeholder="your@email.com" />
+        <div class="access-success" id="owner-success">
+          <div class="s-icon">📧</div>
+          <h4>Check Your Email!</h4>
+          <p>We've sent a verification link to <strong id="ow-success-email"></strong>. Click it to activate your account, then complete your vehicle registration.</p>
         </div>
-        <div class="form-field">
-          <label>Phone Number</label>
-          <input type="tel" placeholder="+44 7XXX XXXXXX" />
-        </div>
-        <div class="form-field">
-          <label>Address to Company Name</label>
-          <input type="text" placeholder="Your address" />
-        </div>
-        <div class="form-field">
-          <label>Postcode</label>
-          <input type="text" placeholder="e.g. LS2 7EY" />
-        </div>
-        <button class="access-btn" onclick="alert('Please register via the Private Chauffeur Connect mobile app.')">Register as Vehicle Owner</button>
-        <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="access-link">📱 Get the App to Register</a>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
+
+function toggleLiability(id) {
+  const body = document.getElementById(id);
+  const btn = document.getElementById(id + '-btn');
+  const open = body.classList.toggle('open');
+  if (btn) btn.textContent = open ? '▲ Hide' : '▼ Read';
+}
+function toggleConsent(id) {
+  document.getElementById(id).classList.toggle('checked');
+}
+function isChecked(id) { return document.getElementById(id).classList.contains('checked'); }
+function showErr(id, msg) { const e = document.getElementById(id); e.textContent = msg; e.classList.add('show'); }
+function hideErr(id) { document.getElementById(id).classList.remove('show'); }
+
+async function webLogin() {
+  hideErr('web-login-err');
+  const email = document.getElementById('web-login-email').value.trim();
+  const pw = document.getElementById('web-login-pw').value;
+  if (!email || !pw) return showErr('web-login-err', 'Please enter your email and password.');
+  const btn = document.getElementById('web-login-btn');
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const res = await fetch(`${API}/auth/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password: pw }) });
+    const data = await res.json();
+    if (!res.ok) { showErr('web-login-err', data.message || data.error || 'Login failed.'); return; }
+    document.getElementById('login-form-area').style.display = 'none';
+    document.getElementById('login-success').style.display = 'block';
+    setTimeout(() => {
+      if (data.user.role === 'owner') window.location.href = '/owner.html';
+    }, 1500);
+  } catch { showErr('web-login-err', 'Cannot reach server. Please try again.'); }
+  finally { btn.disabled = false; btn.textContent = 'Sign In'; }
+}
+
+async function webRegister(role) {
+  const prefix = role === 'chauffeur' ? 'ch' : 'ow';
+  hideErr(prefix + '-err');
+  const name = document.getElementById(prefix + '-name').value.trim();
+  const email = document.getElementById(prefix + '-email').value.trim();
+  const phone = document.getElementById(prefix + '-phone').value.trim();
+  const pw = document.getElementById(prefix + '-pw').value;
+  if (!name || !email || !phone || !pw) return showErr(prefix + '-err', 'All fields are required.');
+  if (pw.length < 8) return showErr(prefix + '-err', 'Password must be at least 8 characters.');
+  if (!isChecked(prefix + '-liability-check')) return showErr(prefix + '-err', 'You must agree to the Transfer of Liability terms.');
+  if (!isChecked(prefix + '-tc-check')) return showErr(prefix + '-err', 'You must agree to the Terms & Conditions.');
+  const btn = document.getElementById(prefix + '-btn');
+  btn.disabled = true; btn.textContent = 'Creating account…';
+  try {
+    const res = await fetch(`${API}/auth/register`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ full_name: name, email, phone, password: pw, role, liability_consent_at: new Date().toISOString(), tc_consent_at: new Date().toISOString() })
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(prefix + '-err', data.error || data.message || 'Registration failed.'); return; }
+    document.getElementById(prefix === 'ch' ? 'chauffeur' : 'owner' + '-form-area').style.display = 'none';
+    document.getElementById((prefix === 'ch' ? 'ch-success-email' : 'ow-success-email')).textContent = email;
+    document.getElementById(prefix === 'ch' ? 'chauffeur-success' : 'owner-success').style.display = 'block';
+    document.getElementById(prefix === 'ch' ? 'chauffeur-form-area' : 'owner-form-area').style.display = 'none';
+  } catch { showErr(prefix + '-err', 'Cannot reach server. Please try again.'); }
+  finally { btn.disabled = false; btn.textContent = role === 'chauffeur' ? 'Register as Chauffeur' : 'Register as Vehicle Owner'; }
+}
+</script>
 
 <!-- ══ FOOTER ═════════════════════════════════════ -->
 <footer id="contact">
