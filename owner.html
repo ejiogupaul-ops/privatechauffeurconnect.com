@@ -244,11 +244,11 @@
       </div>
       <div class="form-row">
         <div class="field">
-          <label>Work Address</label>
+          <label>Work Address <span style="color:var(--muted);font-weight:400;font-size:10px;">(Optional)</span></label>
           <input type="text" id="p-work-addr" placeholder="Street address" />
         </div>
         <div class="field">
-          <label>Work Postcode</label>
+          <label>Work Postcode <span style="color:var(--muted);font-weight:400;font-size:10px;">(Optional)</span></label>
           <input type="text" id="p-work-post" placeholder="e.g. M1 2AB" />
         </div>
       </div>
@@ -279,6 +279,7 @@
   const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
   let token = localStorage.getItem('pcc_owner_token');
   let userName = localStorage.getItem('pcc_owner_name') || '';
+  let userPhone = localStorage.getItem('pcc_owner_phone') || '';
 
   function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -299,7 +300,15 @@
   function logout() {
     localStorage.removeItem('pcc_owner_token');
     localStorage.removeItem('pcc_owner_name');
+    localStorage.removeItem('pcc_owner_phone');
     location.reload();
+  }
+
+  function prefillProfile() {
+    const nameEl = document.getElementById('p-name');
+    const phoneEl = document.getElementById('p-phone');
+    if (userName) { nameEl.value = userName; nameEl.readOnly = true; nameEl.style.opacity = '.6'; nameEl.style.cursor = 'not-allowed'; }
+    if (userPhone) { phoneEl.value = userPhone; phoneEl.readOnly = true; phoneEl.style.opacity = '.6'; phoneEl.style.cursor = 'not-allowed'; }
   }
 
   // Check if already logged in
@@ -322,6 +331,7 @@
         const pr = await fetch(`${API}/owner-profiles/me`, { headers: { Authorization: `Bearer ${token}` } });
         const profile = pr.ok ? await pr.json() : null;
         if (!profile || !profile.phone) {
+          prefillProfile();
           showPage('page-profile');
         } else {
           document.getElementById('done-vehicle').textContent = `${vehicles[0].make} ${vehicles[0].model || ''} · ${vehicles[0].registration}`;
@@ -353,8 +363,10 @@
       }
       token = data.token;
       userName = data.user.full_name || email;
+      userPhone = data.user.phone || '';
       localStorage.setItem('pcc_owner_token', token);
       localStorage.setItem('pcc_owner_name', userName);
+      localStorage.setItem('pcc_owner_phone', userPhone);
       document.getElementById('nav-user').style.display = '';
       document.getElementById('nav-name').textContent = userName;
       document.getElementById('btn-logout').style.display = '';
@@ -424,10 +436,10 @@
       }
 
       setTimeout(() => {
-        // Mark step 2 done, go to profile
         document.getElementById('s2').className = 'step done';
         document.getElementById('s2').querySelector('.step-num').textContent = '✓';
         document.getElementById('sl2').classList.add('done');
+        prefillProfile();
         showPage('page-profile');
       }, 2000);
 
