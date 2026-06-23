@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Email — Private Chauffeur Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold:#c9a84c; --dark:#0a0a12; --dark2:#0f0f1e; --dark3:#141428; --text:#e8e8f0; --muted:#8080a8; --green:#4caf50; --red:#e94560; }
+    body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
+    .logo { display:flex; align-items:center; gap:10px; margin-bottom:40px; text-decoration:none; }
+    .logo-icon { width:40px; height:40px; background:var(--gold); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+    .logo-text .l1 { font-size:12px; color:var(--gold); font-weight:700; letter-spacing:2px; text-transform:uppercase; }
+    .logo-text .l2 { font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    .card { background:var(--dark3); border:1px solid rgba(201,168,76,.2); border-radius:20px; padding:48px 40px; max-width:460px; width:100%; text-align:center; }
+    .icon { font-size:64px; margin-bottom:24px; display:block; }
+    h1 { font-size:26px; font-weight:700; color:#fff; margin-bottom:12px; }
+    p { font-size:15px; color:var(--muted); line-height:1.7; margin-bottom:24px; }
+    .btn { display:inline-block; background:var(--gold); color:#000; font-weight:700; font-size:14px; letter-spacing:1px; text-transform:uppercase; border-radius:10px; padding:14px 32px; text-decoration:none; transition:background .2s; border:none; cursor:pointer; font-family:'Inter',sans-serif; width:100%; margin-bottom:12px; }
+    .btn:hover { background:#e2c06a; }
+    .btn-outline { background:transparent; border:2px solid rgba(201,168,76,.4); color:var(--gold); }
+    .btn-outline:hover { background:rgba(201,168,76,.1); }
+    .spinner { width:48px; height:48px; border:4px solid rgba(201,168,76,.2); border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 24px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    #loading, #success, #error { display:none; }
+    #loading.show, #success.show, #error.show { display:block; }
+  </style>
+</head>
+<body>
+  <a href="/" class="logo">
+    <div class="logo-icon">🚗</div>
+    <div class="logo-text"><div class="l1">Private Chauffeur</div><div class="l2">Connect</div></div>
+  </a>
+
+  <div class="card">
+    <!-- Loading state -->
+    <div id="loading" class="show">
+      <div class="spinner"></div>
+      <h1>Verifying your email…</h1>
+      <p>Please wait while we confirm your email address.</p>
+    </div>
+
+    <!-- Success state -->
+    <div id="success">
+      <span class="icon">✅</span>
+      <h1>Email Verified!</h1>
+      <p>Your email address has been confirmed. You can now log in to the Private Chauffeur Connect app and complete your registration.</p>
+      <a href="/#access" class="btn">Go to Login</a>
+      <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="btn btn-outline">📱 Download the App</a>
+    </div>
+
+    <!-- Error state -->
+    <div id="error">
+      <span class="icon">❌</span>
+      <h1 id="error-title">Verification Failed</h1>
+      <p id="error-msg">This link may have expired or already been used. Please register again or contact support.</p>
+      <a href="/#access" class="btn">Back to Registration</a>
+    </div>
+  </div>
+
+  <script>
+    const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
+
+    async function verify() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token');
+
+      if (!token) {
+        show('error');
+        document.getElementById('error-title').textContent = 'Invalid Link';
+        document.getElementById('error-msg').textContent = 'No verification token found. Please check the link in your email.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/auth/verify-email?token=${encodeURIComponent(token)}`);
+        const data = await res.json();
+        if (res.ok) {
+          show('success');
+        } else {
+          show('error');
+          document.getElementById('error-msg').textContent = data.error || data.message || 'Verification failed. Please try again.';
+        }
+      } catch (e) {
+        show('error');
+        document.getElementById('error-msg').textContent = 'Could not reach the server. Please check your connection and try again.';
+      }
+    }
+
+    function show(state) {
+      ['loading','success','error'].forEach(s => document.getElementById(s).classList.remove('show'));
+      document.getElementById(state).classList.add('show');
+    }
+
+    verify();
+  </script>
+</body>
+</html>

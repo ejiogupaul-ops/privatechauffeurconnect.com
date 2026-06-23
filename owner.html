@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Owner Portal — Private Chauffeur Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold:#c9a84c; --gold2:#e2c06a; --dark:#0a0a12; --dark2:#0f0f1e; --dark3:#141428; --border:rgba(201,168,76,.18); --text:#e8e8f0; --muted:#8080a8; --green:#4caf50; --red:#e94560; }
+    body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text); min-height:100vh; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,10,18,.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 40px; height:64px; }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo-icon { width:36px; height:36px; background:var(--gold); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+    .nav-logo-text .l1 { font-size:11px; color:var(--gold); font-weight:700; letter-spacing:2px; text-transform:uppercase; }
+    .nav-logo-text .l2 { font-size:9px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    .nav-right { display:flex; align-items:center; gap:16px; }
+    .nav-user { font-size:13px; color:var(--muted); }
+    .nav-user span { color:var(--gold); font-weight:600; }
+    .btn-logout { background:transparent; border:1px solid rgba(255,255,255,.15); color:var(--muted); border-radius:6px; padding:7px 16px; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif; transition:all .2s; }
+    .btn-logout:hover { border-color:var(--red); color:var(--red); }
+
+    /* LAYOUT */
+    main { padding-top:64px; min-height:100vh; }
+    .page { display:none; max-width:640px; margin:0 auto; padding:48px 24px; }
+    .page.active { display:block; }
+
+    /* STEPS */
+    .steps { display:flex; align-items:center; gap:0; margin-bottom:40px; }
+    .step { display:flex; align-items:center; gap:8px; }
+    .step-num { width:32px; height:32px; border-radius:50%; border:2px solid rgba(255,255,255,.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--muted); flex-shrink:0; }
+    .step.active .step-num { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.1); }
+    .step.done .step-num { background:var(--gold); border-color:var(--gold); color:#000; }
+    .step-label { font-size:12px; color:var(--muted); font-weight:500; }
+    .step.active .step-label { color:var(--gold); }
+    .step.done .step-label { color:var(--text); }
+    .step-line { flex:1; height:2px; background:rgba(255,255,255,.08); margin:0 8px; min-width:24px; }
+    .step-line.done { background:var(--gold); }
+
+    /* CARD */
+    .card { background:var(--dark3); border:1px solid var(--border); border-radius:20px; padding:36px; }
+    h2 { font-family:'Playfair Display',serif; font-size:26px; color:#fff; margin-bottom:8px; }
+    .subtitle { font-size:14px; color:var(--muted); margin-bottom:28px; line-height:1.6; }
+    .badge { display:inline-flex; align-items:center; gap:8px; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.25); border-radius:30px; padding:5px 14px; margin-bottom:20px; font-size:12px; color:var(--gold); font-weight:600; letter-spacing:1px; }
+
+    /* FORM */
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media(max-width:520px) { .form-row { grid-template-columns:1fr; } }
+    .field { margin-bottom:18px; }
+    .field label { display:block; font-size:11px; color:var(--muted); margin-bottom:7px; letter-spacing:.5px; text-transform:uppercase; }
+    .field input, .field select { width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:13px 16px; color:#fff; font-size:14px; font-family:'Inter',sans-serif; outline:none; transition:border-color .2s; }
+    .field input:focus, .field select:focus { border-color:var(--gold); }
+    .field input::placeholder { color:#404060; }
+    .field select option { background:var(--dark3); }
+    .plate-preview { background:#f5c518; color:#000; font-size:20px; font-weight:900; border-radius:8px; padding:10px 20px; letter-spacing:4px; text-align:center; margin-bottom:20px; font-family:monospace; min-height:50px; display:flex; align-items:center; justify-content:center; }
+
+    /* MOT CHECK */
+    .mot-check { background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:20px; display:none; }
+    .mot-check.show { display:block; }
+    .mot-spinner { display:flex; align-items:center; gap:12px; }
+    .spinner-sm { width:20px; height:20px; border:3px solid rgba(201,168,76,.2); border-top-color:var(--gold); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .mot-result { display:flex; align-items:center; gap:12px; }
+    .mot-icon { font-size:24px; }
+    .mot-text .mt { font-size:14px; font-weight:700; color:#fff; }
+    .mot-text .ms { font-size:12px; color:var(--muted); margin-top:2px; }
+
+    /* BUTTONS */
+    .btn { width:100%; background:var(--gold); color:#000; border:none; border-radius:10px; padding:15px; font-size:14px; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'Inter',sans-serif; transition:background .2s; margin-top:4px; }
+    .btn:hover { background:var(--gold2); }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-ghost { background:transparent; border:2px solid var(--border); color:var(--muted); }
+    .btn-ghost:hover { border-color:var(--gold); color:var(--gold); background:transparent; }
+    .err { background:rgba(233,69,96,.1); border:1px solid rgba(233,69,96,.3); border-radius:10px; padding:14px; font-size:13px; color:#ff6b6b; margin-bottom:16px; display:none; line-height:1.5; }
+    .err.show { display:block; }
+
+    /* SUCCESS */
+    .success-icon { font-size:72px; text-align:center; margin-bottom:20px; }
+    .success-box { background:rgba(76,175,80,.08); border:1px solid rgba(76,175,80,.25); border-radius:12px; padding:20px; margin-bottom:24px; }
+    .success-box .sl { font-size:12px; color:var(--green); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+    .success-box .sv { font-size:15px; font-weight:600; color:#fff; }
+
+    /* LOGIN PAGE */
+    #page-login { max-width:440px; }
+    .divider { text-align:center; font-size:12px; color:var(--muted); margin:18px 0; position:relative; }
+    .divider::before, .divider::after { content:''; position:absolute; top:50%; width:42%; height:1px; background:rgba(255,255,255,.08); }
+    .divider::before { left:0; } .divider::after { right:0; }
+    .link-text { text-align:center; font-size:13px; color:var(--muted); margin-top:16px; }
+    .link-text a { color:var(--gold); text-decoration:none; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">🚗</div>
+    <div class="nav-logo-text"><div class="l1">Private Chauffeur</div><div class="l2">Connect</div></div>
+  </a>
+  <div class="nav-right">
+    <div class="nav-user" id="nav-user" style="display:none">Welcome, <span id="nav-name">—</span></div>
+    <button class="btn-logout" id="btn-logout" style="display:none" onclick="logout()">Sign Out</button>
+  </div>
+</nav>
+
+<main>
+  <!-- ── PAGE: LOGIN ── -->
+  <div class="page active" id="page-login">
+    <div style="text-align:center;margin-bottom:32px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:28px;">Vehicle Owner Portal</h2>
+      <p style="color:var(--muted);margin-top:8px;font-size:14px;">Sign in to manage your vehicle and profile</p>
+    </div>
+    <div class="card">
+      <div class="err" id="login-err"></div>
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="your@email.com" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" />
+      </div>
+      <button class="btn" id="login-btn" onclick="doLogin()">Sign In</button>
+      <div class="divider">or</div>
+      <div class="link-text">Don't have an account? <a href="/#access">Register here</a></div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: VEHICLE REGISTRATION ── -->
+  <div class="page" id="page-vehicle">
+    <div class="steps">
+      <div class="step done" id="s1"><div class="step-num">✓</div><div class="step-label">Account</div></div>
+      <div class="step-line done"></div>
+      <div class="step active" id="s2"><div class="step-num">2</div><div class="step-label">Your Vehicle</div></div>
+      <div class="step-line" id="sl2"></div>
+      <div class="step" id="s3"><div class="step-num">3</div><div class="step-label">Your Profile</div></div>
+    </div>
+    <div class="card">
+      <div class="badge">Step 2 of 3</div>
+      <h2>Add Your Vehicle</h2>
+      <p class="subtitle">Your vehicle details are needed to list it on the platform. We'll check the MOT instantly.</p>
+      <div class="err" id="vehicle-err"></div>
+
+      <div class="field">
+        <label>Registration Plate</label>
+        <input type="text" id="v-reg" placeholder="e.g. AB12 CDE" maxlength="8" oninput="this.value=this.value.toUpperCase();updatePlate(this.value)" />
+      </div>
+      <div class="plate-preview" id="plate-preview">—</div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Car Make</label>
+          <select id="v-make">
+            <option value="">Select make…</option>
+            <option>Alfa Romeo</option><option>Aston Martin</option><option>Audi</option><option>Bentley</option><option>BMW</option>
+            <option>Cadillac</option><option>Chevrolet</option><option>Citroën</option><option>Cupra</option><option>Dacia</option>
+            <option>Ferrari</option><option>Fiat</option><option>Ford</option><option>Genesis</option><option>Honda</option>
+            <option>Hyundai</option><option>Infiniti</option><option>Jaguar</option><option>Jeep</option><option>Kia</option>
+            <option>Lamborghini</option><option>Land Rover</option><option>Lexus</option><option>Maserati</option><option>Mazda</option>
+            <option>McLaren</option><option>Mercedes-Benz</option><option>Mini</option><option>Mitsubishi</option><option>Nissan</option>
+            <option>Peugeot</option><option>Porsche</option><option>Renault</option><option>Rolls-Royce</option><option>Seat</option>
+            <option>Skoda</option><option>Smart</option><option>Subaru</option><option>Suzuki</option><option>Tesla</option>
+            <option>Toyota</option><option>Vauxhall</option><option>Volkswagen</option><option>Volvo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Model</label>
+          <input type="text" id="v-model" placeholder="e.g. E-Class" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Year</label>
+          <input type="number" id="v-year" placeholder="e.g. 2021" min="1990" max="2026" />
+        </div>
+        <div class="field">
+          <label>Colour</label>
+          <input type="text" id="v-colour" placeholder="e.g. Black" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Gear Type</label>
+        <select id="v-gear">
+          <option value="">Select gear type…</option>
+          <option>Automatic</option>
+          <option>Manual</option>
+        </select>
+      </div>
+
+      <!-- MOT check status -->
+      <div class="mot-check" id="mot-box">
+        <div class="mot-spinner" id="mot-loading">
+          <div class="spinner-sm"></div>
+          <div><div style="font-size:14px;font-weight:600;color:#fff;">Checking MOT with DVLA…</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">This usually takes 2–3 seconds</div></div>
+        </div>
+        <div class="mot-result" id="mot-result" style="display:none">
+          <div class="mot-icon" id="mot-icon"></div>
+          <div class="mot-text"><div class="mt" id="mot-title"></div><div class="ms" id="mot-sub"></div></div>
+        </div>
+      </div>
+
+      <button class="btn" id="vehicle-btn" onclick="doAddVehicle()">Register Vehicle &amp; Check MOT</button>
+    </div>
+  </div>
+
+  <!-- ── PAGE: PROFILE ── -->
+  <div class="page" id="page-profile">
+    <div class="steps">
+      <div class="step done"><div class="step-num">✓</div><div class="step-label">Account</div></div>
+      <div class="step-line done"></div>
+      <div class="step done"><div class="step-num">✓</div><div class="step-label">Your Vehicle</div></div>
+      <div class="step-line done"></div>
+      <div class="step active"><div class="step-num">3</div><div class="step-label">Your Profile</div></div>
+    </div>
+    <div class="card">
+      <div class="badge">Step 3 of 3 · Final Step</div>
+      <h2>Complete Your Profile</h2>
+      <p class="subtitle">Tell us a bit about yourself so clients and our team can connect with you.</p>
+      <div class="err" id="profile-err"></div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="p-name" placeholder="Your full name" />
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="p-phone" placeholder="+44 7XXX XXXXXX" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Bio / About You</label>
+        <input type="text" id="p-bio" placeholder="e.g. Professional vehicle owner based in Leeds" />
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Home Address</label>
+          <input type="text" id="p-home-addr" placeholder="Street address" />
+        </div>
+        <div class="field">
+          <label>Home Postcode</label>
+          <input type="text" id="p-home-post" placeholder="e.g. LS2 7EY" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Work Address</label>
+          <input type="text" id="p-work-addr" placeholder="Street address" />
+        </div>
+        <div class="field">
+          <label>Work Postcode</label>
+          <input type="text" id="p-work-post" placeholder="e.g. M1 2AB" />
+        </div>
+      </div>
+      <button class="btn" id="profile-btn" onclick="doSaveProfile()">Save Profile &amp; Go to Dashboard →</button>
+    </div>
+  </div>
+
+  <!-- ── PAGE: DONE ── -->
+  <div class="page" id="page-done" style="text-align:center;">
+    <div class="success-icon">🎉</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:32px;margin-bottom:12px;">You're All Set!</h2>
+    <p style="color:var(--muted);font-size:15px;max-width:400px;margin:0 auto 32px;line-height:1.7;">Your vehicle and profile are ready. Download the app to start receiving bookings and manage everything on the go.</p>
+    <div class="success-box" style="max-width:400px;margin:0 auto 24px;">
+      <div class="sl">Registered Vehicle</div>
+      <div class="sv" id="done-vehicle">—</div>
+    </div>
+    <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk"
+       style="display:inline-block;background:var(--gold);color:#000;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;border-radius:10px;padding:15px 32px;text-decoration:none;margin-bottom:12px;width:100%;max-width:400px;">
+      📱 Download the App
+    </a>
+    <div style="max-width:400px;margin:0 auto;">
+      <a href="/" style="display:block;text-align:center;color:var(--muted);font-size:13px;text-decoration:none;margin-top:12px;">← Back to homepage</a>
+    </div>
+  </div>
+</main>
+
+<script>
+  const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
+  let token = localStorage.getItem('pcc_owner_token');
+  let userName = localStorage.getItem('pcc_owner_name') || '';
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+  function showErr(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg; el.classList.add('show');
+  }
+  function hideErr(id) { document.getElementById(id).classList.remove('show'); }
+  function setLoading(btnId, loading, label) {
+    const b = document.getElementById(btnId);
+    b.disabled = loading; b.textContent = loading ? 'Please wait…' : label;
+  }
+  function updatePlate(val) {
+    document.getElementById('plate-preview').textContent = val.trim() || '—';
+  }
+  function logout() {
+    localStorage.removeItem('pcc_owner_token');
+    localStorage.removeItem('pcc_owner_name');
+    location.reload();
+  }
+
+  // Check if already logged in
+  if (token) {
+    document.getElementById('nav-user').style.display = '';
+    document.getElementById('nav-name').textContent = userName;
+    document.getElementById('btn-logout').style.display = '';
+    checkVehicles();
+  }
+
+  async function checkVehicles() {
+    try {
+      const res = await fetch(`${API}/vehicles`, { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) { token = null; localStorage.removeItem('pcc_owner_token'); showPage('page-login'); return; }
+      const vehicles = await res.json();
+      if (vehicles.length === 0) {
+        showPage('page-vehicle');
+      } else {
+        // Check if profile is complete
+        const pr = await fetch(`${API}/owner-profiles/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const profile = pr.ok ? await pr.json() : null;
+        if (!profile || !profile.phone) {
+          showPage('page-profile');
+        } else {
+          document.getElementById('done-vehicle').textContent = `${vehicles[0].make} ${vehicles[0].model || ''} · ${vehicles[0].registration}`;
+          showPage('page-done');
+        }
+      }
+    } catch { showPage('page-vehicle'); }
+  }
+
+  async function doLogin() {
+    hideErr('login-err');
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) return showErr('login-err', 'Please enter your email and password.');
+    setLoading('login-btn', true, 'Sign In');
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showErr('login-err', data.message || data.error || 'Login failed. Please check your credentials.');
+        return;
+      }
+      if (data.user.role !== 'owner') {
+        showErr('login-err', 'This portal is for vehicle owners only. Please use the app to log in as a chauffeur.');
+        return;
+      }
+      token = data.token;
+      userName = data.user.full_name || email;
+      localStorage.setItem('pcc_owner_token', token);
+      localStorage.setItem('pcc_owner_name', userName);
+      document.getElementById('nav-user').style.display = '';
+      document.getElementById('nav-name').textContent = userName;
+      document.getElementById('btn-logout').style.display = '';
+      checkVehicles();
+    } catch { showErr('login-err', 'Cannot reach server. Please try again.'); }
+    finally { setLoading('login-btn', false, 'Sign In'); }
+  }
+
+  async function doAddVehicle() {
+    hideErr('vehicle-err');
+    const reg = document.getElementById('v-reg').value.trim();
+    const make = document.getElementById('v-make').value;
+    const model = document.getElementById('v-model').value.trim();
+    const year = document.getElementById('v-year').value;
+    const colour = document.getElementById('v-colour').value.trim();
+    const gear = document.getElementById('v-gear').value;
+    if (!reg || !make || !gear) return showErr('vehicle-err', 'Registration, make and gear type are required.');
+
+    // Show MOT check spinner
+    const motBox = document.getElementById('mot-box');
+    motBox.classList.add('show');
+    document.getElementById('mot-loading').style.display = 'flex';
+    document.getElementById('mot-result').style.display = 'none';
+    setLoading('vehicle-btn', true, 'Register Vehicle & Check MOT');
+
+    const start = Date.now();
+    try {
+      const res = await fetch(`${API}/vehicles`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ registration: reg, make, model, year: year || null, color: colour, gear_type: gear, set_default: true })
+      });
+      const data = await res.json();
+
+      // Minimum 2 second display
+      const elapsed = Date.now() - start;
+      if (elapsed < 2000) await new Promise(r => setTimeout(r, 2000 - elapsed));
+
+      document.getElementById('mot-loading').style.display = 'none';
+      document.getElementById('mot-result').style.display = 'flex';
+
+      if (!res.ok) {
+        if (data.error === 'MOT_EXPIRED') {
+          document.getElementById('mot-icon').textContent = '❌';
+          document.getElementById('mot-title').textContent = 'MOT Invalid — Registration Stopped';
+          document.getElementById('mot-title').style.color = 'var(--red)';
+          document.getElementById('mot-sub').textContent = data.message;
+          setLoading('vehicle-btn', false, 'Register Vehicle & Check MOT');
+        } else {
+          motBox.classList.remove('show');
+          showErr('vehicle-err', data.error || data.message || 'Failed to register vehicle.');
+          setLoading('vehicle-btn', false, 'Register Vehicle & Check MOT');
+        }
+        return;
+      }
+
+      // Success
+      if (data.mot_status === 'valid') {
+        document.getElementById('mot-icon').textContent = '✅';
+        document.getElementById('mot-title').textContent = 'MOT Valid';
+        document.getElementById('mot-title').style.color = 'var(--green)';
+        document.getElementById('mot-sub').textContent = `Expires: ${data.mot_expiry_date ? new Date(data.mot_expiry_date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : '—'}`;
+      } else {
+        document.getElementById('mot-icon').textContent = '🚗';
+        document.getElementById('mot-title').textContent = 'Vehicle Registered';
+        document.getElementById('mot-title').style.color = '#fff';
+        document.getElementById('mot-sub').textContent = 'MOT status not checked — will be verified before first booking.';
+      }
+
+      setTimeout(() => {
+        // Mark step 2 done, go to profile
+        document.getElementById('s2').className = 'step done';
+        document.getElementById('s2').querySelector('.step-num').textContent = '✓';
+        document.getElementById('sl2').classList.add('done');
+        showPage('page-profile');
+      }, 2000);
+
+    } catch {
+      motBox.classList.remove('show');
+      showErr('vehicle-err', 'Cannot reach server. Please check your connection.');
+      setLoading('vehicle-btn', false, 'Register Vehicle & Check MOT');
+    }
+  }
+
+  async function doSaveProfile() {
+    hideErr('profile-err');
+    const phone = document.getElementById('p-phone').value.trim();
+    const bio = document.getElementById('p-bio').value.trim();
+    const home_address = document.getElementById('p-home-addr').value.trim();
+    const home_postcode = document.getElementById('p-home-post').value.trim();
+    const work_address = document.getElementById('p-work-addr').value.trim();
+    const work_postcode = document.getElementById('p-work-post').value.trim();
+    if (!phone) return showErr('profile-err', 'Phone number is required.');
+    setLoading('profile-btn', true, 'Save Profile & Go to Dashboard →');
+    try {
+      const res = await fetch(`${API}/owner-profiles/me`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ phone, bio, home_address, home_postcode, work_address, work_postcode })
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        showErr('profile-err', d.error || d.message || 'Failed to save profile.');
+        return;
+      }
+      // Get vehicle for done page
+      const vr = await fetch(`${API}/vehicles`, { headers: { Authorization: `Bearer ${token}` } });
+      const vehicles = vr.ok ? await vr.json() : [];
+      if (vehicles[0]) document.getElementById('done-vehicle').textContent = `${vehicles[0].make} ${vehicles[0].model || ''} · ${vehicles[0].registration}`;
+      showPage('page-done');
+    } catch { showErr('profile-err', 'Cannot reach server. Please try again.'); }
+    finally { setLoading('profile-btn', false, 'Save Profile & Go to Dashboard →'); }
+  }
+
+  // Allow Enter key on login
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('page-login').classList.contains('active')) doLogin();
+  });
+</script>
+</body>
+</html>
