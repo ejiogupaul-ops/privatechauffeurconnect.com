@@ -45,6 +45,8 @@
       height: 95px; width: auto; object-fit: contain;
       mix-blend-mode: screen;
       filter: brightness(1.25) contrast(1.1) saturate(1.1);
+      -webkit-mask-image: linear-gradient(to right, black 78%, transparent 95%);
+      mask-image: linear-gradient(to right, black 78%, transparent 95%);
     }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a { font-size: 12px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text); transition: color .2s; }
