@@ -12,10 +12,8 @@
 
     /* NAV */
     nav { background:rgba(10,10,18,.95); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:64px; flex-shrink:0; }
-    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-    .nav-logo-icon { width:36px; height:36px; background:var(--gold); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; }
-    .nav-logo-text .l1 { font-size:11px; color:var(--gold); font-weight:700; letter-spacing:2px; text-transform:uppercase; }
-    .nav-logo-text .l2 { font-size:9px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
+    .nav-logo { display:flex; align-items:center; text-decoration:none; }
+    .nav-logo-img { height:56px; width:auto; mix-blend-mode:screen; filter:brightness(1.1) contrast(1.05); }
     .nav-back { font-size:13px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .2s; }
     .nav-back:hover { color:var(--gold); }
 
@@ -96,8 +94,7 @@
 
 <nav>
   <a href="/" class="nav-logo">
-    <div class="nav-logo-icon">🚗</div>
-    <div class="nav-logo-text"><div class="l1">Private Chauffeur</div><div class="l2">Connect</div></div>
+    <img src="/logo.png?v=3" alt="Private Chauffeur Connect" class="nav-logo-img" />
   </a>
   <a href="/" class="nav-back">← Back to Home</a>
 </nav>
