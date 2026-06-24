@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Private Chauffeur Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold:#c9a84c; --gold2:#e2c06a; --dark:#0a0a12; --dark2:#0f0f1e; --dark3:#141428; --border:rgba(201,168,76,.18); --text:#e8e8f0; --muted:#8080a8; }
+    html { scrollbar-color:#1a1a2e #0a0a12; scrollbar-width:thin; }
+    body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text); min-height:100vh; }
+    a { color:var(--gold); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:#0a0a12; }
+    ::-webkit-scrollbar-thumb { background:#1a1a2e; border-radius:3px; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,10,18,.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:110px; }
+    .nav-logo { display:flex; align-items:center; text-decoration:none; }
+    .nav-logo-img { height:95px; width:auto; mix-blend-mode:screen; filter:brightness(1.25) contrast(1.1) saturate(1.1); -webkit-mask-image:linear-gradient(to right,black 78%,transparent 95%); mask-image:linear-gradient(to right,black 78%,transparent 95%); }
+    .nav-back { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .nav-back:hover { color:var(--gold); text-decoration:none; }
+    .nav-back svg { width:16px; height:16px; }
+    @media(max-width:600px) { nav { padding:0 16px; height:80px; } .nav-logo-img { height:68px; } }
+
+    /* HERO BAND */
+    .policy-hero {
+      margin-top:110px;
+      background:linear-gradient(135deg,#0d0d20 0%,#12102a 100%);
+      border-bottom:1px solid var(--border);
+      padding:56px 0 48px;
+      text-align:center;
+    }
+    .policy-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(26px,4vw,42px); color:#fff; margin-bottom:10px; }
+    .policy-hero .eyebrow { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+    .policy-hero .updated { font-size:13px; color:var(--muted); }
+
+    /* LAYOUT */
+    .policy-wrap { max-width:820px; margin:0 auto; padding:56px 24px 80px; }
+
+    /* SECTION HEADINGS */
+    .policy-wrap h2 {
+      font-family:'Playfair Display',serif;
+      font-size:22px; color:var(--gold);
+      margin:48px 0 16px;
+      padding-bottom:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .policy-wrap h2:first-child { margin-top:0; }
+    .policy-wrap h3 { font-size:15px; font-weight:600; color:var(--text); margin:24px 0 10px; letter-spacing:.4px; }
+
+    /* BODY TEXT */
+    .policy-wrap p { font-size:15px; color:#b0b0c8; line-height:1.8; margin-bottom:14px; }
+
+    /* LISTS */
+    .policy-wrap ul { padding-left:20px; margin-bottom:16px; }
+    .policy-wrap ul li { font-size:15px; color:#b0b0c8; line-height:1.8; margin-bottom:6px; }
+    .policy-wrap ul li::marker { color:var(--gold); }
+
+    /* TABLE */
+    .policy-table { width:100%; border-collapse:collapse; margin:20px 0 28px; font-size:14px; }
+    .policy-table th { text-align:left; padding:10px 16px; background:var(--dark3); color:var(--gold); font-size:12px; letter-spacing:1px; text-transform:uppercase; border:1px solid var(--border); }
+    .policy-table td { padding:10px 16px; color:#b0b0c8; border:1px solid rgba(255,255,255,.06); vertical-align:top; }
+    .policy-table tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+
+    /* CONTACT BOX */
+    .contact-box { background:var(--dark3); border:1px solid var(--border); border-radius:12px; padding:20px 24px; margin:16px 0 28px; display:inline-flex; align-items:center; gap:12px; }
+    .contact-box svg { width:20px; height:20px; color:var(--gold); flex-shrink:0; }
+    .contact-box a { font-size:15px; font-weight:500; color:var(--gold); }
+
+    /* RECOMMENDATION BOX */
+    .rec-box { background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(201,168,76,.03)); border:1px solid rgba(201,168,76,.25); border-radius:14px; padding:28px; margin-top:48px; }
+    .rec-box h3 { color:var(--gold); margin-bottom:12px; font-size:16px; }
+    .rec-box p { margin-bottom:12px; }
+    .rec-box ul { margin-bottom:0; }
+
+    /* FOOTER */
+    footer { background:#06060e; border-top:1px solid var(--border); padding:48px 0 24px; }
+    .footer-inner { max-width:820px; margin:0 auto; padding:0 24px; display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center; }
+    .footer-inner p { font-size:13px; color:var(--muted); }
+    .footer-links { display:flex; gap:24px; flex-wrap:wrap; justify-content:center; }
+    .footer-links a { font-size:13px; color:var(--muted); transition:color .2s; }
+    .footer-links a:hover { color:var(--gold); text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="nav-logo-img" />
+  </a>
+  <a href="/" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to Home
+  </a>
+</nav>
+
+<div class="policy-hero">
+  <div class="eyebrow">Legal</div>
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last Updated: 24 June 2026</p>
+</div>
+
+<div class="policy-wrap">
+
+  <!-- 1 -->
+  <h2>1. Introduction</h2>
+  <p>Private Chauffeur Connect ("Private Chauffeur Connect", "we", "our", "us") operates the Private Chauffeur Connect mobile application and website ("Platform").</p>
+  <p>This Privacy Policy explains how we collect, use, store, disclose and protect your personal information when you use our services.</p>
+  <p>By creating an account or using the Platform, you acknowledge that you have read and understood this Privacy Policy.</p>
+  <p>For data protection purposes, Private Chauffeur Connect is the Data Controller.</p>
+  <h3>Contact</h3>
+  <div class="contact-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+    <a href="mailto:privacy@privatechauffeurconnect.com">privacy@privatechauffeurconnect.com</a>
+  </div>
+
+  <!-- 2 -->
+  <h2>2. Information We Collect</h2>
+  <h3>Account Information</h3>
+  <p>We may collect:</p>
+  <ul>
+    <li>Full name</li>
+    <li>Email address</li>
+    <li>Telephone number</li>
+    <li>Encrypted password credentials</li>
+    <li>Optional profile photograph</li>
+  </ul>
+
+  <h3>Vehicle Owner Information</h3>
+  <p>We may collect:</p>
+  <ul>
+    <li>Home address and postcode</li>
+    <li>Optional work address and postcode</li>
+    <li>Vehicle make, model, registration, and year</li>
+  </ul>
+
+  <h3>Chauffeur Information</h3>
+  <p>To comply with legal obligations and maintain platform safety we collect:</p>
+  <ul>
+    <li>Home address</li>
+    <li>Date of birth</li>
+    <li>Driving licence details</li>
+    <li>Private Hire / PCO licence details</li>
+    <li>National Insurance number</li>
+    <li>Identity verification documents</li>
+    <li>Bank account details for payouts</li>
+    <li>Professional documentation required for verification</li>
+  </ul>
+
+  <h3>Location Information</h3>
+  <p>When a chauffeur is marked as Online, we collect real-time location data to:</p>
+  <ul>
+    <li>Display availability</li>
+    <li>Match bookings</li>
+    <li>Navigate active journeys</li>
+    <li>Improve service reliability</li>
+  </ul>
+  <p>Location tracking stops when the chauffeur goes offline or closes the application, except where required to complete an active booking.</p>
+
+  <h3>Automatically Collected Information</h3>
+  <p>We automatically collect:</p>
+  <ul>
+    <li>IP address</li>
+    <li>Device identifiers and operating system</li>
+    <li>Browser type and app version</li>
+    <li>Crash logs, usage statistics, and security logs</li>
+  </ul>
+
+  <!-- 3 -->
+  <h2>3. How We Use Your Information</h2>
+  <p>We process personal information for the following purposes:</p>
+  <ul>
+    <li>Creating and managing accounts</li>
+    <li>Matching vehicle owners with chauffeurs</li>
+    <li>Processing bookings and payments</li>
+    <li>Verifying chauffeur identity and licensing</li>
+    <li>Fraud prevention and platform security</li>
+    <li>Customer support</li>
+    <li>Improving Platform performance</li>
+    <li>Sending transactional communications</li>
+    <li>Meeting legal and regulatory obligations</li>
+    <li>Resolving disputes and enforcing our Terms of Service</li>
+  </ul>
+  <p>We do not sell personal data.</p>
+
+  <!-- 4 -->
+  <h2>4. Legal Basis for Processing</h2>
+  <p>Under UK GDPR we rely on:</p>
+  <ul>
+    <li>Performance of a contract</li>
+    <li>Compliance with legal obligations</li>
+    <li>Legitimate business interests</li>
+    <li>User consent where required</li>
+  </ul>
+  <p>Where consent is relied upon, it may be withdrawn at any time without affecting previous lawful processing.</p>
+
+  <!-- 5 -->
+  <h2>5. Sharing Your Information</h2>
+  <p>We only disclose information where necessary. This may include:</p>
+  <ul>
+    <li>Vehicle owners and chauffeurs involved in the same booking</li>
+    <li>Payment providers</li>
+    <li>Identity verification providers</li>
+    <li>Cloud hosting providers</li>
+    <li>Email delivery providers</li>
+    <li>Professional advisers, insurers, and legal representatives</li>
+    <li>Courts, regulatory bodies, and law enforcement agencies where legally required</li>
+  </ul>
+  <p>All service providers are contractually required to protect personal information and may only process it on our instructions.</p>
+
+  <!-- 6 -->
+  <h2>6. International Data Transfers</h2>
+  <p>Some service providers may process information outside the United Kingdom or European Economic Area. Where this occurs, we ensure appropriate safeguards are implemented, including:</p>
+  <ul>
+    <li>UK International Data Transfer Agreements</li>
+    <li>Standard Contractual Clauses</li>
+    <li>Adequacy Regulations</li>
+    <li>Equivalent lawful protection mechanisms</li>
+  </ul>
+
+  <!-- 7 -->
+  <h2>7. Data Retention</h2>
+  <p>We retain information only for as long as necessary.</p>
+  <table class="policy-table">
+    <thead>
+      <tr><th>Data</th><th>Retention Period</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Active account data</td><td>While account remains active</td></tr>
+      <tr><td>Booking records</td><td>Minimum 6 years</td></tr>
+      <tr><td>Payment records</td><td>Minimum 6 years</td></tr>
+      <tr><td>Chauffeur verification documents</td><td>Duration of account + 1 year</td></tr>
+      <tr><td>Crash logs</td><td>90 days</td></tr>
+      <tr><td>Deleted accounts</td><td>Removal initiated within 30 days</td></tr>
+    </tbody>
+  </table>
+  <p>We may retain information beyond these periods where necessary for fraud investigations, legal proceedings, insurance claims, dispute resolution, or regulatory compliance.</p>
+
+  <!-- 8 -->
+  <h2>8. Account Deletion</h2>
+  <p>Users may request deletion of their account at any time. Deletion requests do not require us to erase information where retention is required by law, for taxation purposes, fraud prevention, unresolved disputes, legal claims, or regulatory obligations.</p>
+
+  <!-- 9 -->
+  <h2>9. Your Rights</h2>
+  <p>Under UK GDPR you have the right to:</p>
+  <ul>
+    <li>Access your information</li>
+    <li>Correct inaccurate information</li>
+    <li>Request erasure</li>
+    <li>Restrict processing</li>
+    <li>Object to processing</li>
+    <li>Request portability</li>
+    <li>Withdraw consent where applicable</li>
+  </ul>
+  <p>Requests should be sent to:</p>
+  <div class="contact-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+    <a href="mailto:privacy@privatechauffeurconnect.com">privacy@privatechauffeurconnect.com</a>
+  </div>
+  <p>We aim to respond within one calendar month.</p>
+
+  <!-- 10 -->
+  <h2>10. Security</h2>
+  <p>We implement industry-standard security measures including:</p>
+  <ul>
+    <li>Encrypted database storage</li>
+    <li>HTTPS encryption on all connections</li>
+    <li>Secure authentication tokens</li>
+    <li>Password hashing</li>
+    <li>Role-based access controls</li>
+    <li>Security monitoring and regular system updates</li>
+  </ul>
+  <p>While we take reasonable precautions, no internet-based service can guarantee absolute security. Users are responsible for maintaining the confidentiality of their passwords and account credentials.</p>
+
+  <!-- 11 -->
+  <h2>11. Automated Decision Making</h2>
+  <p>The Platform uses automated systems to:</p>
+  <ul>
+    <li>Match chauffeurs with vehicle owners</li>
+    <li>Prioritise nearby availability</li>
+    <li>Detect suspicious activity</li>
+  </ul>
+  <p>These systems assist operational decisions but are not intended to produce legally significant decisions without appropriate human oversight.</p>
+
+  <!-- 12 -->
+  <h2>12. Communications</h2>
+  <p>We may send:</p>
+  <ul>
+    <li>Verification emails</li>
+    <li>Booking confirmations</li>
+    <li>Security and payment notifications</li>
+    <li>Important service announcements</li>
+  </ul>
+  <p>These communications are necessary for providing the Platform and cannot be opted out of while an account remains active.</p>
+  <p>Marketing communications will only be sent where permitted by law and may be unsubscribed from at any time.</p>
+
+  <!-- 13 -->
+  <h2>13. Third-Party Services</h2>
+  <p>Our Platform relies on third-party providers including hosting, payment, verification, and communication services. While we carefully select our providers, we are not responsible for their independent privacy practices or security failures beyond our reasonable control.</p>
+  <p>Users should also review the privacy policies of any integrated third-party services they use.</p>
+
+  <!-- 14 -->
+  <h2>14. Children's Privacy</h2>
+  <p>The Platform is strictly intended for users aged 18 years or older. We do not knowingly collect information from anyone under 18 and reserve the right to immediately suspend or delete accounts believed to belong to minors.</p>
+
+  <!-- 15 -->
+  <h2>15. Changes to This Privacy Policy</h2>
+  <p>We may modify this Privacy Policy at any time. Material changes may be communicated through the Platform or by email. Continued use of the Platform after changes become effective constitutes acceptance of the revised Privacy Policy.</p>
+
+  <!-- 16 -->
+  <h2>16. Complaints</h2>
+  <p>If you have concerns regarding our handling of personal information, please contact:</p>
+  <div class="contact-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+    <a href="mailto:privacy@privatechauffeurconnect.com">privacy@privatechauffeurconnect.com</a>
+  </div>
+  <p>You also have the right to lodge a complaint with the <a href="https://ico.org.uk" target="_blank" rel="noopener">Information Commissioner's Office (ICO)</a>.</p>
+
+  <!-- RECOMMENDATION -->
+  <div class="rec-box">
+    <h3>Additional Recommendation</h3>
+    <p>Since Private Chauffeur Connect is a platform connecting vehicle owners and professional chauffeurs, we strongly recommend pairing this Privacy Policy with a comprehensive Terms &amp; Conditions document that includes:</p>
+    <ul>
+      <li>Platform disclaimer (intermediary, not a transport operator)</li>
+      <li>Independent contractor status of chauffeurs</li>
+      <li>Liability limitations</li>
+      <li>Booking cancellation policy</li>
+      <li>Payment and refund terms</li>
+      <li>Account suspension and termination rights</li>
+      <li>Dispute resolution procedure</li>
+      <li>Indemnity clauses and force majeure provisions</li>
+      <li>Intellectual property protections</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>© 2026 Private Chauffeur Connect. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="mailto:privacy@privatechauffeurconnect.com">privacy@privatechauffeurconnect.com</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
