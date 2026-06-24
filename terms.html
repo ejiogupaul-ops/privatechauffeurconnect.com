@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms &amp; Conditions — Private Chauffeur Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --gold:#c9a84c; --gold2:#e2c06a; --dark:#0a0a12; --dark2:#0f0f1e; --dark3:#141428; --border:rgba(201,168,76,.18); --text:#e8e8f0; --muted:#8080a8; --green:#4caf50; --blue:#5ab4e8; --red:#e94560; }
+    html { scrollbar-color:#1a1a2e #0a0a12; scrollbar-width:thin; }
+    body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text); min-height:100vh; }
+    a { color:var(--gold); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:#0a0a12; }
+    ::-webkit-scrollbar-thumb { background:#1a1a2e; border-radius:3px; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,10,18,.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 48px; height:110px; }
+    .nav-logo { display:flex; align-items:center; text-decoration:none; }
+    .nav-logo-img { height:95px; width:auto; mix-blend-mode:screen; filter:brightness(1.25) contrast(1.1) saturate(1.1); -webkit-mask-image:linear-gradient(to right,black 78%,transparent 95%); mask-image:linear-gradient(to right,black 78%,transparent 95%); }
+    .nav-back { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:6px; transition:color .2s; }
+    .nav-back:hover { color:var(--gold); text-decoration:none; }
+    @media(max-width:600px) { nav { padding:0 16px; height:80px; } .nav-logo-img { height:68px; } }
+
+    /* HERO */
+    .hero {
+      margin-top:110px;
+      background:linear-gradient(135deg,#0d0d20 0%,#12102a 100%);
+      border-bottom:1px solid var(--border);
+      padding:56px 0 48px;
+      text-align:center;
+    }
+    .hero .eyebrow { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+    .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(26px,4vw,42px); color:#fff; margin-bottom:10px; }
+    .hero .updated { font-size:13px; color:var(--muted); }
+
+    /* LAYOUT */
+    .wrap { max-width:820px; margin:0 auto; padding:56px 24px 80px; }
+
+    /* SECTION */
+    .section { margin-bottom:40px; }
+    .section-title {
+      font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase;
+      color:var(--gold); padding-bottom:12px; border-bottom:2px solid var(--gold);
+      margin-bottom:20px; display:flex; align-items:center; gap:10px;
+    }
+    .section-title.blue { color:var(--blue); border-color:var(--blue); }
+    .section-title.green { color:var(--green); border-color:var(--green); }
+    .section-title.red { color:var(--red); border-color:var(--red); }
+
+    /* CLAUSES */
+    .clause { display:flex; gap:14px; margin-bottom:12px; align-items:flex-start; }
+    .clause-num { color:var(--gold); font-size:12px; font-weight:700; min-width:34px; flex-shrink:0; padding-top:2px; }
+    .clause-text { font-size:14px; color:#b0b0c8; line-height:1.8; flex:1; }
+    .clause-num.blue { color:var(--blue); }
+    .clause-num.green { color:var(--green); }
+    .clause-num.red { color:var(--red); }
+
+    /* BULLETS */
+    .bullets { padding-left:48px; margin-bottom:10px; }
+    .bullets li { font-size:14px; color:#7a7a9a; line-height:1.8; margin-bottom:4px; }
+    .bullets li::marker { color:var(--gold); }
+
+    /* SUB HEADINGS (inside complex sections) */
+    .sub-heading { font-size:13px; font-weight:700; color:var(--text); margin:18px 0 8px 2px; letter-spacing:.3px; }
+    .sub-para { font-size:14px; color:#b0b0c8; line-height:1.8; margin-bottom:10px; }
+
+    /* CONTACT BOX */
+    .contact-box {
+      background:#0e0e22; border:1px solid var(--border); border-radius:14px;
+      padding:24px 28px; margin-top:40px;
+    }
+    .contact-box h3 { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+    .contact-box p { font-size:14px; color:#b0b0c8; line-height:1.9; }
+
+    /* FOOTER */
+    footer { background:#06060e; border-top:1px solid var(--border); padding:32px 24px; text-align:center; }
+    footer p { font-size:12px; color:var(--muted); }
+    footer a { color:var(--muted); margin:0 12px; font-size:12px; transition:color .2s; }
+    footer a:hover { color:var(--gold); text-decoration:none; }
+    .version-note { font-size:11px; color:#2a2a4a; text-align:center; margin-top:48px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="nav-logo-img" />
+  </a>
+  <a href="/" class="nav-back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to Home
+  </a>
+</nav>
+
+<div class="hero">
+  <div class="eyebrow">Legal</div>
+  <h1>Terms &amp; Conditions</h1>
+  <p class="updated">Last updated: June 2026 &nbsp;·&nbsp; Governing Law: England and Wales</p>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. DEFINITIONS -->
+  <div class="section">
+    <div class="section-title">1. Definitions</div>
+    <div class="clause"><span class="clause-num">1.1</span><span class="clause-text">"Platform" means Private Chauffeur Connect, including its website, mobile application, and related services.</span></div>
+    <div class="clause"><span class="clause-num">1.2</span><span class="clause-text">"We", "Us", "Our" means Private Chauffeur Connect Ltd (or successor entity).</span></div>
+    <div class="clause"><span class="clause-num">1.3</span><span class="clause-text">"Vehicle Owner" means a user who owns or controls a vehicle and books Chauffeur services via the Platform.</span></div>
+    <div class="clause"><span class="clause-num">1.4</span><span class="clause-text">"Chauffeur" means a self-employed driver providing driving services via the Platform.</span></div>
+    <div class="clause"><span class="clause-num">1.5</span><span class="clause-text">"Booking" means a confirmed arrangement for a Chauffeur to operate a Vehicle for a defined period.</span></div>
+    <div class="clause"><span class="clause-num">1.6</span><span class="clause-text">"Escrow" means funds temporarily held by the Platform pending completion of a Booking or resolution of a Dispute.</span></div>
+    <div class="clause"><span class="clause-num">1.7</span><span class="clause-text">"Dispute" means a claim raised by a Vehicle Owner regarding damage, loss, missing items, cleanliness, mileage, or related issues arising during a Booking.</span></div>
+  </div>
+
+  <!-- 2. PLATFORM ROLE -->
+  <div class="section">
+    <div class="section-title">2. Platform Role</div>
+    <div class="clause"><span class="clause-num">2.1</span><span class="clause-text">The Platform operates solely as a technology marketplace connecting Vehicle Owners and Chauffeurs.</span></div>
+    <div class="clause"><span class="clause-num">2.2</span><span class="clause-text">We facilitate bookings, payments, escrow services, and dispute resolution but do not provide transport services directly.</span></div>
+    <div class="clause"><span class="clause-num">2.3</span><span class="clause-text">Chauffeurs operate as independent contractors and are not employees, workers, or agents of the Platform.</span></div>
+    <div class="clause"><span class="clause-num">2.4</span><span class="clause-text">Vehicle Owners and Chauffeurs contract directly with each other for the performance of driving services, subject to these Terms.</span></div>
+    <div class="clause"><span class="clause-num">2.5</span><span class="clause-text">We do not guarantee uninterrupted availability of the Platform.</span></div>
+  </div>
+
+  <!-- 3. ELIGIBILITY -->
+  <div class="section">
+    <div class="section-title blue">3. Eligibility &amp; Registration</div>
+    <div class="clause"><span class="clause-num blue">3.1</span><span class="clause-text">Users must be at least 18 years of age.</span></div>
+    <div class="clause"><span class="clause-num blue">3.2</span><span class="clause-text">Users must provide accurate and complete information and keep it updated.</span></div>
+    <div class="clause"><span class="clause-num blue">3.3</span><span class="clause-text">Each user may maintain only one account unless explicitly authorised.</span></div>
+    <div class="clause"><span class="clause-num blue">3.4</span><span class="clause-text">Users are responsible for maintaining confidentiality of login credentials.</span></div>
+    <div class="clause"><span class="clause-num blue">3.5</span><span class="clause-text">We reserve the right to suspend or terminate accounts where false information is provided or suspected.</span></div>
+  </div>
+
+  <!-- 4. VEHICLE OWNER OBLIGATIONS -->
+  <div class="section">
+    <div class="section-title green">4. Vehicle Owner Obligations</div>
+    <div class="clause"><span class="clause-num green">4.1</span><span class="clause-text">Vehicle Owners warrant that any vehicle used in a Booking is:</span></div>
+    <ul class="bullets">
+      <li>legally roadworthy</li>
+      <li>taxed and insured</li>
+      <li>compliant with all applicable licensing requirements</li>
+    </ul>
+    <div class="clause"><span class="clause-num green">4.2</span><span class="clause-text">Vehicle Owners confirm that the Chauffeur shall have exclusive operational control of the vehicle during an active Booking.</span></div>
+    <div class="clause"><span class="clause-num green">4.3</span><span class="clause-text">Vehicle Owners are responsible for all fines, penalties, or charges incurred when the vehicle is not under an active Booking.</span></div>
+    <div class="clause"><span class="clause-num green">4.4</span><span class="clause-text">Vehicle Owners must provide accurate Booking details.</span></div>
+    <div class="clause"><span class="clause-num green">4.5</span><span class="clause-text">Vehicle Owners acknowledge that payment is held in Escrow and released only in accordance with Section 7.</span></div>
+    <div class="clause"><span class="clause-num green">4.6</span><span class="clause-text">Vehicle Owners agree that Disputes may require supporting evidence, including photographs, and that failure to provide evidence may affect the outcome.</span></div>
+    <div class="clause"><span class="clause-num green">4.7</span><span class="clause-text">Cancellation terms may apply depending on Booking stage and assignment status.</span></div>
+  </div>
+
+  <!-- 5. CHAUFFEUR OBLIGATIONS -->
+  <div class="section">
+    <div class="section-title">5. Chauffeur Obligations</div>
+    <div class="clause"><span class="clause-num">5.1</span><span class="clause-text">Chauffeurs must hold a valid UK driving licence appropriate for the vehicle class.</span></div>
+    <div class="clause"><span class="clause-num">5.2</span><span class="clause-text">Chauffeurs must maintain appropriate Hire &amp; Reward insurance or confirm valid coverage under the Vehicle Owner's insurance policy.</span></div>
+    <div class="clause"><span class="clause-num">5.3</span><span class="clause-text">Chauffeurs agree to operate vehicles with reasonable care and in compliance with all applicable laws.</span></div>
+    <div class="clause"><span class="clause-num">5.4</span><span class="clause-text">Chauffeurs are responsible for their own conduct during a Booking, including but not limited to:</span></div>
+    <ul class="bullets">
+      <li>traffic offences</li>
+      <li>unlawful driving behaviour</li>
+      <li>negligence causing damage</li>
+    </ul>
+    <div class="clause"><span class="clause-num">5.5</span><span class="clause-text">Chauffeurs must complete mandatory pre-trip and post-trip vehicle inspection procedures via the Platform.</span></div>
+    <div class="clause"><span class="clause-num">5.6</span><span class="clause-text">Chauffeurs must not operate a vehicle under the influence of alcohol or drugs.</span></div>
+    <div class="clause"><span class="clause-num">5.7</span><span class="clause-text">Chauffeurs must respond to Disputes within 24 hours.</span></div>
+    <div class="clause"><span class="clause-num">5.8</span><span class="clause-text">Failure to respond to a Dispute does not automatically determine liability.</span></div>
+  </div>
+
+  <!-- 6. BOOKINGS & PAYMENTS -->
+  <div class="section">
+    <div class="section-title blue">6. Bookings &amp; Payments</div>
+    <div class="clause"><span class="clause-num blue">6.1</span><span class="clause-text">All payments must be made via the Platform. Off-platform payments are strictly prohibited.</span></div>
+    <div class="clause"><span class="clause-num blue">6.2</span><span class="clause-text">Prices displayed at Booking confirmation are final unless overtime or additional charges apply.</span></div>
+    <div class="clause"><span class="clause-num blue">6.3</span><span class="clause-text">Payments are collected at Booking confirmation and held in Escrow.</span></div>
+    <div class="clause"><span class="clause-num blue">6.4</span><span class="clause-text">The Platform retains a service fee of 35% per Booking unless otherwise stated.</span></div>
+    <div class="clause"><span class="clause-num blue">6.5</span><span class="clause-text">Chauffeur payouts are processed within 3–5 business days following release.</span></div>
+    <div class="clause"><span class="clause-num blue">6.6</span><span class="clause-text">Overtime charges may apply where applicable at a rate disclosed in-app.</span></div>
+    <div class="clause"><span class="clause-num blue">6.7</span><span class="clause-text">We are not responsible for delays caused by third-party payment providers.</span></div>
+  </div>
+
+  <!-- 7. ESCROW & DISPUTE RESOLUTION -->
+  <div class="section">
+    <div class="section-title red">7. Escrow &amp; Dispute Resolution</div>
+
+    <p class="sub-heading">7.1 Escrow Mechanism</p>
+    <p class="sub-para">All Booking payments are held in Escrow and released only upon:</p>
+    <ul class="bullets">
+      <li>completion of the Booking and no Dispute being raised, or</li>
+      <li>resolution of a Dispute in accordance with this Section.</li>
+    </ul>
+
+    <p class="sub-heading">7.2 Dispute Initiation</p>
+    <p class="sub-para">Vehicle Owners may raise a Dispute within 30 minutes of Booking completion. A Dispute may relate to:</p>
+    <ul class="bullets">
+      <li>vehicle damage</li>
+      <li>missing items</li>
+      <li>cleanliness issues</li>
+      <li>mileage or fuel discrepancies</li>
+    </ul>
+
+    <p class="sub-heading">7.3 Evidence Requirement</p>
+    <p class="sub-para">Disputes must be supported by reasonable evidence, which may include photographs and written descriptions. Failure to provide sufficient evidence may result in automatic closure of the Dispute.</p>
+
+    <p class="sub-heading">7.4 Chauffeur Response</p>
+    <p class="sub-para">Chauffeurs will be notified and must respond within 24 hours with evidence or explanation.</p>
+
+    <p class="sub-heading">7.5 Assessment Process</p>
+    <p class="sub-para">We may assess Disputes using:</p>
+    <ul class="bullets">
+      <li>pre-trip and post-trip photographic records</li>
+      <li>user-submitted evidence</li>
+      <li>system metadata</li>
+      <li>internal review procedures</li>
+      <li>automated analytical tools (where applicable)</li>
+    </ul>
+
+    <p class="sub-heading">7.6 Liability Standard</p>
+    <p class="sub-para">A Chauffeur shall not be held liable unless it is reasonably determined, based on available evidence, that damage or loss occurred during the Booking period and was not pre-existing. The burden of proof rests with the claiming party.</p>
+
+    <p class="sub-heading">7.7 Outcomes</p>
+    <p class="sub-para">We may determine one of the following outcomes:</p>
+    <ul class="bullets">
+      <li>Chauffeur not liable (full payment released)</li>
+      <li>Shared liability (partial adjustment)</li>
+      <li>Chauffeur liable (deduction or insurance referral)</li>
+    </ul>
+
+    <p class="sub-heading">7.8 Automatic Closure</p>
+    <p class="sub-para">If no Dispute evidence is submitted within the applicable timeframe, the Booking will be automatically closed and Escrow funds released to the Chauffeur.</p>
+
+    <p class="sub-heading">7.9 Finality</p>
+    <p class="sub-para">Our determination is final for the purposes of Platform payment processing. This does not affect any party's statutory or legal rights.</p>
+  </div>
+
+  <!-- 8. ACCEPTABLE USE -->
+  <div class="section">
+    <div class="section-title">8. Acceptable Use</div>
+    <div class="clause"><span class="clause-num">8.1</span><span class="clause-text">Users must behave lawfully and respectfully at all times.</span></div>
+    <div class="clause"><span class="clause-num">8.2</span><span class="clause-text">Users must not engage in fraud, impersonation, or manipulation of the Platform.</span></div>
+    <div class="clause"><span class="clause-num">8.3</span><span class="clause-text">Off-platform payments or attempts to bypass the Platform are strictly prohibited.</span></div>
+    <div class="clause"><span class="clause-num">8.4</span><span class="clause-text">Breach of this section may result in immediate suspension or termination.</span></div>
+  </div>
+
+  <!-- 9. DATA & PRIVACY -->
+  <div class="section">
+    <div class="section-title blue">9. Data &amp; Privacy</div>
+    <div class="clause"><span class="clause-num blue">9.1</span><span class="clause-text">We process personal data in accordance with UK GDPR and the Data Protection Act 2018.</span></div>
+    <div class="clause"><span class="clause-num blue">9.2</span><span class="clause-text">Data collected includes identity, contact information, Booking data, and trip-related information.</span></div>
+    <div class="clause"><span class="clause-num blue">9.3</span><span class="clause-text">Location data is collected only during active Bookings and retained only as long as necessary for operational, legal, or dispute purposes.</span></div>
+    <div class="clause"><span class="clause-num blue">9.4</span><span class="clause-text">Trip-related images are retained for up to 12 months unless required longer for legal or regulatory reasons.</span></div>
+    <div class="clause"><span class="clause-num blue">9.5</span><span class="clause-text">Data may be disclosed to law enforcement or regulatory authorities where legally required.</span></div>
+    <p style="margin-top:14px;font-size:13px;color:var(--muted);">For full details, see our <a href="/privacy.html">Privacy Policy</a>.</p>
+  </div>
+
+  <!-- 10. LIABILITY -->
+  <div class="section">
+    <div class="section-title red">10. Liability</div>
+    <div class="clause"><span class="clause-num red">10.1</span><span class="clause-text">The Platform is provided on an "as is" and "as available" basis.</span></div>
+    <div class="clause"><span class="clause-num red">10.2</span><span class="clause-text">We do not guarantee uninterrupted or error-free operation.</span></div>
+    <div class="clause"><span class="clause-num red">10.3</span><span class="clause-text">We are not liable for indirect, incidental, or consequential losses.</span></div>
+    <div class="clause"><span class="clause-num red">10.4</span><span class="clause-text">Our total liability per Booking shall not exceed the total Platform fees retained for that Booking, except where prohibited by law.</span></div>
+    <div class="clause"><span class="clause-num red">10.5</span><span class="clause-text">Nothing in these Terms excludes liability for death or personal injury caused by negligence, fraud, or fraudulent misrepresentation.</span></div>
+  </div>
+
+  <!-- 11. TERMINATION -->
+  <div class="section">
+    <div class="section-title">11. Termination</div>
+    <div class="clause"><span class="clause-num">11.1</span><span class="clause-text">We may suspend or terminate accounts at our discretion where Terms are breached.</span></div>
+    <div class="clause"><span class="clause-num">11.2</span><span class="clause-text">Users may terminate their account at any time.</span></div>
+    <div class="clause"><span class="clause-num">11.3</span><span class="clause-text">Termination does not affect ongoing Disputes or financial obligations.</span></div>
+  </div>
+
+  <!-- 12. CHANGES TO TERMS -->
+  <div class="section">
+    <div class="section-title">12. Changes to Terms</div>
+    <div class="clause"><span class="clause-num">12.1</span><span class="clause-text">We may update these Terms from time to time.</span></div>
+    <div class="clause"><span class="clause-num">12.2</span><span class="clause-text">Users will be notified of material changes.</span></div>
+    <div class="clause"><span class="clause-num">12.3</span><span class="clause-text">Continued use of the Platform constitutes acceptance of updated Terms.</span></div>
+  </div>
+
+  <!-- 13. GOVERNING LAW -->
+  <div class="section">
+    <div class="section-title">13. Governing Law</div>
+    <div class="clause"><span class="clause-num">13.1</span><span class="clause-text">These Terms are governed by the laws of England and Wales.</span></div>
+    <div class="clause"><span class="clause-num">13.2</span><span class="clause-text">The courts of England and Wales shall have exclusive jurisdiction over any disputes arising from these Terms.</span></div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-box">
+    <h3>Contact</h3>
+    <p>
+      📧 support@privatechauffeur.co.uk<br />
+      Response target: 2 business days
+    </p>
+  </div>
+
+  <p class="version-note">Private Chauffeur Connect Ltd &nbsp;·&nbsp; England &amp; Wales &nbsp;·&nbsp; June 2026</p>
+
+</div>
+
+<footer>
+  <p>
+    <a href="/">Home</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/terms.html">Terms &amp; Conditions</a>
+    <a href="/download.html">Download App</a>
+  </p>
+  <p style="margin-top:10px;">© 2026 Private Chauffeur Connect</p>
+</footer>
+
+</body>
+</html>
