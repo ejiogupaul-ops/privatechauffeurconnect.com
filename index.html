@@ -38,9 +38,9 @@
     }
     .nav-logo { display: flex; align-items: center; gap: 0; }
     .nav-logo-img {
-      height: 64px; width: auto; object-fit: contain;
+      height: 80px; width: auto; object-fit: contain;
       mix-blend-mode: screen;
-      filter: brightness(1.1) contrast(1.05);
+      filter: brightness(1.3) contrast(1.1) saturate(1.2);
     }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a { font-size: 12px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text); transition: color .2s; }
@@ -71,10 +71,10 @@
       .nav-hamburger { display: flex; }
       nav { padding: 0 16px; width: 100%; }
       .nav-logo { flex-shrink: 1; min-width: 0; }
-      .nav-logo-img { height: 52px; }
+      .nav-logo-img { height: 64px; }
     }
     @media (max-width: 380px) {
-      .nav-logo-img { height: 44px; }
+      .nav-logo-img { height: 54px; }
     }
 
     /* ── BUTTONS ──────────────────────────────────── */
