@@ -36,11 +36,11 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 48px; height: 68px;
     }
-    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo { display: flex; align-items: center; gap: 0; }
     .nav-logo-img {
-      height: 48px; width: auto; object-fit: contain;
+      height: 64px; width: auto; object-fit: contain;
       mix-blend-mode: screen;
-      filter: brightness(1.2) contrast(1.15) saturate(1.2);
+      filter: brightness(1.1) contrast(1.05);
     }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a { font-size: 12px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text); transition: color .2s; }
@@ -71,10 +71,10 @@
       .nav-hamburger { display: flex; }
       nav { padding: 0 16px; width: 100%; }
       .nav-logo { flex-shrink: 1; min-width: 0; }
-      .nav-logo-img { height: 36px; }
+      .nav-logo-img { height: 52px; }
     }
     @media (max-width: 380px) {
-      .nav-logo-img { height: 30px; }
+      .nav-logo-img { height: 44px; }
     }
 
     /* ── BUTTONS ──────────────────────────────────── */
@@ -1079,7 +1079,7 @@ async function webRegister(role) {
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-brand-logo">
-          <img src="/logo.png" alt="Private Chauffeur Connect" style="height:52px;width:auto;mix-blend-mode:screen;filter:brightness(1.15) contrast(1.1);" />
+          <img src="/logo.png" alt="Private Chauffeur Connect" style="height:80px;width:auto;mix-blend-mode:screen;filter:brightness(1.1) contrast(1.05);" />
         </div>
         <p>The premium platform connecting discerning clients with professional, vetted chauffeurs across the UK.</p>
       </div>
