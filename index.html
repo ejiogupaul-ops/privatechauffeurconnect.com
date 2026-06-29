@@ -268,6 +268,20 @@
     }
     @media (max-width: 860px) { .mockups-inner { grid-template-columns: 1fr; } }
     .mockups-phones { display: flex; gap: 16px; justify-content: center; }
+    @media (max-width: 640px) {
+      .mockups-phones {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+        padding: 16px 24px 24px;
+        margin: 0 -20px;
+        scrollbar-width: none;
+      }
+      .mockups-phones::-webkit-scrollbar { display: none; }
+      .mini-phone { flex: 0 0 140px; scroll-snap-align: center; }
+      .mini-phone:nth-child(2) { margin-top: 0; }
+    }
     .mini-phone {
       width: 130px; border-radius: 24px;
       background: var(--dark3); border: 1px solid var(--border);
