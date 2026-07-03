@@ -264,7 +264,7 @@
   <div class="page" id="page-done" style="text-align:center;max-width:560px;">
     <div style="font-size:72px;margin-bottom:20px;">🎉</div>
     <h2 style="font-family:'Playfair Display',serif;font-size:34px;color:#fff;margin-bottom:12px;">You're All Set, <span id="done-name" style="color:var(--gold)"></span>!</h2>
-    <p style="color:var(--muted);font-size:15px;line-height:1.75;margin-bottom:28px;">Your vehicle is registered and your profile is complete. Everything is ready — now it's time to get your first chauffeur booked through the app.</p>
+    <p style="color:var(--muted);font-size:15px;line-height:1.75;margin-bottom:28px;">Your vehicle is registered and your profile is complete. Everything is ready. Now it's time to get your first chauffeur booked through the app.</p>
 
     <!-- Registered vehicle chip -->
     <div style="background:rgba(201,168,76,.08);border:1px solid var(--border);border-radius:12px;padding:16px 24px;margin-bottom:32px;display:inline-block;">
@@ -278,11 +278,11 @@
       <div style="display:flex;flex-direction:column;gap:16px;">
         <div style="display:flex;align-items:flex-start;gap:14px;">
           <div style="width:36px;height:36px;border-radius:9px;background:rgba(201,168,76,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📱</div>
-          <div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Download the App</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Get the Private Chauffeur Connect app on your Android phone — all booking and tracking happens here.</div></div>
+          <div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Download the App</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Get the Private Chauffeur Connect app on your Android phone. All booking and tracking happens here.</div></div>
         </div>
         <div style="display:flex;align-items:flex-start;gap:14px;">
           <div style="width:36px;height:36px;border-radius:9px;background:rgba(201,168,76,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">👔</div>
-          <div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Find a Chauffeur</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Open the app and sign in — a vetted professional chauffeur will be matched to your vehicle.</div></div>
+          <div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Find a Chauffeur</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Open the app and sign in. A vetted professional chauffeur will be matched to your vehicle.</div></div>
         </div>
         <div style="display:flex;align-items:flex-start;gap:14px;">
           <div style="width:36px;height:36px;border-radius:9px;background:rgba(201,168,76,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📍</div>
@@ -435,7 +435,7 @@
       if (!res.ok) {
         if (data.error === 'MOT_EXPIRED') {
           document.getElementById('mot-icon').textContent = '❌';
-          document.getElementById('mot-title').textContent = 'MOT Invalid — Registration Stopped';
+          document.getElementById('mot-title').textContent = 'MOT Invalid: Registration Stopped';
           document.getElementById('mot-title').style.color = 'var(--red)';
           document.getElementById('mot-sub').textContent = data.message;
           setLoading('vehicle-btn', false, 'Register Vehicle & Check MOT');
@@ -457,7 +457,7 @@
         document.getElementById('mot-icon').textContent = '🚗';
         document.getElementById('mot-title').textContent = 'Vehicle Registered';
         document.getElementById('mot-title').style.color = '#fff';
-        document.getElementById('mot-sub').textContent = 'MOT status not checked — will be verified before first booking.';
+        document.getElementById('mot-sub').textContent = 'MOT status not checked. This will be verified before your first booking.';
       }
 
       setTimeout(() => {
