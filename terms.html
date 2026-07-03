@@ -83,6 +83,9 @@
     footer a { color:var(--muted); margin:0 12px; font-size:12px; transition:color .2s; }
     footer a:hover { color:var(--gold); text-decoration:none; }
     .version-note { font-size:11px; color:#2a2a4a; text-align:center; margin-top:48px; }
+
+    /* Content protection */
+    body { -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
   </style>
 </head>
 <body>
@@ -393,5 +396,31 @@
   <p style="margin-top:10px;">© 2026 Private Chauffeur Connect</p>
 </footer>
 
+<script>
+  // Disable copy, cut, and right-click context menu
+  document.addEventListener('copy',  function(e){ e.preventDefault(); });
+  document.addEventListener('cut',   function(e){ e.preventDefault(); });
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+  // Disable keyboard shortcuts: Ctrl/Cmd + C, X, A, S, P, U (view-source)
+  document.addEventListener('keydown', function(e){
+    const ctrl = e.ctrlKey || e.metaKey;
+    if(ctrl && ['c','x','a','s','p','u'].includes(e.key.toLowerCase())){
+      e.preventDefault();
+    }
+    // F12 DevTools
+    if(e.key === 'F12'){ e.preventDefault(); }
+    // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C (DevTools)
+    if(ctrl && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())){
+      e.preventDefault();
+    }
+  });
+
+  // Screenshot deterrent: blur the page when the user switches away (Print Screen
+  // requires the page to be visible, so blurring on visibilitychange adds friction)
+  document.addEventListener('visibilitychange', function(){
+    document.body.style.filter = document.hidden ? 'blur(20px)' : '';
+  });
+</script>
 </body>
 </html>
