@@ -85,6 +85,9 @@
     .footer-links { display:flex; gap:24px; flex-wrap:wrap; justify-content:center; }
     .footer-links a { font-size:13px; color:var(--muted); transition:color .2s; }
     .footer-links a:hover { color:var(--gold); text-decoration:none; }
+
+    /* Content protection */
+    body { -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
   </style>
 </head>
 <body>
@@ -355,5 +358,30 @@
   </div>
 </footer>
 
+<script>
+  // Disable copy, cut, and right-click context menu
+  document.addEventListener('copy',  function(e){ e.preventDefault(); });
+  document.addEventListener('cut',   function(e){ e.preventDefault(); });
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+  // Disable keyboard shortcuts: Ctrl/Cmd + C, X, A, S, P, U (view-source)
+  document.addEventListener('keydown', function(e){
+    const ctrl = e.ctrlKey || e.metaKey;
+    if(ctrl && ['c','x','a','s','p','u'].includes(e.key.toLowerCase())){
+      e.preventDefault();
+    }
+    // F12 DevTools
+    if(e.key === 'F12'){ e.preventDefault(); }
+    // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C (DevTools)
+    if(ctrl && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())){
+      e.preventDefault();
+    }
+  });
+
+  // Screenshot deterrent: blur the page when the user switches away
+  document.addEventListener('visibilitychange', function(){
+    document.body.style.filter = document.hidden ? 'blur(20px)' : '';
+  });
+</script>
 </body>
 </html>
