@@ -406,6 +406,7 @@
     <a href="#top">Home</a>
     <a href="/about.html">About Us</a>
     <a href="#contact">Contact</a>
+    <a href="/faq.html">FAQ</a>
     <div class="nav-register-wrap" id="nav-register-wrap">
       <button class="nav-register-btn" id="nav-register-btn" onclick="toggleRegisterMenu()">
         Register with us <span class="reg-arrow">▾</span>
@@ -425,6 +426,7 @@
   <a href="#top" onclick="closeMenu()">Home</a>
   <a href="/about.html" onclick="closeMenu()">About Us</a>
   <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="/faq.html" onclick="closeMenu()">FAQ</a>
   <a href="/register-chauffeur.html" onclick="closeMenu()" style="color:var(--gold);">Register as Chauffeur</a>
   <a href="/register-owner.html" onclick="closeMenu()" style="color:var(--gold);">Register as Owner</a>
   <a href="/login.html" class="nav-login" onclick="closeMenu()">Login</a>
@@ -931,6 +933,77 @@
 </script>
 
 
+<!-- ══ FAQ PREVIEW ════════════════════════════════ -->
+<section style="background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 24px;">
+  <div style="max-width:760px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:40px;padding:6px 18px;margin-bottom:20px;font-size:11px;color:var(--gold);font-weight:600;letter-spacing:2px;text-transform:uppercase;">Frequently Asked Questions</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);color:#fff;margin-bottom:12px;">Everything you need to know<br>before getting started.</h2>
+    </div>
+
+    <div id="home-faq-list">
+
+      <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
+        <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">How are chauffeurs vetted?</span>
+          <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
+        </div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">Every chauffeur completes identity verification, document checks and our onboarding process before they can accept bookings through the platform.</div>
+      </div>
+
+      <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
+        <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">Can I track my vehicle during a booking?</span>
+          <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
+        </div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">Yes. Live GPS tracking is available throughout active bookings. For Airport Drop-Off with Vehicle Return services, tracking continues until your vehicle has been safely returned.</div>
+      </div>
+
+      <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
+        <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">What happens if I cancel a booking?</span>
+          <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
+        </div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">You can cancel through the app. Any applicable refund or cancellation compensation will be calculated and shown before you confirm your cancellation.</div>
+      </div>
+
+      <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
+        <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">How do chauffeurs get paid?</span>
+          <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
+        </div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">Payments are securely processed through the platform. Chauffeurs receive earnings and any eligible cancellation compensation through their chauffeur wallet in line with the platform's payout schedule.</div>
+      </div>
+
+      <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
+        <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">What insurance is required?</span>
+          <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
+        </div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">Private Chauffeur Connect is developing an insurance solution specifically for bookings made through the platform. Insurance requirements will be confirmed before eligible bookings are accepted.</div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:36px;">
+      <a href="/faq.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.35);color:var(--gold);border-radius:10px;padding:14px 28px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(201,168,76,.18)'" onmouseout="this.style.background='rgba(201,168,76,.1)'">View All FAQs →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+function htoggle(el){
+  const item=el.closest('.hfaq-item');
+  const ans=item.querySelector('.hfaq-a');
+  const chev=item.querySelector('.hfaq-chev');
+  const isOpen=ans.style.display==='block';
+  ans.style.display=isOpen?'none':'block';
+  chev.style.transform=isOpen?'':'rotate(180deg)';
+  item.style.borderColor=isOpen?'rgba(201,168,76,.15)':'rgba(201,168,76,.35)';
+  el.querySelector('span').style.color=isOpen?'var(--text)':'var(--gold2,#e2c06a)';
+}
+</script>
+
 <!-- ══ FOOTER ═════════════════════════════════════ -->
 <footer id="contact">
   <div class="inner">
@@ -950,6 +1023,7 @@
       <div class="footer-col">
         <h5>Company</h5>
         <a href="/about.html">About Us</a>
+        <a href="/faq.html">FAQs</a>
         <a href="/register-chauffeur.html">Register as Chauffeur</a>
         <a href="/register-owner.html">Register as Owner</a>
         <a href="/privacy.html">Privacy Policy</a>

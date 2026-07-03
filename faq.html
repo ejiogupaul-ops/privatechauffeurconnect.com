@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQs — Private Chauffeur Connect</title>
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
+  <meta name="description" content="Frequently asked questions about Private Chauffeur Connect for vehicle owners and professional chauffeurs." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:   #c9a84c;
+      --gold2:  #e2c06a;
+      --dark:   #0a0a12;
+      --dark2:  #0f0f1e;
+      --dark3:  #141428;
+      --border: rgba(201,168,76,.18);
+      --text:   #e8e8f0;
+      --muted:  #8080a8;
+    }
+    html { scroll-behavior: smooth; scrollbar-color: #1a1a2e #0a0a12; scrollbar-width: thin; overflow-x: clip; }
+    body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; overflow-x: clip; }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,18,.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 110px;
+    }
+    .nav-logo-img {
+      height: 95px; width: auto; object-fit: contain;
+      mix-blend-mode: screen; filter: brightness(1.25) contrast(1.1) saturate(1.1);
+      -webkit-mask-image: linear-gradient(to right, black 78%, transparent 95%);
+      mask-image: linear-gradient(to right, black 78%, transparent 95%);
+    }
+    .nav-back { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; transition: color .2s; }
+    .nav-back:hover { color: var(--gold); }
+    .nav-back svg { width: 16px; height: 16px; }
+    @media (max-width: 600px) { nav { padding: 0 16px; height: 80px; } .nav-logo-img { height: 68px; } }
+
+    /* HERO */
+    .faq-hero {
+      margin-top: 110px;
+      background: linear-gradient(135deg, #0d0d20 0%, #12102a 60%, #0f0f1e 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 72px 24px 64px; text-align: center; position: relative; overflow: hidden;
+    }
+    .faq-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(201,168,76,.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .faq-hero .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(201,168,76,.1); border: 1px solid rgba(201,168,76,.3);
+      border-radius: 40px; padding: 6px 18px; margin-bottom: 24px;
+      font-size: 11px; color: var(--gold); font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .faq-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 52px); color: #fff; margin-bottom: 14px; line-height: 1.15;
+    }
+    .faq-hero h1 em { color: var(--gold); font-style: normal; }
+    .faq-hero .tagline { font-size: clamp(15px, 2vw, 18px); color: var(--muted); font-weight: 300; }
+    @media (max-width: 600px) { .faq-hero { margin-top: 80px; padding: 56px 20px 48px; } }
+
+    /* TAB SWITCHER */
+    .tab-wrap {
+      max-width: 860px; margin: 0 auto; padding: 48px 24px 0;
+    }
+    .tabs {
+      display: flex; gap: 10px; margin-bottom: 40px;
+    }
+    .tab-btn {
+      flex: 1; padding: 12px 20px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1); background: transparent;
+      color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: .5px;
+      text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all .2s;
+    }
+    .tab-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,.08); }
+    .tab-btn:hover:not(.active) { border-color: rgba(201,168,76,.3); color: #c0c0d0; }
+
+    /* SECTION LABEL */
+    .section-label {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+    }
+    .section-icon {
+      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(201,168,76,.1); border: 1px solid rgba(201,168,76,.25);
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .section-label h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 3vw, 24px); color: var(--gold);
+    }
+
+    /* ACCORDION */
+    .faq-list { margin-bottom: 64px; }
+    .faq-item {
+      border: 1px solid rgba(201,168,76,.15);
+      border-radius: 12px; margin-bottom: 10px;
+      background: rgba(255,255,255,.02); overflow: hidden;
+      transition: border-color .2s;
+    }
+    .faq-item.open { border-color: rgba(201,168,76,.35); }
+    .faq-q {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; cursor: pointer; gap: 16px;
+    }
+    .faq-q span {
+      font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.45; flex: 1;
+    }
+    .faq-item.open .faq-q span { color: var(--gold2); }
+    .faq-chevron {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 1px solid rgba(201,168,76,.3); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 12px; transition: transform .25s, background .2s;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); background: rgba(201,168,76,.12); }
+    .faq-a {
+      display: none; padding: 0 22px 20px;
+    }
+    .faq-item.open .faq-a { display: block; }
+    .faq-a p { font-size: 14px; color: #a0a0c0; line-height: 1.85; margin-bottom: 10px; }
+    .faq-a p:last-child { margin-bottom: 0; }
+    .faq-a ul, .faq-a ol {
+      padding-left: 18px; margin: 8px 0 10px;
+    }
+    .faq-a li {
+      font-size: 14px; color: #a0a0c0; line-height: 1.85; margin-bottom: 4px;
+    }
+    .faq-divider { height: 1px; background: rgba(201,168,76,.1); margin-bottom: 32px; }
+
+    /* TAB PANELS */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* FOOTER */
+    footer { background: #06060e; border-top: 1px solid var(--border); padding: 40px 0 24px; }
+    .footer-inner { max-width: 860px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+    .footer-inner p { font-size: 13px; color: var(--muted); }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+    .footer-links a { font-size: 13px; color: var(--muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/">
+    <img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="nav-logo-img" />
+  </a>
+  <a href="/" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to Home
+  </a>
+</nav>
+
+<div class="faq-hero">
+  <div class="eyebrow">FAQs</div>
+  <h1>Frequently Asked <em>Questions</em></h1>
+  <p class="tagline">Everything you need to know before getting started.</p>
+</div>
+
+<div class="tab-wrap">
+
+  <!-- TAB SWITCHER -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('owners', this)">🔑 Vehicle Owners</button>
+    <button class="tab-btn" onclick="switchTab('chauffeurs', this)">🚗 Chauffeurs</button>
+  </div>
+
+  <!-- VEHICLE OWNERS PANEL -->
+  <div class="tab-panel active" id="panel-owners">
+    <div class="section-label">
+      <div class="section-icon">🔑</div>
+      <h2>Vehicle Owners</h2>
+    </div>
+    <div class="faq-divider"></div>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What is Private Chauffeur Connect?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Private Chauffeur Connect is a platform that connects vehicle owners with vetted, independent professional chauffeurs. You use your own vehicle, while a professional chauffeur provides the driving service.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What services can I book?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>You can book chauffeurs for:</p>
+          <ul>
+            <li>Airport transfers</li>
+            <li>Business travel</li>
+            <li>Special events</li>
+            <li>Weddings</li>
+            <li>Evening engagements</li>
+            <li>Medical appointments</li>
+            <li>Long-distance journeys</li>
+            <li>Vehicle return services</li>
+            <li>Hourly chauffeur hire</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>How do I book a chauffeur?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Simply:</p>
+          <ol>
+            <li>Enter your journey details.</li>
+            <li>Choose the service you require.</li>
+            <li>Review the price.</li>
+            <li>Confirm and pay securely.</li>
+          </ol>
+          <p>A qualified chauffeur will be assigned to your booking.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>Can I track my vehicle?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Yes. During an active booking, you can view the chauffeur's live location through the app.</p>
+          <p>For Airport Drop-Off with Vehicle Return bookings, tracking continues while your vehicle is being returned until the booking is completed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What if my flight is delayed or cancelled?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Depending on your booking, airport waiting time can be extended (additional charges may apply). If your flight is cancelled, please contact your chauffeur or our support team through the app as soon as possible.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What happens if I need to cancel?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>You can cancel your booking through the app. Refunds are calculated based on:</p>
+          <ul>
+            <li>Time before pickup</li>
+            <li>Booking status</li>
+            <li>Whether the chauffeur has started travelling</li>
+          </ul>
+          <p>Any applicable cancellation charges will be shown before you confirm cancellation.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>Is my payment secure?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Yes. All payments are processed securely through our payment provider. Your payment is held and managed in accordance with our booking and cancellation policies.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What insurance is required?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Private Chauffeur Connect is developing an insurance solution specifically for bookings made through the platform. Where applicable, insurance requirements will be communicated before your booking is confirmed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>How are chauffeurs vetted?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Every chauffeur must complete our onboarding process, which may include:</p>
+          <ul>
+            <li>Identity verification</li>
+            <li>Licence checks</li>
+            <li>Right-to-work verification</li>
+            <li>Background screening (where applicable)</li>
+            <li>Document verification</li>
+            <li>Agreement to our platform standards</li>
+          </ul>
+          <p>All requirements must be satisfied before a chauffeur can accept bookings.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What happens if there's a problem during my booking?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>If you experience an issue, you can report it directly through the app. Our support team will investigate using booking records, GPS history and other available evidence before reaching a decision.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CHAUFFEURS PANEL -->
+  <div class="tab-panel" id="panel-chauffeurs">
+    <div class="section-label">
+      <div class="section-icon">🚗</div>
+      <h2>Chauffeurs</h2>
+    </div>
+    <div class="faq-divider"></div>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>Who can join Private Chauffeur Connect?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Professional independent chauffeurs who meet our onboarding requirements and agree to our platform standards.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>Am I employed by Private Chauffeur Connect?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>No. Chauffeurs remain independent contractors and are responsible for managing their own business and tax affairs.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>How do I receive bookings?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Bookings are offered through the app based on availability and other operational factors. You can accept or decline available bookings.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>How do payouts work?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Payments are made to your chauffeur wallet after completed bookings. Funds are then transferred according to the platform's payout schedule. Where applicable, cancellation compensation is also credited to your wallet.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>How much commission does the platform charge?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Private Chauffeur Connect deducts its agreed platform commission before calculating chauffeur earnings. Your earnings are displayed before you accept each booking.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What happens if a Vehicle Owner cancels?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Depending on the timing and booking status, you may receive cancellation compensation in accordance with our cancellation policy. If compensation is due, it will be added to your wallet for your next payout.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What if I need to cancel a booking?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>You should only cancel when absolutely necessary. Repeated cancellations may affect your platform rating and could result in temporary suspension or account review.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What happens if there's an accident?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>You must:</p>
+          <ol>
+            <li>Ensure everyone is safe.</li>
+            <li>Contact emergency services where required.</li>
+            <li>Notify the Vehicle Owner.</li>
+            <li>Report the incident through the app immediately.</li>
+            <li>Follow our incident reporting procedure.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What if I can't return the keys as instructed?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>If you cannot safely follow the Vehicle Owner's Key Return Instructions, contact the Vehicle Owner through the app before taking any alternative action. Never leave keys unattended unless specifically authorised.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>Can I take another passenger while returning the owner's vehicle?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>No. Only authorised occupants connected with the booking may be carried. Unauthorised passengers are strictly prohibited.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>Am I tracked during bookings?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Yes. GPS tracking remains active throughout active bookings to support journey monitoring, booking records and dispute resolution.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggle(this)">
+          <span>What support is available?</span>
+          <div class="faq-chevron">▾</div>
+        </div>
+        <div class="faq-a">
+          <p>Our support team is available to assist with booking issues, payment queries, incidents and disputes through the app.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/about.html">About Us</a>
+      <a href="/faq.html">FAQs</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms &amp; Conditions</a>
+    </div>
+    <p>&copy; 2026 Private Chauffeur Connect. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+function toggle(el){
+  const item = el.closest('.faq-item');
+  item.classList.toggle('open');
+}
+function switchTab(name, btn){
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
