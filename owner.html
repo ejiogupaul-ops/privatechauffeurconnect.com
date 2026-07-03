@@ -3,513 +3,1010 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Owner Portal — Private Chauffeur Connect</title>
+  <title>Owner Dashboard — Private Chauffeur Connect</title>
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="apple-touch-icon" href="/logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --gold:#c9a84c; --gold2:#e2c06a; --dark:#0a0a12; --dark2:#0f0f1e; --dark3:#141428; --border:rgba(201,168,76,.18); --text:#e8e8f0; --muted:#8080a8; --green:#4caf50; --red:#e94560; }
-    body { font-family:'Inter',sans-serif; background:var(--dark); color:var(--text); min-height:100vh; }
-    html { scrollbar-color:#1a1a2e #0a0a12; scrollbar-width:thin; }
-    ::-webkit-scrollbar { width:6px; }
-    ::-webkit-scrollbar-track { background:#0a0a12; }
-    ::-webkit-scrollbar-thumb { background:#1a1a2e; border-radius:3px; }
-    ::-webkit-scrollbar-thumb:hover { background:#c9a84c33; }
+    :root {
+      --gold: #c9a84c; --gold2: #e2c06a;
+      --dark: #0a0a12; --dark2: #0f0f1e; --dark3: #141428;
+      --border: rgba(201,168,76,.18); --text: #e8e8f0; --muted: #8080a8;
+      --green: #4caf50; --red: #e94560; --blue: #4a90e2;
+    }
+    html { scrollbar-color: #1a1a2e #0a0a12; scrollbar-width: thin; }
+    body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a12; }
+    ::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 3px; }
+    a { text-decoration: none; color: inherit; }
 
-    /* NAV */
-    nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,10,18,.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 40px; height:110px; }
-    .nav-logo { display:flex; align-items:center; text-decoration:none; }
-    .nav-logo-img { height:95px; width:auto; mix-blend-mode:screen; filter:brightness(1.25) contrast(1.1) saturate(1.1); -webkit-mask-image:linear-gradient(to right,black 78%,transparent 95%); mask-image:linear-gradient(to right,black 78%,transparent 95%); }
-    .nav-right { display:flex; align-items:center; gap:16px; }
-    .nav-user { font-size:13px; color:var(--muted); }
-    .nav-user span { color:var(--gold); font-weight:600; }
-    .btn-logout { background:transparent; border:1px solid rgba(255,255,255,.15); color:var(--muted); border-radius:6px; padding:7px 16px; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif; transition:all .2s; }
-    .btn-logout:hover { border-color:var(--red); color:var(--red); }
+    /* ── LOGIN ─────────────────────────────────────────── */
+    #view-login {
+      min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: 860px) { #view-login { grid-template-columns: 1fr; } .login-panel { display: none !important; } }
+    .login-panel {
+      background: linear-gradient(145deg, #0d0d20, #1a1030);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: center; padding: 64px 56px;
+    }
+    .login-panel::before {
+      content: ''; position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1563720223809-b2d764b61804?w=900&q=80') center/cover no-repeat;
+      opacity: .1;
+    }
+    .lp-content { position: relative; z-index: 1; }
+    .lp-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,168,76,.1); border: 1px solid rgba(201,168,76,.25); border-radius: 30px; padding: 5px 14px; margin-bottom: 28px; }
+    .lp-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+    .lp-tag span { font-size: 11px; color: var(--gold); font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; }
+    .lp-divider { width: 48px; height: 3px; background: var(--gold); border-radius: 2px; margin-bottom: 32px; }
+    .login-panel h1 { font-family: 'Playfair Display', serif; font-size: clamp(30px,3.5vw,44px); color: #fff; line-height: 1.15; margin-bottom: 20px; }
+    .login-panel h1 em { color: var(--gold); font-style: normal; }
+    .login-panel p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 36px; max-width: 380px; }
+    .lp-features { display: flex; flex-direction: column; gap: 16px; }
+    .lp-feat { display: flex; align-items: flex-start; gap: 14px; }
+    .lp-feat-icon { width: 38px; height: 38px; border-radius: 9px; background: rgba(201,168,76,.1); border: 1px solid rgba(201,168,76,.2); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+    .lp-feat-text .ft { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 2px; }
+    .lp-feat-text .fs { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .form-panel { display: flex; align-items: center; justify-content: center; padding: 48px 40px; background: var(--dark2); }
+    .form-box { width: 100%; max-width: 420px; }
+    .form-box h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; margin-bottom: 6px; }
+    .form-box .sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 7px; letter-spacing: .5px; text-transform: uppercase; }
+    .field input, .field select, .field textarea {
+      width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 13px 16px; color: var(--text); font-size: 14px;
+      font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); }
+    .field input::placeholder, .field textarea::placeholder { color: #404060; }
+    .field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238080a8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    .field select option { background: #0f0f1e; }
+    .field textarea { resize: vertical; min-height: 80px; }
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 48px; }
+    .pw-eye { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; padding: 4px; }
+    .pw-eye:hover { color: var(--gold); }
+    .btn-primary { width: 100%; background: var(--gold); color: #000; border: none; border-radius: 10px; padding: 14px; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif; transition: background .2s; }
+    .btn-primary:hover { background: var(--gold2); }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--gold); border-radius: 10px; padding: 11px 20px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color .2s, background .2s; }
+    .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,.08); }
+    .btn-danger { background: rgba(233,69,96,.12); border: 1px solid rgba(233,69,96,.3); color: #ff6b6b; border-radius: 8px; padding: 10px 18px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background .2s; }
+    .btn-danger:hover { background: rgba(233,69,96,.2); }
+    .err { background: rgba(233,69,96,.1); border: 1px solid rgba(233,69,96,.3); border-radius: 8px; padding: 11px 14px; font-size: 13px; color: #ff6b6b; margin-bottom: 14px; display: none; }
+    .err.show { display: block; }
+    .reg-link { text-align: center; font-size: 13px; color: var(--muted); margin-top: 18px; }
+    .reg-link a { color: var(--gold); font-weight: 600; }
 
-    /* LAYOUT */
-    main { padding-top:110px; min-height:100vh; }
-    .page { display:none; max-width:640px; margin:0 auto; padding:48px 24px; }
-    .page.active { display:block; }
+    /* ── APP SHELL ──────────────────────────────────────── */
+    #view-app { min-height: 100vh; display: flex; flex-direction: column; }
+    .app-header {
+      background: rgba(10,10,18,.97); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 64px; position: sticky; top: 0; z-index: 200;
+    }
+    .app-header-logo { height: 52px; width: auto; mix-blend-mode: screen; filter: brightness(1.2); }
+    .app-header-right { display: flex; align-items: center; gap: 16px; }
+    .app-user-name { font-size: 13px; color: var(--muted); }
+    .btn-logout { background: none; border: 1px solid rgba(255,255,255,.1); color: var(--muted); border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color .2s, color .2s; }
+    .btn-logout:hover { border-color: var(--red); color: var(--red); }
 
-    /* STEPS */
-    .steps { display:flex; align-items:center; gap:0; margin-bottom:40px; }
-    .step { display:flex; align-items:center; gap:8px; }
-    .step-num { width:32px; height:32px; border-radius:50%; border:2px solid rgba(255,255,255,.15); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--muted); flex-shrink:0; }
-    .step.active .step-num { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.1); }
-    .step.done .step-num { background:var(--gold); border-color:var(--gold); color:#000; }
-    .step-label { font-size:12px; color:var(--muted); font-weight:500; }
-    .step.active .step-label { color:var(--gold); }
-    .step.done .step-label { color:var(--text); }
-    .step-line { flex:1; height:2px; background:rgba(255,255,255,.08); margin:0 8px; min-width:24px; }
-    .step-line.done { background:var(--gold); }
+    /* Tab nav */
+    .tab-nav {
+      background: var(--dark2); border-bottom: 1px solid var(--border);
+      display: flex; overflow-x: auto; padding: 0 16px;
+    }
+    .tab-nav::-webkit-scrollbar { height: 0; }
+    .tab-btn {
+      flex-shrink: 0; padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--muted);
+      background: none; border: none; border-bottom: 2px solid transparent;
+      cursor: pointer; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 7px;
+      transition: color .2s, border-color .2s; white-space: nowrap;
+    }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-btn:hover:not(.active) { color: var(--text); }
+    .tab-badge { background: var(--red); color: #fff; border-radius: 10px; padding: 2px 6px; font-size: 10px; font-weight: 700; }
 
-    /* CARD */
-    .card { background:var(--dark3); border:1px solid var(--border); border-radius:20px; padding:36px; }
-    h2 { font-family:'Playfair Display',serif; font-size:26px; color:#fff; margin-bottom:8px; }
-    .subtitle { font-size:14px; color:var(--muted); margin-bottom:28px; line-height:1.6; }
-    .badge { display:inline-flex; align-items:center; gap:8px; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.25); border-radius:30px; padding:5px 14px; margin-bottom:20px; font-size:12px; color:var(--gold); font-weight:600; letter-spacing:1px; }
+    .app-content { flex: 1; padding: 28px 20px 60px; max-width: 900px; margin: 0 auto; width: 100%; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
-    /* FORM */
-    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    @media(max-width:520px) { .form-row { grid-template-columns:1fr; } }
-    .field { margin-bottom:18px; }
-    .field label { display:block; font-size:11px; color:var(--muted); margin-bottom:7px; letter-spacing:.5px; text-transform:uppercase; }
-    .field input, .field select { width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:13px 16px; color:#fff; font-size:14px; font-family:'Inter',sans-serif; outline:none; transition:border-color .2s; }
-    .field input:focus, .field select:focus { border-color:var(--gold); }
-    .field input::placeholder { color:#404060; }
-    .field select option { background:var(--dark3); }
-    .plate-preview { background:#f5c518; color:#000; font-size:20px; font-weight:900; border-radius:8px; padding:10px 20px; letter-spacing:4px; text-align:center; margin-bottom:20px; font-family:monospace; min-height:50px; display:flex; align-items:center; justify-content:center; }
+    /* ── ONBOARDING ──────────────────────────────────────── */
+    .onboard-card {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: 20px;
+      padding: 40px 36px; max-width: 540px; margin: 48px auto 0;
+    }
+    @media (max-width: 600px) { .onboard-card { padding: 28px 20px; } }
+    .onboard-card h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: #fff; margin-bottom: 6px; }
+    .onboard-card .sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+    .onboard-steps { display: flex; gap: 8px; margin-bottom: 28px; }
+    .onboard-step { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.08); }
+    .onboard-step.done { background: var(--gold); }
 
-    /* MOT CHECK */
-    .mot-check { background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:20px; display:none; }
-    .mot-check.show { display:block; }
-    .mot-spinner { display:flex; align-items:center; gap:12px; }
-    .spinner-sm { width:20px; height:20px; border:3px solid rgba(201,168,76,.2); border-top-color:var(--gold); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
-    @keyframes spin { to{transform:rotate(360deg)} }
-    .mot-result { display:flex; align-items:center; gap:12px; }
-    .mot-icon { font-size:24px; }
-    .mot-text .mt { font-size:14px; font-weight:700; color:#fff; }
-    .mot-text .ms { font-size:12px; color:var(--muted); margin-top:2px; }
+    /* ── DASHBOARD ───────────────────────────────────────── */
+    .dash-greeting { margin-bottom: 28px; }
+    .dash-greeting h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; margin-bottom: 4px; }
+    .dash-greeting p { font-size: 14px; color: var(--muted); }
+    .card { background: var(--dark2); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .card-title { font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }
+    .dash-cta { text-align: center; padding: 36px 24px; }
+    .dash-cta .icon { font-size: 52px; margin-bottom: 14px; }
+    .dash-cta h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; margin-bottom: 8px; }
+    .dash-cta p { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
 
-    /* BUTTONS */
-    .btn { width:100%; background:var(--gold); color:#000; border:none; border-radius:10px; padding:15px; font-size:14px; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'Inter',sans-serif; transition:background .2s; margin-top:4px; }
-    .btn:hover { background:var(--gold2); }
-    .btn:disabled { opacity:.5; cursor:not-allowed; }
-    .btn-ghost { background:transparent; border:2px solid var(--border); color:var(--muted); }
-    .btn-ghost:hover { border-color:var(--gold); color:var(--gold); background:transparent; }
-    .err { background:rgba(233,69,96,.1); border:1px solid rgba(233,69,96,.3); border-radius:10px; padding:14px; font-size:13px; color:#ff6b6b; margin-bottom:16px; display:none; line-height:1.5; }
-    .err.show { display:block; }
+    /* Status badge */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 700;
+    }
+    .status-badge.pending    { background: rgba(201,168,76,.15); color: var(--gold); border: 1px solid rgba(201,168,76,.3); }
+    .status-badge.active     { background: rgba(74,144,226,.15); color: var(--blue); border: 1px solid rgba(74,144,226,.3); }
+    .status-badge.completed  { background: rgba(76,175,80,.15); color: var(--green); border: 1px solid rgba(76,175,80,.3); }
+    .status-badge.cancelled  { background: rgba(233,69,96,.1); color: var(--red); border: 1px solid rgba(233,69,96,.25); }
 
-    /* SUCCESS */
-    .success-icon { font-size:72px; text-align:center; margin-bottom:20px; }
-    .success-box { background:rgba(76,175,80,.08); border:1px solid rgba(76,175,80,.25); border-radius:12px; padding:20px; margin-bottom:24px; }
-    .success-box .sl { font-size:12px; color:var(--green); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
-    .success-box .sv { font-size:15px; font-weight:600; color:#fff; }
+    /* ── BOOKING FORM ────────────────────────────────────── */
+    .trip-type-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .tt-btn { flex: 1; min-width: 120px; padding: 11px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,.1); background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; transition: all .2s; }
+    .tt-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,.08); }
+    .tt-btn:hover:not(.active) { border-color: rgba(201,168,76,.3); }
+    .booking-step { display: none; }
+    .booking-step.active { display: block; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .price-card {
+      background: rgba(201,168,76,.06); border: 1px solid rgba(201,168,76,.22);
+      border-radius: 14px; padding: 22px 24px; margin-bottom: 20px;
+    }
+    .price-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .price-row:last-child { border-bottom: none; padding-top: 12px; }
+    .price-row .label { font-size: 13px; color: var(--muted); }
+    .price-row .value { font-size: 13px; color: var(--text); font-weight: 600; }
+    .price-row.total .label { font-size: 15px; font-weight: 700; color: var(--text); }
+    .price-row.total .value { font-size: 20px; font-weight: 800; color: var(--gold); }
+    .roadworthy-check { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: rgba(76,175,80,.06); border: 1px solid rgba(76,175,80,.2); border-radius: 10px; margin-bottom: 18px; cursor: pointer; }
+    .rw-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all .2s; }
+    .rw-box.checked { background: var(--green); border-color: var(--green); }
+    .rw-box.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
+    .roadworthy-check p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .vehicle-chip { background: var(--dark3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+    .vehicle-chip .vc-icon { font-size: 20px; }
+    .vehicle-chip .vc-reg { font-size: 13px; font-weight: 700; color: #fff; }
+    .vehicle-chip .vc-info { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-    /* LOGIN PAGE */
-    #page-login { max-width:440px; }
-    .divider { text-align:center; font-size:12px; color:var(--muted); margin:18px 0; position:relative; }
-    .divider::before, .divider::after { content:''; position:absolute; top:50%; width:42%; height:1px; background:rgba(255,255,255,.08); }
-    .divider::before { left:0; } .divider::after { right:0; }
-    .link-text { text-align:center; font-size:13px; color:var(--muted); margin-top:16px; }
-    .link-text a { color:var(--gold); text-decoration:none; }
+    /* ── ACTIVE TRIP ──────────────────────────────────────── */
+    .status-bar {
+      border-radius: 14px; padding: 18px 22px; margin-bottom: 18px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .status-bar.searching  { background: rgba(201,168,76,.08); border: 1px solid rgba(201,168,76,.25); }
+    .status-bar.en-route   { background: rgba(74,144,226,.08); border: 1px solid rgba(74,144,226,.25); }
+    .status-bar.on-trip    { background: rgba(76,175,80,.08); border: 1px solid rgba(76,175,80,.25); }
+    .status-bar.done       { background: rgba(76,175,80,.1); border: 1px solid rgba(76,175,80,.3); }
+    .status-bar.problem    { background: rgba(233,69,96,.08); border: 1px solid rgba(233,69,96,.25); }
+    .sb-icon { font-size: 28px; flex-shrink: 0; }
+    .sb-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .sb-desc  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    #map { height: 280px; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--border); }
+    .chauffeur-card { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--dark3); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 14px; }
+    .ch-avatar { width: 52px; height: 52px; border-radius: 50%; background: rgba(201,168,76,.15); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; overflow: hidden; }
+    .ch-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .ch-name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .ch-role { font-size: 12px; color: var(--gold); }
+    .approval-card { border-radius: 14px; padding: 20px 22px; margin-bottom: 14px; }
+    .approval-card.pre { background: rgba(74,144,226,.07); border: 1px solid rgba(74,144,226,.25); }
+    .approval-card.post { background: rgba(76,175,80,.07); border: 1px solid rgba(76,175,80,.25); }
+    .approval-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .approval-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+    @media (max-width: 480px) { .photo-grid { grid-template-columns: repeat(2, 1fr); } }
+    .photo-thumb { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 4/3; background: var(--dark3); border: 1px solid var(--border); }
+    .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-thumb .angle-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,.7); font-size: 10px; font-weight: 700; color: #fff; text-align: center; padding: 4px; letter-spacing: .5px; text-transform: uppercase; }
+    .approval-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-approve { background: var(--green); color: #fff; border: none; border-radius: 8px; padding: 11px 20px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-approve:hover { background: #43a047; }
+    .btn-dispute { background: rgba(233,69,96,.12); border: 1px solid rgba(233,69,96,.3); color: var(--red); border-radius: 8px; padding: 11px 20px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-dispute:hover { background: rgba(233,69,96,.2); }
+
+    /* ── HISTORY ─────────────────────────────────────────── */
+    .booking-row {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px 18px; margin-bottom: 10px; cursor: pointer;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+      transition: border-color .2s;
+    }
+    .booking-row:hover { border-color: rgba(201,168,76,.3); }
+    .br-left { flex: 1; }
+    .br-route { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .br-meta { font-size: 12px; color: var(--muted); }
+    .br-right { text-align: right; flex-shrink: 0; }
+    .br-price { font-size: 15px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+    .booking-detail { display: none; background: var(--dark3); border-radius: 0 0 12px 12px; padding: 16px 18px; border: 1px solid var(--border); border-top: none; margin-bottom: 10px; margin-top: -10px; }
+    .booking-detail.open { display: block; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 480px) { .detail-grid { grid-template-columns: 1fr; } }
+    .detail-item .dl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
+    .detail-item .dv { font-size: 13px; color: var(--text); }
+
+    /* Dispute modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--dark2); border: 1px solid var(--border); border-radius: 16px; padding: 28px; max-width: 440px; width: 100%; }
+    .modal h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; margin-bottom: 8px; }
+    .modal p { font-size: 13px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
+    .modal-btns { display: flex; gap: 10px; }
+    .modal-btns .btn-primary { flex: 1; }
+    .modal-btns .btn-outline { flex: 1; }
   </style>
 </head>
 <body>
-<nav>
-  <a href="/" class="nav-logo">
-    <img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="nav-logo-img" />
-  </a>
-  <div class="nav-right">
-    <div class="nav-user" id="nav-user" style="display:none">Welcome, <span id="nav-name">—</span></div>
-    <button class="btn-logout" id="btn-logout" style="display:none" onclick="logout()">Sign Out</button>
-  </div>
-</nav>
 
-<main>
-  <!-- ── PAGE: LOGIN ── -->
-  <div class="page active" id="page-login">
-    <div style="text-align:center;margin-bottom:32px;">
-      <h2 style="font-family:'Playfair Display',serif;font-size:28px;">Vehicle Owner Portal</h2>
-      <p style="color:var(--muted);margin-top:8px;font-size:14px;">Sign in to manage your vehicle and profile</p>
+<!-- ══ LOGIN ══════════════════════════════════════════════ -->
+<div id="view-login">
+  <div class="login-panel">
+    <div class="lp-content">
+      <div class="lp-tag"><div class="lp-dot"></div><span>Trusted Platform</span></div>
+      <div class="lp-divider"></div>
+      <h1>Welcome Back to<br><em>Private Chauffeur</em><br>Connect</h1>
+      <p>Sign in to book chauffeurs, track journeys, approve vehicle condition photos and manage your bookings, all from one place.</p>
+      <div class="lp-features">
+        <div class="lp-feat"><div class="lp-feat-icon">📅</div><div class="lp-feat-text"><div class="ft">Book Chauffeurs</div><div class="fs">Airport transfers, events, regular trips and more.</div></div></div>
+        <div class="lp-feat"><div class="lp-feat-icon">📍</div><div class="lp-feat-text"><div class="ft">Live Tracking</div><div class="fs">Follow your chauffeur in real time from pickup to destination.</div></div></div>
+        <div class="lp-feat"><div class="lp-feat-icon">📸</div><div class="lp-feat-text"><div class="ft">Photo Approval</div><div class="fs">Review pre and post-trip vehicle inspection photos.</div></div></div>
+      </div>
     </div>
-    <div class="card">
+  </div>
+  <div class="form-panel">
+    <div class="form-box">
+      <h2>Sign In</h2>
+      <p class="sub">Sign in to your vehicle owner account</p>
       <div class="err" id="login-err"></div>
-      <div class="field">
-        <label>Email Address</label>
-        <input type="email" id="login-email" placeholder="your@email.com" />
+      <div class="field"><label>Email Address</label><input type="email" id="login-email" placeholder="your@email.com" autocomplete="email" /></div>
+      <div class="field"><label>Password</label><div class="pw-wrap"><input type="password" id="login-pw" placeholder="••••••••" autocomplete="current-password" /><button class="pw-eye" type="button" onclick="togglePw('login-pw',this)">👁</button></div></div>
+      <button class="btn-primary" id="login-btn" onclick="doLogin()">Sign In</button>
+      <div class="reg-link">Don't have an account? <a href="/register-owner.html">Register as Vehicle Owner</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════════ -->
+<div id="view-app" hidden>
+  <header class="app-header">
+    <a href="/"><img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="app-header-logo" /></a>
+    <div class="app-header-right">
+      <span class="app-user-name" id="header-name"></span>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- ONBOARDING: Add Vehicle -->
+  <div id="panel-onboard-vehicle" style="display:none;">
+    <div class="onboard-card">
+      <div class="onboard-steps"><div class="onboard-step done"></div><div class="onboard-step"></div></div>
+      <h2>Register Your Vehicle</h2>
+      <p class="sub">Before you can book a chauffeur, we need to know which vehicle they'll be driving.</p>
+      <div class="err" id="veh-err"></div>
+      <div class="form-row">
+        <div class="field"><label>Registration Plate <span style="color:var(--red)">*</span></label><input type="text" id="veh-reg" placeholder="e.g. AB12 CDE" /></div>
+        <div class="field"><label>Make (Brand) <span style="color:var(--red)">*</span></label><input type="text" id="veh-make" placeholder="e.g. BMW" /></div>
       </div>
-      <div class="field">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••" />
+      <div class="form-row">
+        <div class="field"><label>Model</label><input type="text" id="veh-model" placeholder="e.g. 5 Series" /></div>
+        <div class="field"><label>Year</label><input type="number" id="veh-year" placeholder="e.g. 2021" min="1990" max="2030" /></div>
       </div>
-      <button class="btn" id="login-btn" onclick="doLogin()">Sign In</button>
-      <div class="divider">or</div>
-      <div class="link-text">Don't have an account? <a href="/#access">Register here</a></div>
+      <div class="form-row">
+        <div class="field"><label>Colour</label><input type="text" id="veh-color" placeholder="e.g. Black" /></div>
+        <div class="field"><label>Gearbox <span style="color:var(--red)">*</span></label><select id="veh-gear"><option value="automatic">Automatic</option><option value="manual">Manual</option></select></div>
+      </div>
+      <button class="btn-primary" id="veh-btn" onclick="doAddVehicle()">Save Vehicle &amp; Continue →</button>
     </div>
   </div>
 
-  <!-- ── PAGE: VEHICLE REGISTRATION ── -->
-  <div class="page" id="page-vehicle">
-    <div class="steps">
-      <div class="step done" id="s1"><div class="step-num">✓</div><div class="step-label">Account</div></div>
-      <div class="step-line done"></div>
-      <div class="step active" id="s2"><div class="step-num">2</div><div class="step-label">Your Vehicle</div></div>
-      <div class="step-line" id="sl2"></div>
-      <div class="step" id="s3"><div class="step-num">3</div><div class="step-label">Your Profile</div></div>
-    </div>
-    <div class="card">
-      <div class="badge">Step 2 of 3</div>
-      <h2>Add Your Vehicle</h2>
-      <p class="subtitle">Your vehicle details are needed to list it on the platform. We'll check the MOT instantly.</p>
-      <div class="err" id="vehicle-err"></div>
-
-      <div class="field">
-        <label>Registration Plate</label>
-        <input type="text" id="v-reg" placeholder="e.g. AB12 CDE" maxlength="8" oninput="this.value=this.value.toUpperCase();updatePlate(this.value)" />
-      </div>
-      <div class="plate-preview" id="plate-preview">—</div>
-
-      <div class="form-row">
-        <div class="field">
-          <label>Car Make</label>
-          <select id="v-make">
-            <option value="">Select make…</option>
-            <option>Alfa Romeo</option><option>Aston Martin</option><option>Audi</option><option>Bentley</option><option>BMW</option>
-            <option>Cadillac</option><option>Chevrolet</option><option>Citroën</option><option>Cupra</option><option>Dacia</option>
-            <option>Ferrari</option><option>Fiat</option><option>Ford</option><option>Genesis</option><option>Honda</option>
-            <option>Hyundai</option><option>Infiniti</option><option>Jaguar</option><option>Jeep</option><option>Kia</option>
-            <option>Lamborghini</option><option>Land Rover</option><option>Lexus</option><option>Maserati</option><option>Mazda</option>
-            <option>McLaren</option><option>Mercedes-Benz</option><option>Mini</option><option>Mitsubishi</option><option>Nissan</option>
-            <option>Peugeot</option><option>Porsche</option><option>Renault</option><option>Rolls-Royce</option><option>Seat</option>
-            <option>Skoda</option><option>Smart</option><option>Subaru</option><option>Suzuki</option><option>Tesla</option>
-            <option>Toyota</option><option>Vauxhall</option><option>Volkswagen</option><option>Volvo</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Model</label>
-          <input type="text" id="v-model" placeholder="e.g. E-Class" />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label>Year</label>
-          <input type="number" id="v-year" placeholder="e.g. 2021" min="1990" max="2026" />
-        </div>
-        <div class="field">
-          <label>Colour</label>
-          <input type="text" id="v-colour" placeholder="e.g. Black" />
-        </div>
-      </div>
-      <div class="field">
-        <label>Gear Type</label>
-        <select id="v-gear">
-          <option value="">Select gear type…</option>
-          <option>Automatic</option>
-          <option>Manual</option>
-        </select>
-      </div>
-
-      <!-- MOT check status -->
-      <div class="mot-check" id="mot-box">
-        <div class="mot-spinner" id="mot-loading">
-          <div class="spinner-sm"></div>
-          <div><div style="font-size:14px;font-weight:600;color:#fff;">Checking MOT with DVLA…</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">This usually takes 2–3 seconds</div></div>
-        </div>
-        <div class="mot-result" id="mot-result" style="display:none">
-          <div class="mot-icon" id="mot-icon"></div>
-          <div class="mot-text"><div class="mt" id="mot-title"></div><div class="ms" id="mot-sub"></div></div>
-        </div>
-      </div>
-
-      <button class="btn" id="vehicle-btn" onclick="doAddVehicle()">Register Vehicle &amp; Check MOT</button>
-    </div>
-  </div>
-
-  <!-- ── PAGE: PROFILE ── -->
-  <div class="page" id="page-profile">
-    <div class="steps">
-      <div class="step done"><div class="step-num">✓</div><div class="step-label">Account</div></div>
-      <div class="step-line done"></div>
-      <div class="step done"><div class="step-num">✓</div><div class="step-label">Your Vehicle</div></div>
-      <div class="step-line done"></div>
-      <div class="step active"><div class="step-num">3</div><div class="step-label">Your Profile</div></div>
-    </div>
-    <div class="card">
-      <div class="badge">Step 3 of 3 · Final Step</div>
+  <!-- ONBOARDING: Profile -->
+  <div id="panel-onboard-profile" style="display:none;">
+    <div class="onboard-card">
+      <div class="onboard-steps"><div class="onboard-step done"></div><div class="onboard-step done"></div></div>
       <h2>Complete Your Profile</h2>
-      <p class="subtitle">Tell us a bit about yourself so our team can get you set up and connected.</p>
-      <div class="err" id="profile-err"></div>
-
+      <p class="sub">We need your home address so chauffeurs know where to return your vehicle.</p>
+      <div class="err" id="prof-err"></div>
       <div class="form-row">
-        <div class="field">
-          <label>Full Name</label>
-          <input type="text" id="p-name" placeholder="Your full name" />
-        </div>
-        <div class="field">
-          <label>Phone Number <span style="color:#e94560;">*</span></label>
-          <input type="tel" id="p-phone" placeholder="+44 7XXX XXXXXX" />
-        </div>
+        <div class="field"><label>Full Name</label><input type="text" id="prof-name" /></div>
+        <div class="field"><label>Phone</label><input type="tel" id="prof-phone" placeholder="+44 7XXX XXXXXX" /></div>
       </div>
-      <div class="field">
-        <label>Bio / About You</label>
-        <input type="text" id="p-bio" placeholder="e.g. Professional vehicle owner based in Leeds" />
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label>Home Address <span style="color:#e94560;">*</span></label>
-          <input type="text" id="p-home-addr" placeholder="Street address" />
-        </div>
-        <div class="field">
-          <label>Home Postcode</label>
-          <input type="text" id="p-home-post" placeholder="e.g. LS2 7EY" />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label>Work Address <span style="color:var(--muted);font-weight:400;font-size:10px;">(Optional)</span></label>
-          <input type="text" id="p-work-addr" placeholder="Street address" />
-        </div>
-        <div class="field">
-          <label>Work Postcode <span style="color:var(--muted);font-weight:400;font-size:10px;">(Optional)</span></label>
-          <input type="text" id="p-work-post" placeholder="e.g. M1 2AB" />
-        </div>
-      </div>
-      <button class="btn" id="profile-btn" onclick="doSaveProfile()">Save Profile →</button>
+      <div class="field"><label>Home Address <span style="color:var(--red)">*</span></label><input type="text" id="prof-addr" placeholder="e.g. 12 Park Lane, Manchester" /></div>
+      <div class="field"><label>Home Postcode</label><input type="text" id="prof-postcode" placeholder="e.g. M1 2AB" /></div>
+      <button class="btn-primary" id="prof-btn" onclick="doSaveProfile()">Complete Setup →</button>
     </div>
   </div>
 
-  <!-- ── PAGE: DONE ── -->
-  <div class="page" id="page-done" style="text-align:center;max-width:560px;">
-    <div style="font-size:72px;margin-bottom:20px;">🎉</div>
-    <h2 style="font-family:'Playfair Display',serif;font-size:34px;color:#fff;margin-bottom:12px;">You're All Set, <span id="done-name" style="color:var(--gold)"></span>!</h2>
-    <p style="color:var(--muted);font-size:15px;line-height:1.75;margin-bottom:28px;">Your vehicle is registered and your profile is complete. Everything is ready. Now it's time to get your first chauffeur booked through the app.</p>
+  <!-- MAIN APP -->
+  <div id="panel-main" style="display:none;">
+    <nav class="tab-nav">
+      <button class="tab-btn active" id="tnav-dash" onclick="showTab('dash')">🏠 Dashboard</button>
+      <button class="tab-btn" id="tnav-book" onclick="showTab('book')">📅 Book a Chauffeur</button>
+      <button class="tab-btn" id="tnav-active" onclick="showTab('active')" style="display:none;">📍 Active Trip <span class="tab-badge" id="active-badge">●</span></button>
+      <button class="tab-btn" id="tnav-history" onclick="showTab('history')">📋 My Bookings</button>
+    </nav>
 
-    <!-- Registered vehicle chip -->
-    <div style="background:rgba(201,168,76,.08);border:1px solid var(--border);border-radius:12px;padding:16px 24px;margin-bottom:32px;display:inline-block;">
-      <div style="font-size:11px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;">Your Registered Vehicle</div>
-      <div style="font-size:16px;font-weight:700;color:#fff;" id="done-vehicle">—</div>
-    </div>
+    <div class="app-content">
 
-    <!-- Next steps -->
-    <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:28px;text-align:left;">
-      <div style="font-size:12px;color:var(--gold);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px;">What's Next</div>
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <div style="display:flex;align-items:flex-start;gap:14px;">
-          <div style="width:36px;height:36px;border-radius:9px;background:rgba(201,168,76,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📱</div>
-          <div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Download the App</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Get the Private Chauffeur Connect app on your Android phone. All booking and tracking happens here.</div></div>
+      <!-- ── DASHBOARD ── -->
+      <div class="tab-panel active" id="tab-dash">
+        <div class="dash-greeting">
+          <h2>Good to see you, <span id="dash-name"></span> 👋</h2>
+          <p>Here's an overview of your account.</p>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:14px;">
-          <div style="width:36px;height:36px;border-radius:9px;background:rgba(201,168,76,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">👔</div>
-          <div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Find a Chauffeur</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Open the app and sign in. A vetted professional chauffeur will be matched to your vehicle.</div></div>
+        <div id="dash-active-card" style="display:none;">
+          <div class="card-title">Active Booking</div>
+          <div id="dash-active-content"></div>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:14px;">
-          <div style="width:36px;height:36px;border-radius:9px;background:rgba(201,168,76,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📍</div>
-          <div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;">Track Live</div><div style="font-size:12px;color:var(--muted);line-height:1.6;">Watch your chauffeur's location in real time from pickup to drop-off, all from the app.</div></div>
+        <div id="dash-no-active">
+          <div class="card">
+            <div class="dash-cta">
+              <div class="icon">🚗</div>
+              <h3>Ready to Book a Chauffeur?</h3>
+              <p>Enter your journey details, get an instant price, and a vetted chauffeur will be matched to your vehicle.</p>
+              <button class="btn-primary" style="max-width:240px;" onclick="showTab('book')">Book a Chauffeur →</button>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">Recent Bookings</div>
+          <div id="dash-recent"></div>
         </div>
       </div>
+
+      <!-- ── BOOK ── -->
+      <div class="tab-panel" id="tab-book">
+        <div class="card">
+          <div class="card-title">New Booking</div>
+
+          <!-- Step 1: Journey details -->
+          <div class="booking-step active" id="book-step-1">
+            <div class="trip-type-tabs">
+              <button class="tt-btn active" onclick="setTripType('regular',this)">🚗 Regular Journey</button>
+              <button class="tt-btn" onclick="setTripType('airport_drop',this)">✈️ Airport Drop-Off</button>
+              <button class="tt-btn" onclick="setTripType('airport_roundtrip',this)">🔄 Airport Return</button>
+            </div>
+            <div class="err" id="book-err-1"></div>
+            <div class="form-row">
+              <div class="field"><label>Pickup Location <span style="color:var(--red)">*</span></label><input type="text" id="bk-pickup" placeholder="e.g. 12 Park Lane, Manchester" /></div>
+              <div class="field"><label>Destination <span style="color:var(--red)">*</span></label><input type="text" id="bk-dest" placeholder="e.g. Manchester Airport T1" /></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label>Date &amp; Time <span style="color:var(--red)">*</span></label><input type="datetime-local" id="bk-datetime" /></div>
+              <div class="field" id="bk-duration-wrap">
+                <label>Duration (hours) <span style="color:var(--red)">*</span></label>
+                <select id="bk-duration">
+                  <option value="">Select…</option>
+                  <option value="1">1 hour</option><option value="2">2 hours</option><option value="3">3 hours</option>
+                  <option value="4">4 hours</option><option value="5">5 hours</option><option value="6">6 hours</option>
+                  <option value="7">7 hours</option><option value="8">8 hours</option><option value="9">9 hours</option>
+                  <option value="10">10 hours</option><option value="12">12 hours</option>
+                </select>
+              </div>
+            </div>
+            <!-- Airport return: wait time at airport -->
+            <div class="field" id="bk-wait-wrap" style="display:none;">
+              <label>Wait time at airport (hours)</label>
+              <select id="bk-wait">
+                <option value="0">No waiting (drop off only)</option>
+                <option value="1">1 hour</option><option value="2">2 hours</option><option value="3">3 hours</option>
+                <option value="4">4 hours</option><option value="5">5 hours</option>
+              </select>
+            </div>
+            <!-- Airport return: does owner return with chauffeur? -->
+            <div id="bk-return-with-wrap" style="display:none;">
+              <div class="field">
+                <label>Will you return with the chauffeur?</label>
+                <div style="display:flex;gap:10px;margin-top:4px;">
+                  <button class="tt-btn active" id="rw-yes" onclick="setReturnWith(true)">Yes, I'll be in the car</button>
+                  <button class="tt-btn" id="rw-no" onclick="setReturnWith(false)">No — chauffeur returns alone</button>
+                </div>
+              </div>
+              <!-- Unaccompanied key return details -->
+              <div id="bk-key-return-wrap" style="display:none;">
+                <div class="form-row">
+                  <div class="field"><label>Key Return Method</label><select id="bk-key-method"><option value="">Select…</option><option value="lockbox">Key Lockbox</option><option value="neighbour">Leave with Neighbour</option><option value="post">Post</option><option value="other">Other</option></select></div>
+                  <div class="field"><label>Key Return Details</label><input type="text" id="bk-key-details" placeholder="e.g. lockbox code 1234" /></div>
+                </div>
+                <div class="field"><label>Full Key Return Instructions</label><textarea id="bk-key-instructions" placeholder="Full instructions for the chauffeur on how to return your keys safely…"></textarea></div>
+              </div>
+            </div>
+            <div class="field"><label>Purpose (optional)</label><input type="text" id="bk-purpose" placeholder="e.g. Airport transfer, Business meeting" /></div>
+            <button class="btn-primary" style="margin-top:8px;" onclick="getEstimate()">Get Price Estimate →</button>
+          </div>
+
+          <!-- Step 2: Confirm -->
+          <div class="booking-step" id="book-step-2">
+            <div class="err" id="book-err-2"></div>
+            <div id="bk-vehicle-chip" class="vehicle-chip">
+              <span class="vc-icon">🚗</span>
+              <div><div class="vc-reg" id="bk-veh-reg-display"></div><div class="vc-info" id="bk-veh-info-display"></div></div>
+            </div>
+            <div class="price-card" id="bk-price-card"></div>
+            <div class="roadworthy-check" id="rw-check" onclick="toggleRoadworthy()">
+              <div class="rw-box" id="rw-box"></div>
+              <p>I confirm that my vehicle is roadworthy, has a valid MOT, is properly insured, and is in a safe operating condition for this booking.</p>
+            </div>
+            <div style="display:flex;gap:12px;">
+              <button class="btn-outline" onclick="goBookStep(1)">← Back</button>
+              <button class="btn-primary" id="bk-confirm-btn" onclick="createBooking()" disabled>Confirm Booking</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Success -->
+          <div class="booking-step" id="book-step-3" style="text-align:center;padding:24px 0;">
+            <div style="font-size:56px;margin-bottom:16px;">✅</div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin-bottom:10px;">Booking Confirmed!</h3>
+            <p style="font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.7;">We're finding a chauffeur for you now. You'll see updates here and on the Active Trip tab as soon as one is assigned.</p>
+            <button class="btn-primary" style="max-width:220px;" onclick="showTab('active')">Track My Booking →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ACTIVE TRIP ── -->
+      <div class="tab-panel" id="tab-active">
+        <div id="active-content">
+          <div class="card" style="text-align:center;padding:36px 24px;">
+            <p style="color:var(--muted);">No active booking found. <a href="#" onclick="showTab('book');return false;" style="color:var(--gold);">Book a chauffeur →</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HISTORY ── -->
+      <div class="tab-panel" id="tab-history">
+        <div class="card-title" style="margin-bottom:14px;">All Bookings</div>
+        <div id="history-list"></div>
+      </div>
+
     </div>
-
-    <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk"
-       style="display:block;background:var(--gold);color:#000;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;border-radius:10px;padding:16px 32px;text-decoration:none;margin-bottom:14px;">
-      📱 Download the App
-    </a>
-    <a href="/" style="display:block;text-align:center;color:var(--muted);font-size:13px;text-decoration:none;">← Back to homepage</a>
   </div>
-</main>
+</div>
 
+<!-- Dispute Modal -->
+<div class="modal-overlay" id="dispute-modal">
+  <div class="modal">
+    <h3>Raise a Dispute</h3>
+    <p>Please describe the issue with the vehicle condition so we can investigate.</p>
+    <div class="field"><label>Reason for Dispute</label><textarea id="dispute-reason" placeholder="e.g. Damage to rear bumper not present before the booking…" style="min-height:100px;"></textarea></div>
+    <div class="err" id="dispute-err"></div>
+    <div class="modal-btns">
+      <button class="btn-outline" onclick="closeDispute()">Cancel</button>
+      <button class="btn-primary" id="dispute-submit-btn" onclick="submitDispute()">Submit Dispute</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
-  let token = localStorage.getItem('pcc_owner_token');
-  let userName = localStorage.getItem('pcc_owner_name') || '';
-  let userPhone = localStorage.getItem('pcc_owner_phone') || '';
+const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
+const ACTIVE_STATUSES = ['pending','accepted','chauffeur_arriving','arrived_at_pickup','outbound_journey','at_destination','waiting_at_destination','return_ready_confirmation','return_journey'];
 
-  function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
-  function showErr(id, msg) {
-    const el = document.getElementById(id);
-    el.textContent = msg; el.classList.add('show');
-  }
-  function hideErr(id) { document.getElementById(id).classList.remove('show'); }
-  function setLoading(btnId, loading, label) {
-    const b = document.getElementById(btnId);
-    b.disabled = loading; b.textContent = loading ? 'Please wait…' : label;
-  }
-  function updatePlate(val) {
-    document.getElementById('plate-preview').textContent = val.trim() || '—';
-  }
-  function logout() {
-    localStorage.removeItem('pcc_owner_token');
-    localStorage.removeItem('pcc_owner_name');
-    localStorage.removeItem('pcc_owner_phone');
-    location.reload();
-  }
+let token = null;
+let userName = '';
+let myVehicle = null;
+let activeBooking = null;
+let pollTimer = null;
+let map = null;
+let chauffeurMarker = null;
+let tripType = 'regular';
+let ownerReturnsWith = true;
+let rwChecked = false;
+let lastEstimate = null;
+let disputeBookingId = null;
+let allBookings = [];
 
-  function prefillProfile() {
-    const nameEl = document.getElementById('p-name');
-    const phoneEl = document.getElementById('p-phone');
-    if (userName) { nameEl.value = userName; nameEl.readOnly = true; nameEl.style.opacity = '.6'; nameEl.style.cursor = 'not-allowed'; }
-    if (userPhone) { phoneEl.value = userPhone; phoneEl.readOnly = true; phoneEl.style.opacity = '.6'; phoneEl.style.cursor = 'not-allowed'; }
-  }
-
-  // Check if already logged in
-  if (token) {
-    document.getElementById('nav-user').style.display = '';
-    document.getElementById('nav-name').textContent = userName;
-    document.getElementById('btn-logout').style.display = '';
-    checkVehicles();
-  }
-
-  async function checkVehicles() {
-    try {
-      const res = await fetch(`${API}/vehicles`, { headers: { Authorization: `Bearer ${token}` } });
-      if (!res.ok) { token = null; localStorage.removeItem('pcc_owner_token'); showPage('page-login'); return; }
-      const vehicles = await res.json();
-      if (vehicles.length === 0) {
-        showPage('page-vehicle');
-      } else {
-        // Check if profile is complete
-        const pr = await fetch(`${API}/owners/profile`, { headers: { Authorization: `Bearer ${token}` } });
-        const profile = pr.ok ? await pr.json() : null;
-        if (!profile || !profile.phone) {
-          prefillProfile();
-          showPage('page-profile');
-        } else {
-          document.getElementById('done-vehicle').textContent = `${vehicles[0].make} ${vehicles[0].model || ''} · ${vehicles[0].registration}`;
-          document.getElementById('done-name').textContent = (userName || '').split(' ')[0];
-          showPage('page-done');
-        }
-      }
-    } catch { showPage('page-vehicle'); }
-  }
-
-  async function doLogin() {
-    hideErr('login-err');
-    const email = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value;
-    if (!email || !password) return showErr('login-err', 'Please enter your email and password.');
-    setLoading('login-btn', true, 'Sign In');
-    try {
-      const res = await fetch(`${API}/auth/login`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        showErr('login-err', data.message || data.error || 'Login failed. Please check your credentials.');
-        return;
-      }
-      if (data.user.role !== 'owner') {
-        showErr('login-err', 'This portal is for vehicle owners only. Please use the app to log in as a chauffeur.');
-        return;
-      }
-      token = data.token;
-      userName = data.user.full_name || email;
-      userPhone = data.user.phone || '';
-      localStorage.setItem('pcc_owner_token', token);
-      localStorage.setItem('pcc_owner_name', userName);
-      localStorage.setItem('pcc_owner_phone', userPhone);
-      document.getElementById('nav-user').style.display = '';
-      document.getElementById('nav-name').textContent = userName;
-      document.getElementById('btn-logout').style.display = '';
-      checkVehicles();
-    } catch { showErr('login-err', 'Cannot reach server. Please try again.'); }
-    finally { setLoading('login-btn', false, 'Sign In'); }
-  }
-
-  async function doAddVehicle() {
-    hideErr('vehicle-err');
-    const reg = document.getElementById('v-reg').value.trim();
-    const make = document.getElementById('v-make').value;
-    const model = document.getElementById('v-model').value.trim();
-    const year = document.getElementById('v-year').value;
-    const colour = document.getElementById('v-colour').value.trim();
-    const gear = document.getElementById('v-gear').value;
-    if (!reg || !make || !gear) return showErr('vehicle-err', 'Registration, make and gear type are required.');
-
-    // Show MOT check spinner
-    const motBox = document.getElementById('mot-box');
-    motBox.classList.add('show');
-    document.getElementById('mot-loading').style.display = 'flex';
-    document.getElementById('mot-result').style.display = 'none';
-    setLoading('vehicle-btn', true, 'Register Vehicle & Check MOT');
-
-    const start = Date.now();
-    try {
-      const res = await fetch(`${API}/vehicles`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ registration: reg, make, model, year: year || null, color: colour, gear_type: gear, set_default: true })
-      });
-      const data = await res.json();
-
-      // Minimum 2 second display
-      const elapsed = Date.now() - start;
-      if (elapsed < 2000) await new Promise(r => setTimeout(r, 2000 - elapsed));
-
-      document.getElementById('mot-loading').style.display = 'none';
-      document.getElementById('mot-result').style.display = 'flex';
-
-      if (!res.ok) {
-        if (data.error === 'MOT_EXPIRED') {
-          document.getElementById('mot-icon').textContent = '❌';
-          document.getElementById('mot-title').textContent = 'MOT Invalid: Registration Stopped';
-          document.getElementById('mot-title').style.color = 'var(--red)';
-          document.getElementById('mot-sub').textContent = data.message;
-          setLoading('vehicle-btn', false, 'Register Vehicle & Check MOT');
-        } else {
-          motBox.classList.remove('show');
-          showErr('vehicle-err', data.error || data.message || 'Failed to register vehicle.');
-          setLoading('vehicle-btn', false, 'Register Vehicle & Check MOT');
-        }
-        return;
-      }
-
-      // Success
-      if (data.mot_status === 'valid') {
-        document.getElementById('mot-icon').textContent = '✅';
-        document.getElementById('mot-title').textContent = 'MOT Valid';
-        document.getElementById('mot-title').style.color = 'var(--green)';
-        document.getElementById('mot-sub').textContent = `Expires: ${data.mot_expiry_date ? new Date(data.mot_expiry_date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : '—'}`;
-      } else {
-        document.getElementById('mot-icon').textContent = '🚗';
-        document.getElementById('mot-title').textContent = 'Vehicle Registered';
-        document.getElementById('mot-title').style.color = '#fff';
-        document.getElementById('mot-sub').textContent = 'MOT status not checked. This will be verified before your first booking.';
-      }
-
-      setTimeout(() => {
-        document.getElementById('s2').className = 'step done';
-        document.getElementById('s2').querySelector('.step-num').textContent = '✓';
-        document.getElementById('sl2').classList.add('done');
-        prefillProfile();
-        showPage('page-profile');
-      }, 2000);
-
-    } catch {
-      motBox.classList.remove('show');
-      showErr('vehicle-err', 'Cannot reach server. Please check your connection.');
-      setLoading('vehicle-btn', false, 'Register Vehicle & Check MOT');
-    }
-  }
-
-  async function doSaveProfile() {
-    hideErr('profile-err');
-    const phone = document.getElementById('p-phone').value.trim();
-    const bio = document.getElementById('p-bio').value.trim();
-    const home_address = document.getElementById('p-home-addr').value.trim();
-    const home_postcode = document.getElementById('p-home-post').value.trim();
-    const work_address = document.getElementById('p-work-addr').value.trim();
-    const work_postcode = document.getElementById('p-work-post').value.trim();
-    if (!phone) return showErr('profile-err', 'Phone number is required.');
-    if (!home_address) return showErr('profile-err', 'Home address is required.');
-    setLoading('profile-btn', true, 'Saving…');
-    try {
-      const res = await fetch(`${API}/owners/profile`, {
-        method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ phone, home_address, home_postcode, work_address, work_postcode })
-      });
-      let d = {};
-      try { d = await res.json(); } catch {}
-      if (!res.ok) {
-        showErr('profile-err', d.error || d.message || `Server error (${res.status}). Please try again.`);
-        return;
-      }
-      const vr = await fetch(`${API}/vehicles`, { headers: { Authorization: `Bearer ${token}` } });
-      const vehicles = vr.ok ? await vr.json() : [];
-      if (vehicles[0]) document.getElementById('done-vehicle').textContent = `${vehicles[0].make} ${vehicles[0].model || ''} · ${vehicles[0].registration}`;
-      document.getElementById('done-name').textContent = (userName || '').split(' ')[0];
-      showPage('page-done');
-    } catch (err) { showErr('profile-err', 'Cannot reach server. Please check your connection and try again.'); }
-    finally { setLoading('profile-btn', false, 'Save Profile →'); }
-  }
-
-  // Allow Enter key on login
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && document.getElementById('page-login').classList.contains('active')) doLogin();
+// ── Helpers ───────────────────────────────────────────────
+function togglePw(id, btn) { const i=document.getElementById(id); const s=i.type==='password'; i.type=s?'text':'password'; btn.textContent=s?'🙈':'👁'; }
+function showView(id) { document.querySelectorAll('#view-login,#view-app').forEach(el=>{ el.hidden = el.id!==id; }); }
+function showPanel(id) {
+  ['panel-onboard-vehicle','panel-onboard-profile','panel-main'].forEach(p=>{
+    document.getElementById(p).style.display = p===id?'':'none';
   });
+}
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tnav-'+name).classList.add('active');
+  if (name==='active') { initMap(); if(activeBooking) refreshActive(activeBooking.id); }
+  if (name==='history') renderHistory();
+  if (name==='dash') renderDashboard();
+}
+function showErr(id, msg) { const e=document.getElementById(id); e.textContent=msg; e.classList.add('show'); }
+function hideErr(id) { document.getElementById(id).classList.remove('show'); }
+function fmtDate(iso) { if(!iso) return '—'; return new Date(iso).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+function fmtPrice(p) { return '£'+(parseFloat(p)||0).toFixed(2); }
+function statusLabel(s) {
+  const MAP = {
+    pending:'🕐 Finding Your Chauffeur', no_chauffeurs:'😔 No Chauffeurs Available',
+    accepted:'✅ Chauffeur Assigned', chauffeur_arriving:'🚗 Chauffeur En Route',
+    arrived_at_pickup:'📍 Chauffeur Arrived at Pickup', outbound_journey:'🛣️ Journey in Progress',
+    at_destination:'🏁 Arrived at Destination', waiting_at_destination:'⏳ Waiting at Destination',
+    return_ready_confirmation:'🔄 Return Confirmed', return_journey:'🔄 Vehicle Being Returned',
+    completed:'✅ Journey Complete', cancelled:'❌ Booking Cancelled',
+  };
+  return MAP[s] || s;
+}
+function statusClass(s) {
+  if(['pending','no_chauffeurs'].includes(s)) return 'searching';
+  if(['accepted','chauffeur_arriving','arrived_at_pickup'].includes(s)) return 'en-route';
+  if(['outbound_journey','at_destination','waiting_at_destination','return_ready_confirmation','return_journey'].includes(s)) return 'on-trip';
+  if(s==='completed') return 'done';
+  return 'problem';
+}
+async function apiFetch(path, opts={}) {
+  const headers = {'Content-Type':'application/json', ...(token?{Authorization:`Bearer ${token}`}:{})};
+  const res = await fetch(API+path, {...opts, headers:{...headers,...(opts.headers||{})}});
+  const data = await res.json().catch(()=>({}));
+  if (!res.ok) throw new Error(data.message || data.error || 'Request failed');
+  return data;
+}
+
+// ── Auth ──────────────────────────────────────────────────
+async function doLogin() {
+  hideErr('login-err');
+  const email = document.getElementById('login-email').value.trim();
+  const pw = document.getElementById('login-pw').value;
+  if (!email || !pw) return showErr('login-err','Please enter your email and password.');
+  const btn = document.getElementById('login-btn');
+  btn.disabled=true; btn.textContent='Signing in…';
+  try {
+    const data = await apiFetch('/auth/login',{method:'POST',body:JSON.stringify({email,password:pw})});
+    if (data.user?.role !== 'owner') { showErr('login-err','This login is for Vehicle Owners only.'); return; }
+    token = data.token;
+    userName = data.user.full_name || email;
+    localStorage.setItem('pcc_owner_token', token);
+    localStorage.setItem('pcc_owner_name', userName);
+    await enterApp();
+  } catch(e) { showErr('login-err', e.message||'Login failed. Please check your credentials.'); }
+  finally { btn.disabled=false; btn.textContent='Sign In'; }
+}
+function logout() {
+  token=null; userName=''; myVehicle=null; activeBooking=null;
+  clearInterval(pollTimer);
+  localStorage.removeItem('pcc_owner_token'); localStorage.removeItem('pcc_owner_name');
+  showView('view-login');
+}
+async function enterApp() {
+  token = token || localStorage.getItem('pcc_owner_token');
+  userName = userName || localStorage.getItem('pcc_owner_name') || '';
+  if (!token) { showView('view-login'); return; }
+  showView('view-app');
+  document.getElementById('header-name').textContent = userName;
+  document.getElementById('dash-name').textContent = userName.split(' ')[0];
+  // Check for vehicle
+  try {
+    const vehicles = await apiFetch('/vehicles');
+    myVehicle = vehicles?.[0] || null;
+  } catch(_) { myVehicle = null; }
+  if (!myVehicle) { showPanel('panel-onboard-vehicle'); return; }
+  // Check profile
+  try {
+    const p = await apiFetch('/owners/profile');
+    if (!p.home_address && !p.address) { prefillProfile(p); showPanel('panel-onboard-profile'); return; }
+  } catch(_) {}
+  launchMain();
+}
+function prefillProfile(p) {
+  if (!p) return;
+  if (p.full_name) document.getElementById('prof-name').value=p.full_name;
+  if (p.phone) document.getElementById('prof-phone').value=p.phone;
+}
+async function launchMain() {
+  showPanel('panel-main');
+  prefillBookingVehicle();
+  // Check for active booking
+  try {
+    allBookings = await apiFetch('/bookings/my');
+    activeBooking = allBookings.find(b=>ACTIVE_STATUSES.includes(b.status)) || null;
+  } catch(_) { allBookings=[]; }
+  if (activeBooking) {
+    document.getElementById('tnav-active').style.display='';
+    showTab('active');
+    startPolling(activeBooking.id);
+  } else {
+    showTab('dash');
+    renderDashboard();
+  }
+}
+
+// ── Onboarding ───────────────────────────────────────────
+async function doAddVehicle() {
+  hideErr('veh-err');
+  const reg = document.getElementById('veh-reg').value.trim().toUpperCase().replace(/\s+/g,'');
+  const make = document.getElementById('veh-make').value.trim();
+  const model = document.getElementById('veh-model').value.trim();
+  const year = document.getElementById('veh-year').value.trim();
+  const color = document.getElementById('veh-color').value.trim();
+  const gear = document.getElementById('veh-gear').value;
+  if (!reg||!make) return showErr('veh-err','Registration plate and make (brand) are required.');
+  const btn = document.getElementById('veh-btn'); btn.disabled=true; btn.textContent='Saving…';
+  try {
+    const body = {registration:reg, make, gear_type:gear, set_default:true};
+    if (model) body.model=model;
+    if (year) body.year=parseInt(year);
+    if (color) body.color=color;
+    myVehicle = await apiFetch('/vehicles',{method:'POST',body:JSON.stringify(body)});
+    try { const p=await apiFetch('/owners/profile'); prefillProfile(p); } catch(_){}
+    showPanel('panel-onboard-profile');
+  } catch(e) { showErr('veh-err',e.message||'Could not save vehicle. Please check the details and try again.'); }
+  finally { btn.disabled=false; btn.textContent='Save Vehicle & Continue →'; }
+}
+async function doSaveProfile() {
+  hideErr('prof-err');
+  const name = document.getElementById('prof-name').value.trim();
+  const phone = document.getElementById('prof-phone').value.trim();
+  const addr = document.getElementById('prof-addr').value.trim();
+  const postcode = document.getElementById('prof-postcode').value.trim();
+  if (!addr) return showErr('prof-err','Home address is required.');
+  const btn = document.getElementById('prof-btn'); btn.disabled=true; btn.textContent='Saving…';
+  try {
+    const body={home_address:addr};
+    if (name) body.full_name=name;
+    if (phone) body.phone=phone;
+    if (postcode) body.home_postcode=postcode;
+    await apiFetch('/owners/profile',{method:'PATCH',body:JSON.stringify(body)});
+    if (name) { userName=name; localStorage.setItem('pcc_owner_name',name); document.getElementById('header-name').textContent=name; document.getElementById('dash-name').textContent=name.split(' ')[0]; }
+    launchMain();
+  } catch(e) { showErr('prof-err',e.message); }
+  finally { btn.disabled=false; btn.textContent='Complete Setup →'; }
+}
+
+// ── Dashboard ───────────────────────────────────────────
+function renderDashboard() {
+  const card = document.getElementById('dash-active-card');
+  const noActive = document.getElementById('dash-no-active');
+  if (activeBooking) {
+    card.style.display=''; noActive.style.display='none';
+    document.getElementById('dash-active-content').innerHTML=`
+      <div class="card" style="cursor:pointer;" onclick="showTab('active')">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div><div style="font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;">${activeBooking.pickup_location} → ${activeBooking.destination}</div><div style="font-size:12px;color:var(--muted);">${fmtDate(activeBooking.date_time)}</div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span class="status-badge ${ACTIVE_STATUSES.includes(activeBooking.status)?'active':activeBooking.status==='completed'?'completed':'cancelled'}">${statusLabel(activeBooking.status)}</span><span style="color:var(--gold);font-size:18px;">›</span></div>
+        </div>
+      </div>`;
+  } else { card.style.display='none'; noActive.style.display=''; }
+  const recent = allBookings.slice(0,3);
+  const recEl = document.getElementById('dash-recent');
+  if (!recent.length) { recEl.innerHTML='<p style="color:var(--muted);font-size:13px;">No bookings yet.</p>'; return; }
+  recEl.innerHTML = recent.map(b=>`
+    <div class="booking-row" onclick="showTab('history')">
+      <div class="br-left"><div class="br-route">${b.pickup_location} → ${b.destination}</div><div class="br-meta">${fmtDate(b.date_time)}</div></div>
+      <div class="br-right"><div class="br-price">${fmtPrice(b.price)}</div><span class="status-badge ${b.status==='completed'?'completed':ACTIVE_STATUSES.includes(b.status)?'active':b.status==='pending'?'pending':'cancelled'}">${b.status}</span></div>
+    </div>`).join('');
+}
+
+// ── Booking Form ────────────────────────────────────────
+function prefillBookingVehicle() {
+  if (!myVehicle) return;
+  document.getElementById('bk-veh-reg-display').textContent = myVehicle.registration || '—';
+  const makeModel = [myVehicle.make, myVehicle.model].filter(Boolean).join(' ');
+  document.getElementById('bk-veh-info-display').textContent = [makeModel, myVehicle.gear_type, myVehicle.color].filter(Boolean).join(' · ');
+}
+function vehicleMakeModel() {
+  return [myVehicle?.make, myVehicle?.model].filter(Boolean).join(' ') || '';
+}
+function setTripType(type, btn) {
+  tripType = type;
+  document.querySelectorAll('.tt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('bk-duration-wrap').style.display = type==='airport_drop'?'none':'';
+  document.getElementById('bk-wait-wrap').style.display = type==='airport_roundtrip'?'':'none';
+  document.getElementById('bk-return-with-wrap').style.display = type==='airport_roundtrip'?'':'none';
+}
+function setReturnWith(val) {
+  ownerReturnsWith = val;
+  document.getElementById('rw-yes').classList.toggle('active', val);
+  document.getElementById('rw-no').classList.toggle('active', !val);
+  document.getElementById('bk-key-return-wrap').style.display = val?'none':'';
+  document.getElementById('bk-wait-wrap').style.display = !val?'none':''; // no wait time if unaccompanied
+}
+function toggleRoadworthy() {
+  rwChecked = !rwChecked;
+  document.getElementById('rw-box').classList.toggle('checked', rwChecked);
+  document.getElementById('bk-confirm-btn').disabled = !rwChecked;
+}
+function goBookStep(n) {
+  document.querySelectorAll('.booking-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('book-step-'+n).classList.add('active');
+}
+async function getEstimate() {
+  hideErr('book-err-1');
+  const pickup = document.getElementById('bk-pickup').value.trim();
+  const dest = document.getElementById('bk-dest').value.trim();
+  const dt = document.getElementById('bk-datetime').value;
+  const dur = document.getElementById('bk-duration').value;
+  if (!pickup||!dest) return showErr('book-err-1','Pickup location and destination are required.');
+  if (!dt) return showErr('book-err-1','Please select a date and time.');
+  if (tripType!=='airport_drop' && !(tripType==='airport_roundtrip'&&!ownerReturnsWith) && !dur) return showErr('book-err-1','Please select a duration.');
+  const dtVal = new Date(dt);
+  if (dtVal < new Date(Date.now()+15*60*1000)) return showErr('book-err-1','Booking time must be at least 15 minutes from now.');
+  const btn = document.querySelector('#book-step-1 .btn-primary'); btn.disabled=true; btn.textContent='Calculating…';
+  try {
+    const body = {pickup_location:pickup, destination:dest, trip_type:tripType};
+    if (tripType==='regular') body.duration_hours=parseFloat(dur);
+    if (tripType==='airport_roundtrip') {
+      body.owner_returns_with_chauffeur = ownerReturnsWith;
+      if (ownerReturnsWith) body.duration_hours = parseFloat(document.getElementById('bk-wait').value)||0;
+    }
+    lastEstimate = await apiFetch('/bookings/estimate',{method:'POST',body:JSON.stringify(body)});
+    renderPriceCard(lastEstimate);
+    prefillBookingVehicle();
+    rwChecked=false; document.getElementById('rw-box').classList.remove('checked'); document.getElementById('bk-confirm-btn').disabled=true;
+    goBookStep(2);
+  } catch(e) { showErr('book-err-1',e.message); }
+  finally { btn.disabled=false; btn.textContent='Get Price Estimate →'; }
+}
+function renderPriceCard(est) {
+  const rows = [
+    ['Distance',est.distanceMiles?`${est.distanceMiles.toFixed(1)} miles`:'—'],
+    ['Mileage Cost', fmtPrice(est.mileageCost)],
+    ['Trip Type', tripType==='regular'?'Regular Journey':tripType==='airport_drop'?'Airport Drop-Off':'Airport Return'],
+  ];
+  if (est.waitingCost>0) rows.push(['Waiting / Duration',fmtPrice(est.waitingCost)]);
+  if (est.travelAllowance>0) rows.push(['Travel Allowance',fmtPrice(est.travelAllowance)]);
+  const html = rows.map(([l,v])=>`<div class="price-row"><span class="label">${l}</span><span class="value">${v}</span></div>`).join('')
+    + `<div class="price-row total"><span class="label">Total Price</span><span class="value">${fmtPrice(est.price)}</span></div>`;
+  document.getElementById('bk-price-card').innerHTML=html;
+}
+async function createBooking() {
+  hideErr('book-err-2');
+  if (!rwChecked) return showErr('book-err-2','Please confirm the vehicle is roadworthy.');
+  if (!myVehicle) return showErr('book-err-2','No vehicle registered. Please register a vehicle first.');
+  const btn = document.getElementById('bk-confirm-btn'); btn.disabled=true; btn.textContent='Confirming…';
+  try {
+    const dur = document.getElementById('bk-duration').value;
+    const body = {
+      pickup_location: document.getElementById('bk-pickup').value.trim(),
+      destination: document.getElementById('bk-dest').value.trim(),
+      date_time: new Date(document.getElementById('bk-datetime').value).toISOString(),
+      trip_type: tripType,
+      vehicle_reg: myVehicle.registration,
+      gear_type: myVehicle.gear_type || 'automatic',
+      car_brand: vehicleMakeModel(),
+      roadworthy_confirmed: true,
+      purpose: document.getElementById('bk-purpose').value.trim() || undefined,
+    };
+    if (tripType==='regular') body.duration_hours=parseFloat(dur);
+    if (tripType==='airport_roundtrip') {
+      body.owner_returns_with_chauffeur=ownerReturnsWith;
+      if (ownerReturnsWith) body.duration_hours=parseFloat(document.getElementById('bk-wait').value)||0;
+      if (!ownerReturnsWith) {
+        body.key_return_method=document.getElementById('bk-key-method').value||undefined;
+        body.key_return_details=document.getElementById('bk-key-details').value.trim()||undefined;
+        body.key_return_instructions=document.getElementById('bk-key-instructions').value.trim()||undefined;
+      }
+    }
+    const booking = await apiFetch('/bookings',{method:'POST',body:JSON.stringify(body)});
+    // Trigger dispatch
+    try { await apiFetch('/bookings/'+booking.id+'/dispatch',{method:'POST',body:'{}'}); } catch(_){}
+    activeBooking = booking;
+    allBookings = [booking, ...allBookings];
+    document.getElementById('tnav-active').style.display='';
+    goBookStep(3);
+    startPolling(booking.id);
+  } catch(e) { showErr('book-err-2',e.message); btn.disabled=!rwChecked; btn.textContent='Confirm Booking'; }
+}
+
+// ── Active Trip ─────────────────────────────────────────
+function startPolling(id) {
+  clearInterval(pollTimer);
+  pollTimer = setInterval(()=>refreshActive(id), 5000);
+  refreshActive(id);
+}
+async function refreshActive(id) {
+  try {
+    const booking = await apiFetch('/bookings/'+id);
+    activeBooking = booking;
+    renderActiveTripPanel(booking);
+    updateMapMarker(booking.chauffeur_lat, booking.chauffeur_lng);
+    if (booking.status==='completed'||booking.status==='cancelled') clearInterval(pollTimer);
+  } catch(e) { /* silent */ }
+}
+function renderActiveTripPanel(bk) {
+  if (!bk) { document.getElementById('active-content').innerHTML='<div class="card" style="text-align:center;padding:36px 24px;"><p style="color:var(--muted);">No active booking.</p></div>'; return; }
+  const chauffeur = bk.chauffeur_profile;
+  const chauffeurName = chauffeur?.users?.full_name || 'Awaiting chauffeur';
+  const photoUrl = chauffeur?.profile_photo_url || '';
+  const hasGPS = bk.chauffeur_lat && bk.chauffeur_lng;
+  // Pre-trip approval
+  const showPreApproval = bk.pre_trip_verified_at && !bk.pre_trip_owner_approved && bk.status==='arrived_at_pickup';
+  // Post-trip review
+  const showPostReview = bk.post_trip_verified_at && bk.payment_status==='held';
+  let html = `
+    <div class="status-bar ${statusClass(bk.status)}">
+      <div class="sb-icon">${statusIcon(bk.status)}</div>
+      <div><div class="sb-title">${statusLabel(bk.status)}</div><div class="sb-desc">${statusDesc(bk)}</div></div>
+    </div>
+    <div id="map"></div>
+    ${chauffeur ? `<div class="chauffeur-card"><div class="ch-avatar">${photoUrl?`<img src="${photoUrl}" alt="${chauffeurName}" />`:'👔'}</div><div><div class="ch-name">${chauffeurName}</div><div class="ch-role">Your assigned chauffeur</div></div></div>` : ''}
+    ${showPreApproval ? renderPreApprovalCard(bk) : ''}
+    ${showPostReview ? renderPostReviewCard(bk) : ''}
+    <div class="card" style="margin-top:8px;">
+      <div class="card-title">Booking Details</div>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="dl">Pickup</div><div class="dv">${bk.pickup_location||'—'}</div></div>
+        <div class="detail-item"><div class="dl">Destination</div><div class="dv">${bk.destination||'—'}</div></div>
+        <div class="detail-item"><div class="dl">Date &amp; Time</div><div class="dv">${fmtDate(bk.date_time)}</div></div>
+        <div class="detail-item"><div class="dl">Price</div><div class="dv">${fmtPrice(bk.price)}</div></div>
+        <div class="detail-item"><div class="dl">Vehicle</div><div class="dv">${bk.vehicle_reg||'—'}</div></div>
+        <div class="detail-item"><div class="dl">Trip Type</div><div class="dv">${bk.trip_type||'—'}</div></div>
+      </div>
+      ${['pending','accepted'].includes(bk.status) ? `<div style="margin-top:18px;"><button class="btn-danger" onclick="cancelBooking('${bk.id}')">Cancel Booking</button></div>` : ''}
+    </div>`;
+  document.getElementById('active-content').innerHTML=html;
+  // Init map after render
+  setTimeout(()=>{ initMap(); updateMapMarker(bk.chauffeur_lat, bk.chauffeur_lng); }, 100);
+}
+function statusIcon(s) {
+  const MAP={pending:'🕐',no_chauffeurs:'😔',accepted:'✅',chauffeur_arriving:'🚗',arrived_at_pickup:'📍',outbound_journey:'🛣️',at_destination:'🏁',waiting_at_destination:'⏳',return_ready_confirmation:'🔄',return_journey:'🔄',completed:'✅',cancelled:'❌'};
+  return MAP[s]||'•';
+}
+function statusDesc(bk) {
+  const MAP={
+    pending:'We are finding the best available chauffeur for your booking.',
+    no_chauffeurs:'No chauffeurs are available right now. You can retry or contact support.',
+    accepted:'A chauffeur has been assigned and will be on their way shortly.',
+    chauffeur_arriving:'Your chauffeur is on their way to the pickup location.',
+    arrived_at_pickup:'Your chauffeur has arrived. Please check the pre-trip vehicle condition photos.',
+    outbound_journey:'Your journey is underway.',
+    at_destination:'Your vehicle has arrived at the destination.',
+    waiting_at_destination:'Your chauffeur is waiting at the destination.',
+    return_ready_confirmation:'The return journey has been confirmed.',
+    return_journey:'Your vehicle is being returned.',
+    completed:'Your journey is complete. Please review the post-trip vehicle condition.',
+    cancelled:'This booking has been cancelled.',
+  };
+  return MAP[bk.status]||'';
+}
+function renderPreApprovalCard(bk) {
+  return `<div class="approval-card pre" id="pre-approval-card">
+    <div class="approval-title">📸 Pre-Trip Vehicle Condition</div>
+    <div class="approval-desc">Your chauffeur has photographed your vehicle before departure. Please review and approve the condition to allow the journey to start. You have 3 minutes.</div>
+    <div class="photo-grid" id="pre-photo-grid">Loading photos…</div>
+    <div class="approval-btns">
+      <button class="btn-approve" onclick="approvePre('${bk.id}')">✓ Approve Condition &amp; Start Journey</button>
+    </div>
+  </div>`;
+}
+function renderPostReviewCard(bk) {
+  return `<div class="approval-card post" id="post-review-card">
+    <div class="approval-title">📸 Post-Trip Vehicle Condition</div>
+    <div class="approval-desc">Please review the post-trip photos and confirm the vehicle was returned in good condition, or raise a dispute if there is any damage.</div>
+    <div class="photo-grid" id="post-photo-grid">Loading photos…</div>
+    <div class="approval-btns">
+      <button class="btn-approve" onclick="approvePost('${bk.id}')">✓ Approve &amp; Release Payment</button>
+      <button class="btn-dispute" onclick="openDispute('${bk.id}')">⚠ Raise a Dispute</button>
+    </div>
+  </div>`;
+}
+async function loadPhotos(bookingId, type) {
+  try {
+    const data = await apiFetch('/bookings/'+bookingId+'/photos/verification');
+    const photos = type==='pre' ? data.prePhotos : data.postPhotos;
+    const gridId = type==='pre' ? 'pre-photo-grid' : 'post-photo-grid';
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    if (!photos||!photos.length) { grid.innerHTML='<p style="color:var(--muted);font-size:13px;grid-column:1/-1;">Photos are still being uploaded. Refresh in a moment.</p>'; return; }
+    grid.innerHTML = photos.map(p=>`<div class="photo-thumb"><img src="${p.image_url}" alt="${p.angle}" loading="lazy" /><div class="angle-label">${p.angle}</div></div>`).join('');
+  } catch(_) {}
+}
+async function approvePre(id) {
+  const btn = event.target; btn.disabled=true; btn.textContent='Approving…';
+  try {
+    await apiFetch('/bookings/'+id+'/pre-trip-approve',{method:'POST',body:'{}'});
+    await refreshActive(id);
+  } catch(e) { alert(e.message); btn.disabled=false; btn.textContent='✓ Approve Condition & Start Journey'; }
+}
+async function approvePost(id) {
+  const btn = event.target; btn.disabled=true; btn.textContent='Releasing payment…';
+  try {
+    await apiFetch('/bookings/'+id+'/owner-review',{method:'POST',body:JSON.stringify({action:'approve'})});
+    await refreshActive(id);
+    clearInterval(pollTimer);
+    // Refresh history
+    allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+  } catch(e) { alert(e.message); btn.disabled=false; btn.textContent='✓ Approve & Release Payment'; }
+}
+function openDispute(id) { disputeBookingId=id; document.getElementById('dispute-modal').classList.add('open'); }
+function closeDispute() { document.getElementById('dispute-modal').classList.remove('open'); }
+async function submitDispute() {
+  hideErr('dispute-err');
+  const reason = document.getElementById('dispute-reason').value.trim();
+  if (!reason) return showErr('dispute-err','Please provide a reason for the dispute.');
+  const btn = document.getElementById('dispute-submit-btn'); btn.disabled=true; btn.textContent='Submitting…';
+  try {
+    await apiFetch('/bookings/'+disputeBookingId+'/owner-review',{method:'POST',body:JSON.stringify({action:'dispute',reason})});
+    closeDispute();
+    await refreshActive(disputeBookingId);
+  } catch(e) { showErr('dispute-err',e.message); }
+  finally { btn.disabled=false; btn.textContent='Submit Dispute'; }
+}
+async function cancelBooking(id) {
+  if (!confirm('Are you sure you want to cancel this booking? Cancellation charges may apply.')) return;
+  try {
+    await apiFetch('/bookings/'+id+'/status',{method:'PATCH',body:JSON.stringify({status:'cancelled'})});
+    clearInterval(pollTimer);
+    document.getElementById('tnav-active').style.display='none';
+    activeBooking = null;
+    allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+    showTab('dash');
+    renderDashboard();
+  } catch(e) { alert(e.message||'Could not cancel booking.'); }
+}
+
+// ── Map ──────────────────────────────────────────────────
+function initMap() {
+  const el = document.getElementById('map');
+  if (!el || map) return;
+  map = L.map('map',{zoomControl:true}).setView([51.5,-0.1],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© OpenStreetMap',maxZoom:19
+  }).addTo(map);
+}
+function updateMapMarker(lat, lng) {
+  if (!map||!lat||!lng) return;
+  const pos=[parseFloat(lat),parseFloat(lng)];
+  if (chauffeurMarker) { chauffeurMarker.setLatLng(pos); }
+  else {
+    const icon = L.divIcon({className:'',html:`<div style="background:var(--gold);width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5);"></div>`,iconSize:[16,16],iconAnchor:[8,8]});
+    chauffeurMarker = L.marker(pos,{icon}).addTo(map).bindPopup('Chauffeur Location');
+  }
+  map.setView(pos,15);
+}
+
+// ── History ──────────────────────────────────────────────
+async function renderHistory() {
+  const el = document.getElementById('history-list');
+  el.innerHTML='<p style="color:var(--muted);font-size:13px;">Loading…</p>';
+  try { allBookings = await apiFetch('/bookings/my'); } catch(_){}
+  if (!allBookings.length) { el.innerHTML='<p style="color:var(--muted);font-size:13px;">No bookings yet.</p>'; return; }
+  el.innerHTML = allBookings.map(b=>{
+    const sc = b.status==='completed'?'completed':ACTIVE_STATUSES.includes(b.status)?'active':b.status==='pending'?'pending':'cancelled';
+    return `
+      <div class="booking-row" onclick="toggleDetail('${b.id}')">
+        <div class="br-left"><div class="br-route">${b.pickup_location} → ${b.destination}</div><div class="br-meta">${fmtDate(b.date_time)} · ${b.trip_type||''}</div></div>
+        <div class="br-right"><div class="br-price">${fmtPrice(b.price)}</div><span class="status-badge ${sc}">${b.status}</span></div>
+      </div>
+      <div class="booking-detail" id="detail-${b.id}">
+        <div class="detail-grid">
+          <div class="detail-item"><div class="dl">Booking ID</div><div class="dv" style="font-size:11px;">${b.id}</div></div>
+          <div class="detail-item"><div class="dl">Vehicle</div><div class="dv">${b.vehicle_reg||'—'}</div></div>
+          <div class="detail-item"><div class="dl">Distance</div><div class="dv">${b.distance_miles?b.distance_miles.toFixed(1)+' mi':'—'}</div></div>
+          <div class="detail-item"><div class="dl">Duration</div><div class="dv">${b.duration_hours?b.duration_hours+'h':'—'}</div></div>
+          <div class="detail-item"><div class="dl">Payment</div><div class="dv">${b.payment_status||'—'}</div></div>
+          <div class="detail-item"><div class="dl">Chauffeur</div><div class="dv">${b.chauffeur_profile?.users?.full_name||'Not yet assigned'}</div></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+function toggleDetail(id) {
+  const el=document.getElementById('detail-'+id);
+  el.classList.toggle('open');
+}
+
+// ── Load photos after DOM update ─────────────────────────
+// MutationObserver watches for photo grids appearing
+const observer = new MutationObserver(()=>{
+  if (activeBooking) {
+    if (document.getElementById('pre-photo-grid')?.textContent.includes('Loading')) loadPhotos(activeBooking.id,'pre');
+    if (document.getElementById('post-photo-grid')?.textContent.includes('Loading')) loadPhotos(activeBooking.id,'post');
+  }
+});
+observer.observe(document.body,{childList:true,subtree:true});
+
+// ── Initialise ───────────────────────────────────────────
+document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&document.getElementById('view-login')&&!document.getElementById('view-login').hidden) doLogin(); });
+enterApp();
 </script>
 </body>
 </html>
