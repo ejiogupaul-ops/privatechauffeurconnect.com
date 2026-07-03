@@ -24,6 +24,7 @@
     a { text-decoration: none; color: inherit; }
 
     /* ── LOGIN ─────────────────────────────────────────── */
+    #view-app { display: none; }
     #view-login {
       min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
     }
@@ -278,7 +279,7 @@
 </div>
 
 <!-- ══ APP ════════════════════════════════════════════════ -->
-<div id="view-app" hidden>
+<div id="view-app">
   <header class="app-header">
     <a href="/"><img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="app-header-logo" /></a>
     <div class="app-header-right">
@@ -507,7 +508,7 @@ let allBookings = [];
 
 // ── Helpers ───────────────────────────────────────────────
 function togglePw(id, btn) { const i=document.getElementById(id); const s=i.type==='password'; i.type=s?'text':'password'; btn.textContent=s?'🙈':'👁'; }
-function showView(id) { document.querySelectorAll('#view-login,#view-app').forEach(el=>{ el.hidden = el.id!==id; }); }
+function showView(id) { document.querySelectorAll('#view-login,#view-app').forEach(el=>{ el.style.display = el.id===id ? '' : 'none'; }); }
 function showPanel(id) {
   ['panel-onboard-vehicle','panel-onboard-profile','panel-main'].forEach(p=>{
     document.getElementById(p).style.display = p===id?'':'none';
