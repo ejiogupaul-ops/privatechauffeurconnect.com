@@ -266,7 +266,8 @@
   <div class="form-panel">
     <div class="form-box">
       <h2>Sign In</h2>
-      <p class="sub">Sign in to your vehicle owner account</p>
+      <p class="sub" id="login-sub">Sign in to your vehicle owner account to access your dashboard.</p>
+      <div id="login-notice" style="display:none;background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.25);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#80c0a0;line-height:1.6;"></div>
       <div class="err" id="login-err"></div>
       <div class="field"><label>Email Address</label><input type="email" id="login-email" placeholder="your@email.com" autocomplete="email" /></div>
       <div class="field"><label>Password</label><div class="pw-wrap"><input type="password" id="login-pw" placeholder="••••••••" autocomplete="current-password" /><button class="pw-eye" type="button" onclick="togglePw('login-pw',this)">👁</button></div></div>
@@ -560,8 +561,21 @@ async function doLogin() {
   const btn = document.getElementById('login-btn');
   btn.disabled=true; btn.textContent='Signing in…';
   try {
-    const data = await apiFetch('/auth/login',{method:'POST',body:JSON.stringify({email,password:pw})});
-    if (data.user?.role !== 'owner') { showErr('login-err','This login is for Vehicle Owners only.'); return; }
+    const res = await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pw})});
+    const data = await res.json().catch(()=>({}));
+    if (!res.ok) {
+      if (data.error==='EMAIL_NOT_VERIFIED') {
+        document.getElementById('login-err').innerHTML='Your email address has not been verified yet. Please check your inbox and click the verification link we sent when you registered, then try again.<br><br><a href="#" onclick="resendVerification(\''+email+'\');return false;" style="color:var(--gold);font-weight:600;">Resend verification email →</a>';
+        document.getElementById('login-err').classList.add('show');
+        return;
+      }
+      if (data.error==='ACCOUNT_SUSPENDED') {
+        showErr('login-err','Your account has been suspended. Please contact support at support@privatechauffeurconnect.com.');
+        return;
+      }
+      throw new Error(data.message||data.error||'Login failed. Please check your credentials.');
+    }
+    if (data.user?.role !== 'owner') { showErr('login-err','This portal is for Vehicle Owners only. Chauffeurs please use the mobile app.'); return; }
     token = data.token;
     userName = data.user.full_name || email;
     localStorage.setItem('pcc_owner_token', token);
@@ -569,6 +583,14 @@ async function doLogin() {
     await enterApp();
   } catch(e) { showErr('login-err', e.message||'Login failed. Please check your credentials.'); }
   finally { btn.disabled=false; btn.textContent='Sign In'; }
+}
+async function resendVerification(email) {
+  try {
+    await fetch(API+'/auth/resend-verification',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    document.getElementById('login-err').innerHTML='Verification email resent to <strong>'+email+'</strong>. Please check your inbox (and spam folder).';
+  } catch(_) {
+    document.getElementById('login-err').innerHTML='Could not resend. Please try again in a moment.';
+  }
 }
 function logout() {
   token=null; userName=''; myVehicle=null; activeBooking=null;
@@ -579,7 +601,21 @@ function logout() {
 async function enterApp() {
   token = token || localStorage.getItem('pcc_owner_token');
   userName = userName || localStorage.getItem('pcc_owner_name') || '';
-  if (!token) { showView('view-login'); return; }
+  if (!token) {
+    showView('view-login');
+    // Check URL params for context
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('registered')==='1') {
+      const n=document.getElementById('login-notice');
+      n.innerHTML='<strong>Account created!</strong> Please check your email and click the verification link first. Once verified, sign in above to access your dashboard.';
+      n.style.display='';
+    } else if (params.get('verified')==='1') {
+      const n=document.getElementById('login-notice');
+      n.innerHTML='<strong>Email verified!</strong> Your account is now active. Sign in above to access your dashboard.';
+      n.style.display='';
+    }
+    return;
+  }
   showView('view-app');
   document.getElementById('header-name').textContent = userName;
   document.getElementById('dash-name').textContent = userName.split(' ')[0];

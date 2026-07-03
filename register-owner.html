@@ -384,9 +384,14 @@
     </div>
 
     <div class="access-success" id="owner-success">
-      <div class="s-icon">🎉</div>
-      <h4>Welcome Aboard!</h4>
-      <p>We've sent a verification link to <strong id="ow-success-email"></strong>.<br>Click it to activate your account, then complete your vehicle registration in the app.</p>
+      <div class="s-icon">✅</div>
+      <h4>Account Created!</h4>
+      <p>We've sent a verification link to <strong id="ow-success-email"></strong>.<br><br>
+      <strong style="color:var(--text);">Next steps:</strong><br>
+      1. Check your email and click the verification link to activate your account.<br>
+      2. Once verified, sign in below to access your Owner Dashboard.
+      </p>
+      <a href="/owner.html" style="display:inline-block;margin-top:22px;background:var(--gold);color:#000;border-radius:10px;padding:13px 28px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;">Go to Owner Sign In &rarr;</a>
     </div>
   </div>
 </div>
@@ -441,17 +446,20 @@ async function doRegister(){
       res=await attempt();
     }
     const data=await res.json();
-    if(res.ok){
-      document.getElementById('ow-success-email').textContent=email;
+    function showSuccess(em){
+      document.getElementById('ow-success-email').textContent=em;
       document.getElementById('owner-form-area').style.display='none';
       document.getElementById('owner-success').style.display='block';
+      // Redirect to sign-in page after 4 seconds
+      setTimeout(()=>{ window.location.href='/owner.html?registered=1'; }, 4000);
+    }
+    if(res.ok){
+      showSuccess(email);
     } else {
       // If retry returns "already exists" the account was created in attempt 1 but the
       // response was lost — treat it as a success so the user isn't left confused.
       if((data.error||'').toLowerCase().includes('already exists')){
-        document.getElementById('ow-success-email').textContent=email;
-        document.getElementById('owner-form-area').style.display='none';
-        document.getElementById('owner-success').style.display='block';
+        showSuccess(email);
       } else {
         showErr(data.error||data.message||'Registration failed.');
       }
