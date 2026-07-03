@@ -357,14 +357,39 @@ async function doRegister(){
   if(pw.length<8) return showErr('Password must be at least 8 characters.');
   const btn=document.getElementById('ch-btn');
   btn.disabled=true; btn.textContent='Creating account…';
+  const payload=JSON.stringify({full_name:name,email,phone,password:pw,role:'chauffeur',liability_consent_at:new Date().toISOString(),tc_consent_at:new Date().toISOString()});
+  async function attempt(){
+    const ctrl=new AbortController();
+    const t=setTimeout(()=>ctrl.abort(),30000);
+    try{ return await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:ctrl.signal}); }
+    finally{ clearTimeout(t); }
+  }
   try{
-    const res=await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({full_name:name,email,phone,password:pw,role:'chauffeur',liability_consent_at:new Date().toISOString(),tc_consent_at:new Date().toISOString()})});
+    let res;
+    try{ res=await attempt(); }
+    catch{
+      // First attempt failed (network error / cold-start timeout) — retry once
+      btn.textContent='Retrying…';
+      await new Promise(r=>setTimeout(r,3000));
+      res=await attempt();
+    }
     const data=await res.json();
-    if(!res.ok){ showErr(data.error||data.message||'Registration failed.'); return; }
-    document.getElementById('ch-success-email').textContent=email;
-    document.getElementById('chauffeur-form-area').style.display='none';
-    document.getElementById('chauffeur-success').style.display='block';
-  }catch{ showErr('Cannot reach server. Please try again.'); }
+    if(res.ok){
+      document.getElementById('ch-success-email').textContent=email;
+      document.getElementById('chauffeur-form-area').style.display='none';
+      document.getElementById('chauffeur-success').style.display='block';
+    } else {
+      // If retry returns "already exists" the account was created in attempt 1 but the
+      // response was lost — treat it as a success so the user isn't left confused.
+      if((data.error||'').toLowerCase().includes('already exists')){
+        document.getElementById('ch-success-email').textContent=email;
+        document.getElementById('chauffeur-form-area').style.display='none';
+        document.getElementById('chauffeur-success').style.display='block';
+      } else {
+        showErr(data.error||data.message||'Registration failed.');
+      }
+    }
+  }catch{ showErr('Cannot reach server. Please check your internet connection and try again.'); }
   finally{ btn.disabled=false; btn.textContent='Join as a Chauffeur'; }
 }
 </script>
