@@ -58,6 +58,33 @@
       padding: 8px 22px; color: var(--gold); transition: background .2s, color .2s;
     }
     .nav-links .nav-login:hover { background: var(--gold); color: #000; }
+    /* Register dropdown */
+    .nav-register-wrap { position: relative; }
+    .nav-register-btn {
+      background: var(--gold); color: #000; border: none; border-radius: 6px;
+      padding: 8px 18px; font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; cursor: pointer; font-family: 'Inter', sans-serif;
+      display: flex; align-items: center; gap: 6px; transition: background .2s;
+      white-space: nowrap;
+    }
+    .nav-register-btn:hover { background: var(--gold2); }
+    .nav-register-btn .reg-arrow { font-size: 10px; transition: transform .2s; }
+    .nav-register-btn.open .reg-arrow { transform: rotate(180deg); }
+    .nav-register-dropdown {
+      display: none; position: absolute; top: calc(100% + 10px); right: 0;
+      background: #0f0f1e; border: 1px solid var(--border); border-radius: 10px;
+      min-width: 220px; overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,.5);
+      z-index: 200;
+    }
+    .nav-register-dropdown.open { display: block; }
+    .nav-register-dropdown a {
+      display: block; padding: 14px 18px; font-size: 13px; font-weight: 600;
+      color: var(--text); letter-spacing: .5px; transition: background .15s, color .15s;
+      border-bottom: 1px solid rgba(255,255,255,.05); text-transform: none;
+    }
+    .nav-register-dropdown a:last-child { border-bottom: none; }
+    .nav-register-dropdown a:hover { background: rgba(201,168,76,.1); color: var(--gold); }
     .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; z-index: 200; flex-shrink: 0; margin-left: auto; }
     .nav-hamburger span { width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all .3s; display: block; }
     .nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
@@ -381,6 +408,15 @@
     <a href="#chauffeurs">Top Chauffeurs</a>
     <a href="#owners">Vehicle Owners</a>
     <a href="#contact">Contact</a>
+    <div class="nav-register-wrap" id="nav-register-wrap">
+      <button class="nav-register-btn" id="nav-register-btn" onclick="toggleRegisterMenu()">
+        Register with us <span class="reg-arrow">▾</span>
+      </button>
+      <div class="nav-register-dropdown" id="nav-register-dropdown">
+        <a href="/register-chauffeur.html">🚗 Register as a Chauffeur</a>
+        <a href="/register-owner.html">🔑 Register as a Vehicle Owner</a>
+      </div>
+    </div>
     <a href="/login.html" class="nav-login">Login</a>
   </div>
   <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
@@ -393,6 +429,8 @@
   <a href="#chauffeurs" onclick="closeMenu()">Top Chauffeurs</a>
   <a href="#owners" onclick="closeMenu()">Vehicle Owners</a>
   <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="/register-chauffeur.html" onclick="closeMenu()" style="color:var(--gold);">Register as Chauffeur</a>
+  <a href="/register-owner.html" onclick="closeMenu()" style="color:var(--gold);">Register as Owner</a>
   <a href="/login.html" class="nav-login" onclick="closeMenu()">Login</a>
 </div>
 
@@ -414,8 +452,8 @@
         Vehicle owners can register their vehicles, while qualified chauffeurs can apply to drive them. We facilitate secure connections and manage bookings, helping both parties deliver a professional chauffeur service.
       </p>
       <div class="hero-ctas reveal reveal-delay-2">
-        <a href="#access" class="btn btn-gold">Register as Vehicle Owner</a>
-        <a href="#access" class="btn btn-outline">Join as Chauffeur</a>
+        <a href="/register-owner.html" class="btn btn-gold">Register as Vehicle Owner</a>
+        <a href="/register-chauffeur.html" class="btn btn-outline">Join as Chauffeur</a>
       </div>
       <div class="hero-stats reveal reveal-delay-3">
         <div class="hero-stat"><div class="num">500+</div><div class="lbl">Vetted Chauffeurs</div></div>
@@ -552,7 +590,7 @@
           <div class="audience-tag">For Chauffeurs</div>
           <h3>More Bookings, Better Earnings</h3>
           <p>Grow your business with a steady stream of bookings from vehicle owners. Join our network and build a rewarding career.</p>
-          <a href="#access" class="btn btn-outline btn-sm">Register as Chauffeur →</a>
+          <a href="/register-chauffeur.html" class="btn btn-outline btn-sm">Register as Chauffeur →</a>
         </div>
       </div>
       <div class="audience-card reveal reveal-delay-1" id="owners">
@@ -907,255 +945,6 @@
 })();
 </script>
 
-<!-- ══ SEAMLESS ACCESS ════════════════════════════ -->
-<style>
-  .liability-box { background:rgba(201,168,76,.05); border:1px solid rgba(201,168,76,.2); border-radius:12px; margin-bottom:14px; overflow:hidden; }
-  .liability-header { display:flex; justify-content:space-between; align-items:center; padding:13px 16px; cursor:pointer; }
-  .liability-header span { font-size:13px; color:var(--gold); font-weight:600; }
-  .liability-toggle { font-size:12px; color:var(--gold); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; }
-  .liability-body { padding:0 16px 14px; border-top:1px solid rgba(255,255,255,.06); display:none; }
-  .liability-body.open { display:block; }
-  .liability-section-lbl { font-size:10px; color:var(--gold); font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin:14px 0 6px; }
-  .liability-body p { font-size:12px; color:var(--muted); line-height:1.8; }
-  .consent-row { display:flex; align-items:flex-start; gap:12px; padding:13px 16px; border-top:1px solid rgba(255,255,255,.06); cursor:pointer; }
-  .consent-box { width:20px; height:20px; border-radius:5px; border:2px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; transition:all .2s; }
-  .consent-box.checked { background:var(--gold); border-color:var(--gold); }
-  .consent-box.checked::after { content:'✓'; color:#000; font-size:12px; font-weight:bold; }
-  .consent-row p { font-size:12px; color:var(--muted); line-height:1.6; }
-  .access-success { display:none; text-align:center; padding:20px 0; }
-  .access-success .s-icon { font-size:52px; margin-bottom:16px; }
-  .access-success h4 { font-size:18px; color:#fff; margin-bottom:8px; }
-  .access-success p { font-size:13px; color:var(--muted); line-height:1.6; }
-  .access-err { background:rgba(233,69,96,.1); border:1px solid rgba(233,69,96,.3); border-radius:8px; padding:12px 14px; font-size:13px; color:#ff6b6b; margin-bottom:14px; display:none; }
-  .access-err.show { display:block; }
-  .pw-wrap { position:relative; }
-  .pw-wrap input { width:100%; padding-right:48px; }
-  .pw-eye { position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--muted); font-size:18px; line-height:1; padding:4px; }
-  .pw-eye:hover { color:var(--gold); }
-  .access-btn:disabled { background:#2a2a4a; color:#4a4a6a; cursor:not-allowed; border:1px solid #3a3a5a; }
-  .access-btn:disabled:hover { background:#2a2a4a; }
-</style>
-
-<section class="access" id="access">
-  <div class="inner">
-    <div class="section-center reveal">
-      <div class="section-eyebrow">
-        <div class="line"></div>
-        <span>Seamless Access</span>
-        <div class="line"></div>
-      </div>
-      <h2 class="section-title">Get Started<br><em>In Minutes</em></h2>
-      <p class="section-sub">Register directly on the website or download the app — your account works on both.</p>
-    </div>
-    <div class="access-grid">
-
-      <!-- REGISTER AS CHAUFFEUR -->
-      <div class="access-card reveal reveal-delay-1" id="chauffeur-register">
-        <div id="chauffeur-form-area">
-          <h3>Register as Chauffeur</h3>
-          <p>Join our network and start earning by serving vehicle owners across the UK.</p>
-          <div class="access-err" id="ch-err"></div>
-          <div class="form-field">
-            <label>Full Name</label>
-            <input type="text" id="ch-name" placeholder="Your full name" />
-          </div>
-          <div class="form-field">
-            <label>Email Address</label>
-            <input type="email" id="ch-email" placeholder="your@email.com" />
-          </div>
-          <div class="form-field">
-            <label>Phone Number</label>
-            <input type="tel" id="ch-phone" placeholder="+44 7XXX XXXXXX" />
-          </div>
-          <div class="form-field">
-            <label>Password</label>
-            <div class="pw-wrap">
-              <input type="password" id="ch-pw" placeholder="Min. 8 characters" />
-              <button class="pw-eye" type="button" onclick="togglePw('ch-pw',this)" title="Show/hide password">👁</button>
-            </div>
-          </div>
-          <!-- Transfer of Liability -->
-          <div class="liability-box">
-            <div class="liability-header" onclick="toggleLiability('ch-liability')">
-              <span>📋 Transfer of Liability Agreement</span>
-              <button class="liability-toggle" id="ch-liability-btn">▼ Read</button>
-            </div>
-            <div class="liability-body" id="ch-liability">
-              <div class="liability-section-lbl">Chauffeur Liability</div>
-              <p>The chauffeur accepts full responsibility for any traffic violations, PCNs, or parking fines incurred during a booking; any damage to the vehicle during the booking; loss of income to the owner if the vehicle is seized; any liability from operating without a valid driving licence, private hire badge, or hire & reward insurance.</p>
-              <div class="liability-section-lbl">Vehicle Owner Responsibility</div>
-              <p>The vehicle owner is responsible for providing a roadworthy vehicle with valid MOT, road tax, and hire & reward insurance; any fines received when the vehicle is not on a booking; ensuring the vehicle is licensed for private hire use.</p>
-              <div class="liability-section-lbl">Platform Role</div>
-              <p>Private Chauffeur Connect connects vehicle owners with chauffeurs. Any disputes over fines, damage, or money are between the owner and chauffeur directly. The platform is not liable for what happens during a booking.</p>
-            </div>
-            <div class="consent-row" onclick="toggleConsent('ch-liability-check', 'ch-btn', 'ch-tc-check')">
-              <div class="consent-box" id="ch-liability-check"></div>
-              <p>I have read and agree to the Transfer of Liability terms above</p>
-            </div>
-          </div>
-          <!-- T&C -->
-          <div class="liability-box">
-            <div class="liability-header" onclick="toggleLiability('ch-tc')">
-              <span>📜 Terms &amp; Conditions</span>
-              <button class="liability-toggle" id="ch-tc-btn">▼ Read</button>
-            </div>
-            <div class="liability-body" id="ch-tc">
-              <div class="liability-section-lbl">Use of Platform</div>
-              <p>By registering you agree to use Private Chauffeur Connect solely for lawful purposes. You must not misuse the platform, impersonate others, or submit false information.</p>
-              <div class="liability-section-lbl">Bookings &amp; Payments</div>
-              <p>All bookings are subject to availability. Payments are processed securely through the platform. Cancellation terms apply as stated at time of booking.</p>
-              <div class="liability-section-lbl">Account Responsibility</div>
-              <p>You are responsible for maintaining the confidentiality of your account credentials. Private Chauffeur Connect reserves the right to suspend accounts that breach these terms.</p>
-              <div class="liability-section-lbl">Changes to Terms</div>
-              <p>We may update these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
-            </div>
-            <div class="consent-row" onclick="toggleConsent('ch-tc-check', 'ch-btn', 'ch-liability-check')">
-              <div class="consent-box" id="ch-tc-check"></div>
-              <p>I have read and agree to the Terms &amp; Conditions of Private Chauffeur Connect</p>
-            </div>
-          </div>
-          <button class="access-btn" id="ch-btn" onclick="webRegister('chauffeur')" disabled>Register as Chauffeur</button>
-        </div>
-        <div class="access-success" id="chauffeur-success">
-          <div class="s-icon">📧</div>
-          <h4>Check Your Email!</h4>
-          <p>We've sent a verification link to <strong id="ch-success-email"></strong>. Click it to activate your account.</p>
-        </div>
-      </div>
-
-      <!-- REGISTER AS VEHICLE OWNER -->
-      <div class="access-card reveal reveal-delay-2" id="owner-register">
-        <div id="owner-form-area">
-          <h3>Register as Vehicle Owner</h3>
-          <p>List your vehicle and connect with professional chauffeurs.</p>
-          <div class="access-err" id="ow-err"></div>
-          <div class="form-field">
-            <label>Full Name</label>
-            <input type="text" id="ow-name" placeholder="Your full name" />
-          </div>
-          <div class="form-field">
-            <label>Email Address</label>
-            <input type="email" id="ow-email" placeholder="your@email.com" />
-          </div>
-          <div class="form-field">
-            <label>Phone Number</label>
-            <input type="tel" id="ow-phone" placeholder="+44 7XXX XXXXXX" />
-          </div>
-          <div class="form-field">
-            <label>Password</label>
-            <div class="pw-wrap">
-              <input type="password" id="ow-pw" placeholder="Min. 8 characters" />
-              <button class="pw-eye" type="button" onclick="togglePw('ow-pw',this)" title="Show/hide password">👁</button>
-            </div>
-          </div>
-          <!-- Transfer of Liability -->
-          <div class="liability-box">
-            <div class="liability-header" onclick="toggleLiability('ow-liability')">
-              <span>📋 Transfer of Liability Agreement</span>
-              <button class="liability-toggle" id="ow-liability-btn">▼ Read</button>
-            </div>
-            <div class="liability-body" id="ow-liability">
-              <div class="liability-section-lbl">Vehicle Owner Responsibility</div>
-              <p>The vehicle owner is responsible for providing a roadworthy vehicle with valid MOT, road tax, and hire & reward insurance; any fines received when the vehicle is not on a booking; ensuring the vehicle is licensed for private hire use.</p>
-              <div class="liability-section-lbl">Chauffeur Liability</div>
-              <p>The chauffeur accepts full responsibility for any traffic violations, PCNs, or parking fines during a booking; any damage to the vehicle; and any liability from operating without valid documentation.</p>
-              <div class="liability-section-lbl">Platform Role</div>
-              <p>Private Chauffeur Connect connects vehicle owners with chauffeurs. Any disputes over fines, damage, or money are between the owner and chauffeur directly. The platform is not liable for what happens during a booking.</p>
-            </div>
-            <div class="consent-row" onclick="toggleConsent('ow-liability-check', 'ow-btn', 'ow-tc-check')">
-              <div class="consent-box" id="ow-liability-check"></div>
-              <p>I have read and agree to the Transfer of Liability terms above</p>
-            </div>
-          </div>
-          <!-- T&C -->
-          <div class="liability-box">
-            <div class="liability-header" onclick="toggleLiability('ow-tc')">
-              <span>📜 Terms &amp; Conditions</span>
-              <button class="liability-toggle" id="ow-tc-btn">▼ Read</button>
-            </div>
-            <div class="liability-body" id="ow-tc">
-              <div class="liability-section-lbl">Use of Platform</div>
-              <p>By registering you agree to use Private Chauffeur Connect solely for lawful purposes. You must not misuse the platform, impersonate others, or submit false information.</p>
-              <div class="liability-section-lbl">Bookings &amp; Payments</div>
-              <p>All bookings are subject to availability. Payments are processed securely through the platform. Cancellation terms apply as stated at time of booking.</p>
-              <div class="liability-section-lbl">Account Responsibility</div>
-              <p>You are responsible for maintaining the confidentiality of your account credentials. Private Chauffeur Connect reserves the right to suspend accounts that breach these terms.</p>
-              <div class="liability-section-lbl">Changes to Terms</div>
-              <p>We may update these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
-            </div>
-            <div class="consent-row" onclick="toggleConsent('ow-tc-check', 'ow-btn', 'ow-liability-check')">
-              <div class="consent-box" id="ow-tc-check"></div>
-              <p>I have read and agree to the Terms &amp; Conditions of Private Chauffeur Connect</p>
-            </div>
-          </div>
-          <button class="access-btn" id="ow-btn" onclick="webRegister('owner')" disabled>Register as Vehicle Owner</button>
-        </div>
-        <div class="access-success" id="owner-success">
-          <div class="s-icon">📧</div>
-          <h4>Check Your Email!</h4>
-          <p>We've sent a verification link to <strong id="ow-success-email"></strong>. Click it to activate your account, then complete your vehicle registration.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<script>
-const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
-
-function togglePw(inputId, btn) {
-  const inp = document.getElementById(inputId);
-  const show = inp.type === 'password';
-  inp.type = show ? 'text' : 'password';
-  btn.textContent = show ? '🙈' : '👁';
-}
-
-function toggleLiability(id) {
-  const body = document.getElementById(id);
-  const btn = document.getElementById(id + '-btn');
-  const open = body.classList.toggle('open');
-  if (btn) btn.textContent = open ? '▲ Hide' : '▼ Read';
-}
-function toggleConsent(id, btnId, otherId) {
-  document.getElementById(id).classList.toggle('checked');
-  if (btnId) {
-    const bothChecked = document.getElementById(id).classList.contains('checked') &&
-                        document.getElementById(otherId).classList.contains('checked');
-    document.getElementById(btnId).disabled = !bothChecked;
-  }
-}
-function isChecked(id) { return document.getElementById(id).classList.contains('checked'); }
-function showErr(id, msg) { const e = document.getElementById(id); e.textContent = msg; e.classList.add('show'); }
-function hideErr(id) { document.getElementById(id).classList.remove('show'); }
-
-async function webRegister(role) {
-  const prefix = role === 'chauffeur' ? 'ch' : 'ow';
-  hideErr(prefix + '-err');
-  const name = document.getElementById(prefix + '-name').value.trim();
-  const email = document.getElementById(prefix + '-email').value.trim();
-  const phone = document.getElementById(prefix + '-phone').value.trim();
-  const pw = document.getElementById(prefix + '-pw').value;
-  if (!name || !email || !phone || !pw) return showErr(prefix + '-err', 'All fields are required.');
-  if (pw.length < 8) return showErr(prefix + '-err', 'Password must be at least 8 characters.');
-  if (!isChecked(prefix + '-liability-check')) return showErr(prefix + '-err', 'You must agree to the Transfer of Liability terms.');
-  if (!isChecked(prefix + '-tc-check')) return showErr(prefix + '-err', 'You must agree to the Terms & Conditions.');
-  const btn = document.getElementById(prefix + '-btn');
-  btn.disabled = true; btn.textContent = 'Creating account…';
-  try {
-    const res = await fetch(`${API}/auth/register`, {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ full_name: name, email, phone, password: pw, role, liability_consent_at: new Date().toISOString(), tc_consent_at: new Date().toISOString() })
-    });
-    const data = await res.json();
-    if (!res.ok) { showErr(prefix + '-err', data.error || data.message || 'Registration failed.'); return; }
-    document.getElementById(prefix === 'ch' ? 'chauffeur' : 'owner' + '-form-area').style.display = 'none';
-    document.getElementById((prefix === 'ch' ? 'ch-success-email' : 'ow-success-email')).textContent = email;
-    document.getElementById(prefix === 'ch' ? 'chauffeur-success' : 'owner-success').style.display = 'block';
-    document.getElementById(prefix === 'ch' ? 'chauffeur-form-area' : 'owner-form-area').style.display = 'none';
-  } catch { showErr(prefix + '-err', 'Cannot reach server. Please try again.'); }
-  finally { btn.disabled = false; btn.textContent = role === 'chauffeur' ? 'Register as Chauffeur' : 'Register as Vehicle Owner'; }
-}
-</script>
 
 <!-- ══ FOOTER ═════════════════════════════════════ -->
 <footer id="contact">
@@ -1176,6 +965,8 @@ async function webRegister(role) {
       <div class="footer-col">
         <h5>Company</h5>
         <a href="/about.html">About Us</a>
+        <a href="/register-chauffeur.html">Register as Chauffeur</a>
+        <a href="/register-owner.html">Register as Owner</a>
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/terms.html">Terms of Service</a>
       </div>
@@ -1217,6 +1008,22 @@ async function webRegister(role) {
     document.getElementById('mobile-menu').classList.remove('open');
     document.getElementById('hamburger').classList.remove('open');
     document.body.style.overflow = '';
+  }
+
+  function toggleRegisterMenu() {
+    const btn = document.getElementById('nav-register-btn');
+    const dropdown = document.getElementById('nav-register-dropdown');
+    const isOpen = dropdown.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    if (isOpen) {
+      document.addEventListener('click', function closeOnClickOutside(e) {
+        if (!document.getElementById('nav-register-wrap').contains(e.target)) {
+          dropdown.classList.remove('open');
+          btn.classList.remove('open');
+          document.removeEventListener('click', closeOnClickOutside);
+        }
+      });
+    }
   }
 </script>
 
