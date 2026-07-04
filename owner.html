@@ -236,6 +236,32 @@
     .detail-item .dl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
     .detail-item .dv { font-size: 13px; color: var(--text); }
 
+    /* Airport dropdown */
+    .airport-trigger {
+      width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 13px 16px; cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center; transition: border-color .2s;
+    }
+    .airport-trigger:hover { border-color: var(--gold); }
+    .airport-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 100;
+      background: #0f0f1e; border: 1px solid var(--gold); border-radius: 12px;
+      overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,.6);
+    }
+    .airport-dropdown input {
+      width: 100%; background: rgba(255,255,255,.06); border: none; border-bottom: 1px solid var(--border);
+      padding: 12px 16px; color: var(--text); font-size: 14px; font-family: 'Inter',sans-serif; outline: none;
+    }
+    .airport-dropdown input::placeholder { color: #404060; }
+    #bk-airport-list { max-height: 260px; overflow-y: auto; }
+    .airport-opt {
+      display: flex; align-items: center; gap: 12px; padding: 11px 16px;
+      cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.04); transition: background .15s;
+    }
+    .airport-opt:hover { background: rgba(201,168,76,.08); }
+    .airport-opt.selected { background: rgba(201,168,76,.12); }
+    .airport-opt .ao-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .airport-opt .ao-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
     /* Dispute modal */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.open { display: flex; }
@@ -373,15 +399,44 @@
           <!-- Step 1: Journey details -->
           <div class="booking-step active" id="book-step-1">
             <div class="trip-type-tabs">
-              <button class="tt-btn active" onclick="setTripType('regular',this)">🚗 Regular Journey</button>
-              <button class="tt-btn" onclick="setTripType('airport_drop',this)">✈️ Airport Drop-Off</button>
-              <button class="tt-btn" onclick="setTripType('airport_roundtrip',this)">🔄 Airport Return</button>
+              <button class="tt-btn active" id="tt-regular" onclick="setTripType('regular',this)">🚗 Regular Journey</button>
+              <button class="tt-btn" id="tt-airport_drop" onclick="setTripType('airport_drop',this)">✈️ Airport Drop-Off</button>
+              <button class="tt-btn" id="tt-airport_roundtrip" onclick="setTripType('airport_roundtrip',this)">🔄 Airport Return</button>
             </div>
             <div class="err" id="book-err-1"></div>
+
+            <!-- PICKUP: address + postcode -->
             <div class="form-row">
-              <div class="field"><label>Pickup Location <span style="color:var(--red)">*</span></label><input type="text" id="bk-pickup" placeholder="e.g. 12 Park Lane, Manchester" /></div>
-              <div class="field"><label>Destination <span style="color:var(--red)">*</span></label><input type="text" id="bk-dest" placeholder="e.g. Manchester Airport T1" /></div>
+              <div class="field"><label>Pickup Street Address <span style="color:var(--red)">*</span></label><input type="text" id="bk-pickup" placeholder="e.g. 12 Park Lane" /></div>
+              <div class="field"><label>Pickup Postcode <span style="color:var(--red)">*</span></label><input type="text" id="bk-pickup-pc" placeholder="e.g. M1 2AB" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" /></div>
             </div>
+
+            <!-- DESTINATION: Airport dropdown (airport trips) -->
+            <div id="bk-dest-airport-wrap" style="display:none;">
+              <div class="field" style="position:relative;">
+                <label>Airport <span style="color:var(--red)">*</span></label>
+                <div class="airport-trigger" id="bk-airport-trigger" onclick="toggleAirportPicker(event)">
+                  <span id="bk-airport-display" style="color:var(--muted);">Select airport…</span>
+                  <span style="color:var(--gold);font-size:11px;">▼</span>
+                </div>
+                <div class="airport-dropdown" id="bk-airport-dropdown" style="display:none;">
+                  <input type="text" id="bk-airport-search" placeholder="Search by name or city…" oninput="filterAirports()" autocomplete="off" />
+                  <div id="bk-airport-list"></div>
+                </div>
+              </div>
+              <div id="bk-airport-pc-confirm" style="display:none;font-size:12px;color:var(--muted);padding:4px 2px 8px;">
+                📍 Postcode: <strong id="bk-airport-pc-val" style="color:var(--text);"></strong>
+              </div>
+            </div>
+
+            <!-- DESTINATION: Regular address + postcode -->
+            <div id="bk-dest-regular-wrap">
+              <div class="form-row">
+                <div class="field"><label>Destination Address <span style="color:var(--red)">*</span></label><input type="text" id="bk-dest" placeholder="e.g. 25 Baker Street, London" /></div>
+                <div class="field"><label>Destination Postcode <span style="color:var(--red)">*</span></label><input type="text" id="bk-dest-pc" placeholder="e.g. NW1 6XE" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" /></div>
+              </div>
+            </div>
+
             <div class="form-row">
               <div class="field"><label>Date &amp; Time <span style="color:var(--red)">*</span></label><input type="datetime-local" id="bk-datetime" /></div>
               <div class="field" id="bk-duration-wrap">
@@ -397,9 +452,9 @@
             </div>
             <!-- Airport return: wait time at airport -->
             <div class="field" id="bk-wait-wrap" style="display:none;">
-              <label>Wait time at airport (hours)</label>
+              <label>Time at airport (hours)</label>
               <select id="bk-wait">
-                <option value="0">No waiting (drop off only)</option>
+                <option value="0">No waiting / drop off only</option>
                 <option value="1">1 hour</option><option value="2">2 hours</option><option value="3">3 hours</option>
                 <option value="4">4 hours</option><option value="5">5 hours</option>
               </select>
@@ -407,16 +462,16 @@
             <!-- Airport return: does owner return with chauffeur? -->
             <div id="bk-return-with-wrap" style="display:none;">
               <div class="field">
-                <label>Will you return with the chauffeur?</label>
-                <div style="display:flex;gap:10px;margin-top:4px;">
-                  <button class="tt-btn active" id="rw-yes" onclick="setReturnWith(true)">Yes, I'll be in the car</button>
-                  <button class="tt-btn" id="rw-no" onclick="setReturnWith(false)">No — chauffeur returns alone</button>
+                <label>Will you be returning home with the chauffeur?</label>
+                <div style="display:flex;gap:10px;margin-top:8px;">
+                  <button class="tt-btn active" id="rw-yes" onclick="setReturnWith(true)">✈️ 🔄 Yes — I'm returning</button>
+                  <button class="tt-btn" id="rw-no" onclick="setReturnWith(false)">🔑 🚗 No — return my car</button>
                 </div>
               </div>
               <!-- Unaccompanied key return details -->
               <div id="bk-key-return-wrap" style="display:none;">
                 <div class="form-row">
-                  <div class="field"><label>Key Return Method</label><select id="bk-key-method"><option value="">Select…</option><option value="lockbox">Key Lockbox</option><option value="neighbour">Leave with Neighbour</option><option value="post">Post</option><option value="other">Other</option></select></div>
+                  <div class="field"><label>Key Return Method</label><select id="bk-key-method"><option value="">Select…</option><option value="key_safe">Key Safe / Lockbox</option><option value="letterbox">Post through Letterbox</option><option value="direct">Return Directly to Me</option><option value="authorised_person">Hand to Authorised Person</option><option value="concierge">Leave with Concierge</option><option value="other">Other Arrangements</option></select></div>
                   <div class="field"><label>Key Return Details</label><input type="text" id="bk-key-details" placeholder="e.g. lockbox code 1234" /></div>
                 </div>
                 <div class="field"><label>Full Key Return Instructions</label><textarea id="bk-key-instructions" placeholder="Full instructions for the chauffeur on how to return your keys safely…"></textarea></div>
@@ -492,6 +547,42 @@
 const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
 const ACTIVE_STATUSES = ['pending','accepted','chauffeur_arriving','arrived_at_pickup','outbound_journey','at_destination','waiting_at_destination','return_ready_confirmation','return_journey'];
 
+const UK_AIRPORTS = [
+  {name:'Heathrow Airport',           city:'London',       postcode:'TW6 1QG'},
+  {name:'Gatwick Airport',            city:'London',       postcode:'RH6 0NP'},
+  {name:'Stansted Airport',           city:'London',       postcode:'CM24 1RW'},
+  {name:'Luton Airport',              city:'London',       postcode:'LU2 9LY'},
+  {name:'London City Airport',        city:'London',       postcode:'E16 2PX'},
+  {name:'Southend Airport',           city:'London',       postcode:'SS2 6YF'},
+  {name:'Manchester Airport',         city:'Manchester',   postcode:'M90 1QX'},
+  {name:'Birmingham Airport',         city:'Birmingham',   postcode:'B26 3QJ'},
+  {name:'Edinburgh Airport',          city:'Edinburgh',    postcode:'EH12 9DN'},
+  {name:'Glasgow Airport',            city:'Glasgow',      postcode:'PA3 2SW'},
+  {name:'Glasgow Prestwick Airport',  city:'Ayrshire',     postcode:'KA9 2PL'},
+  {name:'Bristol Airport',            city:'Bristol',      postcode:'BS48 3DY'},
+  {name:'Leeds Bradford Airport',     city:'Leeds',        postcode:'LS19 7TU'},
+  {name:'Liverpool Airport',          city:'Liverpool',    postcode:'L24 1YD'},
+  {name:'Newcastle Airport',          city:'Newcastle',    postcode:'NE13 8BZ'},
+  {name:'East Midlands Airport',      city:'Derby',        postcode:'DE74 2SA'},
+  {name:'Cardiff Airport',            city:'Cardiff',      postcode:'CF62 3BD'},
+  {name:'Southampton Airport',        city:'Southampton',  postcode:'SO18 2NL'},
+  {name:'Belfast International',      city:'Belfast',      postcode:'BT29 4AB'},
+  {name:'Belfast City Airport',       city:'Belfast',      postcode:'BT3 9JH'},
+  {name:'Aberdeen Airport',           city:'Aberdeen',     postcode:'AB21 7DU'},
+  {name:'Inverness Airport',          city:'Inverness',    postcode:'IV2 7JB'},
+  {name:'Exeter Airport',             city:'Exeter',       postcode:'EX5 2BD'},
+  {name:'Norwich Airport',            city:'Norwich',      postcode:'NR6 6JA'},
+  {name:'Bournemouth Airport',        city:'Bournemouth',  postcode:'BH23 6SE'},
+  {name:'Humberside Airport',         city:'Humber',       postcode:'DN39 6YH'},
+  {name:'Durham Tees Valley Airport', city:'Teesside',     postcode:'TS18 2EU'},
+  {name:'Newquay Airport',            city:'Cornwall',     postcode:'TR8 4RQ'},
+  {name:'Derry City Airport',         city:'Derry',        postcode:'BT47 3GY'},
+  {name:'Dundee Airport',             city:'Dundee',       postcode:'DD2 1UH'},
+  {name:'Isle of Man Airport',        city:'Isle of Man',  postcode:'IM9 2AS'},
+  {name:'Jersey Airport',             city:'Jersey',       postcode:'JE1 3YT'},
+  {name:'Guernsey Airport',           city:'Guernsey',     postcode:'GY5 7SD'},
+];
+
 let token = null;
 let userName = '';
 let myVehicle = null;
@@ -505,6 +596,7 @@ let rwChecked = false;
 let lastEstimate = null;
 let disputeBookingId = null;
 let allBookings = [];
+let selectedAirport = null;
 
 // ── Helpers ───────────────────────────────────────────────
 function togglePw(id, btn) { const i=document.getElementById(id); const s=i.type==='password'; i.type=s?'text':'password'; btn.textContent=s?'🙈':'👁'; }
@@ -732,20 +824,69 @@ function prefillBookingVehicle() {
 function vehicleMakeModel() {
   return [myVehicle?.make, myVehicle?.model].filter(Boolean).join(' ') || '';
 }
+// ── Airport picker ────────────────────────────────────────
+function renderAirportList(filter) {
+  const q = (filter||'').toLowerCase();
+  const list = document.getElementById('bk-airport-list');
+  const filtered = UK_AIRPORTS.filter(a=>!q||(a.name.toLowerCase().includes(q)||a.city.toLowerCase().includes(q)||a.postcode.toLowerCase().includes(q)));
+  list.innerHTML = filtered.map(a=>`
+    <div class="airport-opt${selectedAirport?.postcode===a.postcode?' selected':''}" onclick="selectAirport(${JSON.stringify(a).replace(/"/g,'&quot;')})">
+      <span style="font-size:18px;">✈️</span>
+      <div><div class="ao-name">${a.name}</div><div class="ao-sub">${a.city} · ${a.postcode}</div></div>
+    </div>`).join('');
+}
+function toggleAirportPicker(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('bk-airport-dropdown');
+  const open = dd.style.display==='block';
+  dd.style.display = open ? 'none' : 'block';
+  if (!open) { renderAirportList(''); document.getElementById('bk-airport-search').value=''; setTimeout(()=>document.getElementById('bk-airport-search').focus(),50); }
+}
+function filterAirports() { renderAirportList(document.getElementById('bk-airport-search').value); }
+function selectAirport(a) {
+  selectedAirport = a;
+  document.getElementById('bk-airport-display').textContent = a.name;
+  document.getElementById('bk-airport-display').style.color = 'var(--text)';
+  document.getElementById('bk-airport-pc-val').textContent = a.postcode;
+  document.getElementById('bk-airport-pc-confirm').style.display = '';
+  document.getElementById('bk-airport-dropdown').style.display = 'none';
+}
+document.addEventListener('click', ()=>{ const dd=document.getElementById('bk-airport-dropdown'); if(dd) dd.style.display='none'; });
+
+function buildFullPickup() {
+  const addr=(document.getElementById('bk-pickup').value||'').trim();
+  const pc=(document.getElementById('bk-pickup-pc').value||'').trim().toUpperCase();
+  return [addr,pc].filter(Boolean).join(', ');
+}
+function buildFullDestination() {
+  if (tripType==='airport_drop'||tripType==='airport_roundtrip') {
+    return selectedAirport ? `${selectedAirport.name}, ${selectedAirport.postcode}` : '';
+  }
+  const addr=(document.getElementById('bk-dest').value||'').trim();
+  const pc=(document.getElementById('bk-dest-pc').value||'').trim().toUpperCase();
+  return [addr,pc].filter(Boolean).join(', ');
+}
+
 function setTripType(type, btn) {
   tripType = type;
-  document.querySelectorAll('.tt-btn').forEach(b=>b.classList.remove('active'));
+  // Update tab buttons in trip-type-tabs only
+  document.querySelectorAll('.trip-type-tabs .tt-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  const isAirport = type==='airport_drop'||type==='airport_roundtrip';
+  document.getElementById('bk-dest-airport-wrap').style.display = isAirport?'':'none';
+  document.getElementById('bk-dest-regular-wrap').style.display = isAirport?'none':'';
+  if (isAirport && !selectedAirport) { selectedAirport=null; document.getElementById('bk-airport-display').textContent='Select airport…'; document.getElementById('bk-airport-display').style.color='var(--muted)'; document.getElementById('bk-airport-pc-confirm').style.display='none'; }
   document.getElementById('bk-duration-wrap').style.display = type==='airport_drop'?'none':'';
-  document.getElementById('bk-wait-wrap').style.display = type==='airport_roundtrip'?'':'none';
+  document.getElementById('bk-wait-wrap').style.display = type==='airport_roundtrip'&&ownerReturnsWith?'':'none';
   document.getElementById('bk-return-with-wrap').style.display = type==='airport_roundtrip'?'':'none';
+  document.getElementById('bk-airport-dropdown').style.display='none';
 }
 function setReturnWith(val) {
   ownerReturnsWith = val;
   document.getElementById('rw-yes').classList.toggle('active', val);
   document.getElementById('rw-no').classList.toggle('active', !val);
   document.getElementById('bk-key-return-wrap').style.display = val?'none':'';
-  document.getElementById('bk-wait-wrap').style.display = !val?'none':''; // no wait time if unaccompanied
+  document.getElementById('bk-wait-wrap').style.display = val?'':'none';
 }
 function toggleRoadworthy() {
   rwChecked = !rwChecked;
@@ -758,15 +899,24 @@ function goBookStep(n) {
 }
 async function getEstimate() {
   hideErr('book-err-1');
-  const pickup = document.getElementById('bk-pickup').value.trim();
-  const dest = document.getElementById('bk-dest').value.trim();
+  const pickupAddr = (document.getElementById('bk-pickup').value||'').trim();
+  const pickupPc   = (document.getElementById('bk-pickup-pc').value||'').trim();
+  if (!pickupAddr) return showErr('book-err-1','Please enter a pickup street address.');
+  if (!pickupPc)   return showErr('book-err-1','Please enter a pickup postcode.');
+  const isAirport = tripType==='airport_drop'||tripType==='airport_roundtrip';
+  if (isAirport && !selectedAirport) return showErr('book-err-1','Please select an airport from the dropdown.');
+  if (!isAirport) {
+    if (!(document.getElementById('bk-dest').value||'').trim()) return showErr('book-err-1','Please enter a destination address.');
+    if (!(document.getElementById('bk-dest-pc').value||'').trim()) return showErr('book-err-1','Please enter a destination postcode.');
+  }
   const dt = document.getElementById('bk-datetime').value;
   const dur = document.getElementById('bk-duration').value;
-  if (!pickup||!dest) return showErr('book-err-1','Pickup location and destination are required.');
   if (!dt) return showErr('book-err-1','Please select a date and time.');
   if (tripType!=='airport_drop' && !(tripType==='airport_roundtrip'&&!ownerReturnsWith) && !dur) return showErr('book-err-1','Please select a duration.');
   const dtVal = new Date(dt);
   if (dtVal < new Date(Date.now()+15*60*1000)) return showErr('book-err-1','Booking time must be at least 15 minutes from now.');
+  const pickup = buildFullPickup();
+  const dest   = buildFullDestination();
   const btn = document.querySelector('#book-step-1 .btn-primary'); btn.disabled=true; btn.textContent='Calculating…';
   try {
     const body = {pickup_location:pickup, destination:dest, trip_type:tripType};
@@ -803,8 +953,8 @@ async function createBooking() {
   try {
     const dur = document.getElementById('bk-duration').value;
     const body = {
-      pickup_location: document.getElementById('bk-pickup').value.trim(),
-      destination: document.getElementById('bk-dest').value.trim(),
+      pickup_location: buildFullPickup(),
+      destination: buildFullDestination(),
       date_time: new Date(document.getElementById('bk-datetime').value).toISOString(),
       trip_type: tripType,
       vehicle_reg: myVehicle.registration,
@@ -824,7 +974,6 @@ async function createBooking() {
       }
     }
     const booking = await apiFetch('/bookings',{method:'POST',body:JSON.stringify(body)});
-    // Trigger dispatch
     try { await apiFetch('/bookings/'+booking.id+'/dispatch',{method:'POST',body:'{}'}); } catch(_){}
     activeBooking = booking;
     allBookings = [booking, ...allBookings];
