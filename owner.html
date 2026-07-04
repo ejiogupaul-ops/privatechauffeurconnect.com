@@ -269,6 +269,43 @@
     .return-consent-row .rw-box.checked { background: var(--gold); border-color: var(--gold); }
     .return-consent-row p { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
+    /* Date/time pickers */
+    .cal-trigger {
+      width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 13px 16px; cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center; transition: border-color .2s;
+    }
+    .cal-trigger:hover { border-color: var(--gold); }
+    .cal-wrap { position: relative; }
+    .cal-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; z-index: 200;
+      background: #0f0f1e; border: 1px solid var(--gold); border-radius: 14px;
+      padding: 14px; width: 280px; box-shadow: 0 12px 40px rgba(0,0,0,.7);
+    }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .cal-nav { background: none; border: 1px solid rgba(201,168,76,.3); color: var(--gold); border-radius: 7px; width: 28px; height: 28px; cursor: pointer; font-size: 13px; }
+    .cal-nav:hover { background: rgba(201,168,76,.1); }
+    .cal-month-label { font-size: 14px; font-weight: 700; color: #fff; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+    .cal-dow { font-size: 10px; color: var(--muted); text-align: center; padding: 4px 0; font-weight: 600; letter-spacing: .3px; }
+    .cal-day {
+      font-size: 12px; text-align: center; padding: 7px 0; border-radius: 7px;
+      cursor: pointer; color: var(--text); transition: background .15s;
+    }
+    .cal-day:hover:not(.cal-past):not(.cal-empty) { background: rgba(201,168,76,.15); }
+    .cal-day.cal-today { border: 1px solid rgba(201,168,76,.4); color: var(--gold); }
+    .cal-day.cal-selected { background: var(--gold); color: #000; font-weight: 700; }
+    .cal-day.cal-past { color: #3a3a5a; cursor: default; }
+    .cal-day.cal-empty { cursor: default; }
+    .time-row { display: flex; gap: 10px; margin-top: 2px; }
+    .time-row .field { flex: 1; }
+    input[type="time"] {
+      width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 13px 16px; color: var(--text); font-size: 14px;
+      font-family: 'Inter', sans-serif; -webkit-appearance: none;
+    }
+    input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1) opacity(.5); cursor: pointer; }
+
     /* Airport dropdown */
     .airport-trigger {
       width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
@@ -470,8 +507,35 @@
               </div>
             </div>
 
-            <div class="form-row">
-              <div class="field"><label>Date &amp; Time <span style="color:var(--red)">*</span></label><input type="datetime-local" id="bk-datetime" /></div>
+            <!-- Date picker -->
+            <div class="field">
+              <label>Date <span style="color:var(--red)">*</span></label>
+              <div class="cal-wrap">
+                <div class="cal-trigger" onclick="toggleCalendar(event)">
+                  <span id="cal-display" style="color:var(--muted);">Select date…</span>
+                  <span style="font-size:14px;">📅</span>
+                </div>
+                <div class="cal-dropdown" id="cal-dropdown" style="display:none;">
+                  <div class="cal-header">
+                    <button class="cal-nav" type="button" onclick="calNav(-1)">‹</button>
+                    <span class="cal-month-label" id="cal-month-label"></span>
+                    <button class="cal-nav" type="button" onclick="calNav(1)">›</button>
+                  </div>
+                  <div class="cal-grid">
+                    <div class="cal-dow">Mo</div><div class="cal-dow">Tu</div><div class="cal-dow">We</div>
+                    <div class="cal-dow">Th</div><div class="cal-dow">Fr</div><div class="cal-dow">Sa</div><div class="cal-dow">Su</div>
+                    <div id="cal-days"></div>
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" id="bk-date-value" />
+            </div>
+            <!-- Time + Duration row -->
+            <div class="time-row">
+              <div class="field">
+                <label>Time (24hr) <span style="color:var(--red)">*</span></label>
+                <input type="time" id="bk-time" />
+              </div>
               <div class="field" id="bk-duration-wrap">
                 <label>Duration (hours) <span style="color:var(--red)">*</span></label>
                 <select id="bk-duration">
@@ -482,15 +546,6 @@
                   <option value="10">10 hours</option><option value="12">12 hours</option>
                 </select>
               </div>
-            </div>
-            <!-- Airport return: wait time at airport -->
-            <div class="field" id="bk-wait-wrap" style="display:none;">
-              <label>Time at airport (hours)</label>
-              <select id="bk-wait">
-                <option value="0">No waiting / drop off only</option>
-                <option value="1">1 hour</option><option value="2">2 hours</option><option value="3">3 hours</option>
-                <option value="4">4 hours</option><option value="5">5 hours</option>
-              </select>
             </div>
             <!-- Airport return: does owner return with chauffeur? -->
             <div id="bk-return-with-wrap" style="display:none;">
@@ -940,6 +995,75 @@ function prefillBookingVehicle() {
 function vehicleMakeModel() {
   return [myVehicle?.make, myVehicle?.model].filter(Boolean).join(' ') || '';
 }
+// ── Calendar picker ───────────────────────────────────────
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth(); // 0-based
+let calSelectedDate = null; // 'YYYY-MM-DD'
+
+function toggleCalendar(e) {
+  if (e) e.stopPropagation();
+  const dd = document.getElementById('cal-dropdown');
+  const open = dd.style.display === 'block';
+  dd.style.display = open ? 'none' : 'block';
+  if (!open) renderCalendar();
+}
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+function renderCalendar() {
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent = MONTHS[calMonth] + ' ' + calYear;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const firstDay = new Date(calYear, calMonth, 1);
+  // Monday=0, Sunday=6 offset
+  let startOffset = firstDay.getDay() - 1; // getDay: 0=Sun, 1=Mon...
+  if (startOffset < 0) startOffset = 6;
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  let html = '';
+  // Empty cells before 1st
+  for (let i = 0; i < startOffset; i++) html += '<div class="cal-day cal-empty"></div>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dt = new Date(calYear, calMonth, d);
+    const ds = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isPast = dt < today;
+    const isToday = dt.getTime() === today.getTime();
+    const isSel = ds === calSelectedDate;
+    let cls = 'cal-day';
+    if (isPast) cls += ' cal-past';
+    if (isToday && !isSel) cls += ' cal-today';
+    if (isSel) cls += ' cal-selected';
+    const click = isPast ? '' : `onclick="selectCalDay('${ds}')"`;
+    html += `<div class="${cls}" ${click}>${d}</div>`;
+  }
+  document.getElementById('cal-days').innerHTML = html;
+}
+function selectCalDay(ds) {
+  calSelectedDate = ds;
+  document.getElementById('bk-date-value').value = ds;
+  const [y, m, d] = ds.split('-');
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('cal-display').textContent = `${parseInt(d)} ${MONTHS[parseInt(m)-1]} ${y}`;
+  document.getElementById('cal-display').style.color = 'var(--text)';
+  document.getElementById('cal-dropdown').style.display = 'none';
+  renderCalendar(); // refresh to show selection
+}
+document.addEventListener('click', (e) => {
+  const dd = document.getElementById('cal-dropdown');
+  if (dd && dd.style.display === 'block') {
+    if (!dd.contains(e.target) && !e.target.closest('.cal-wrap')) dd.style.display = 'none';
+  }
+});
+
+function buildDateTimeISO() {
+  const dateVal = document.getElementById('bk-date-value').value;
+  const timeVal = (document.getElementById('bk-time').value || '').trim();
+  if (!dateVal || !timeVal) return null;
+  return new Date(`${dateVal}T${timeVal}`).toISOString();
+}
+
 // ── Airport picker ────────────────────────────────────────
 function renderAirportList(filter) {
   const q = (filter||'').toLowerCase();
@@ -992,8 +1116,7 @@ function setTripType(type, btn) {
   document.getElementById('bk-dest-airport-wrap').style.display = isAirport?'':'none';
   document.getElementById('bk-dest-regular-wrap').style.display = isAirport?'none':'';
   if (isAirport && !selectedAirport) { selectedAirport=null; document.getElementById('bk-airport-display').textContent='Select airport…'; document.getElementById('bk-airport-display').style.color='var(--muted)'; document.getElementById('bk-airport-pc-confirm').style.display='none'; }
-  document.getElementById('bk-duration-wrap').style.display = type==='airport_drop'?'none':'';
-  document.getElementById('bk-wait-wrap').style.display = type==='airport_roundtrip'&&ownerReturnsWith?'':'none';
+  document.getElementById('bk-duration-wrap').style.display = type==='regular'?'':'none';
   document.getElementById('bk-return-with-wrap').style.display = type==='airport_roundtrip'?'':'none';
   document.getElementById('bk-airport-dropdown').style.display='none';
 }
@@ -1002,7 +1125,6 @@ function setReturnWith(val) {
   document.getElementById('rw-yes').classList.toggle('active', val);
   document.getElementById('rw-no').classList.toggle('active', !val);
   document.getElementById('bk-key-return-wrap').style.display = val?'none':'';
-  document.getElementById('bk-wait-wrap').style.display = val?'':'none';
   if (!val) { keyReturnMethod=''; keyReturnDetails={}; resetKeyReturnUI(); }
 }
 function resetKeyReturnUI() {
@@ -1076,10 +1198,12 @@ async function getEstimate() {
     if (!(document.getElementById('bk-dest').value||'').trim()) return showErr('book-err-1','Please enter a destination address.');
     if (!(document.getElementById('bk-dest-pc').value||'').trim()) return showErr('book-err-1','Please enter a destination postcode.');
   }
-  const dt = document.getElementById('bk-datetime').value;
+  const dateVal = document.getElementById('bk-date-value').value;
+  const timeVal = (document.getElementById('bk-time').value||'').trim();
   const dur = document.getElementById('bk-duration').value;
-  if (!dt) return showErr('book-err-1','Please select a date and time.');
-  if (tripType!=='airport_drop' && !(tripType==='airport_roundtrip'&&!ownerReturnsWith) && !dur) return showErr('book-err-1','Please select a duration.');
+  if (!dateVal) return showErr('book-err-1','Please select a date.');
+  if (!timeVal) return showErr('book-err-1','Please select a time.');
+  if (tripType==='regular' && !dur) return showErr('book-err-1','Please select a duration.');
   if (tripType==='airport_roundtrip' && !ownerReturnsWith) {
     if (!keyReturnMethod) return showErr('book-err-1','Please select a key return method.');
     const d = getKRDetails();
@@ -1102,7 +1226,7 @@ async function getEstimate() {
       if (!d.other_instructions) return showErr('book-err-1','Please describe your key return arrangements.');
     }
   }
-  const dtVal = new Date(dt);
+  const dtVal = new Date(`${dateVal}T${timeVal}`);
   if (dtVal < new Date(Date.now()+15*60*1000)) return showErr('book-err-1','Booking time must be at least 15 minutes from now.');
   const pickup = buildFullPickup();
   const dest   = buildFullDestination();
@@ -1112,7 +1236,6 @@ async function getEstimate() {
     if (tripType==='regular') body.duration_hours=parseFloat(dur);
     if (tripType==='airport_roundtrip') {
       body.owner_returns_with_chauffeur = ownerReturnsWith;
-      if (ownerReturnsWith) body.duration_hours = parseFloat(document.getElementById('bk-wait').value)||0;
     }
     lastEstimate = await apiFetch('/bookings/estimate',{method:'POST',body:JSON.stringify(body)});
     renderPriceCard(lastEstimate);
@@ -1149,7 +1272,7 @@ async function createBooking() {
     const body = {
       pickup_location: buildFullPickup(),
       destination: buildFullDestination(),
-      date_time: new Date(document.getElementById('bk-datetime').value).toISOString(),
+      date_time: buildDateTimeISO(),
       trip_type: tripType,
       vehicle_reg: myVehicle.registration,
       gear_type: myVehicle.gear_type || 'automatic',
@@ -1160,7 +1283,6 @@ async function createBooking() {
     if (tripType==='regular') body.duration_hours=parseFloat(dur);
     if (tripType==='airport_roundtrip') {
       body.owner_returns_with_chauffeur=ownerReturnsWith;
-      if (ownerReturnsWith) body.duration_hours=parseFloat(document.getElementById('bk-wait').value)||0;
       if (!ownerReturnsWith) {
         body.key_return_method = keyReturnMethod || undefined;
         const d = getKRDetails();
