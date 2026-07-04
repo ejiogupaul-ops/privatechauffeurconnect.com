@@ -236,6 +236,39 @@
     .detail-item .dl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
     .detail-item .dv { font-size: 13px; color: var(--text); }
 
+    /* Key Return Method cards */
+    .kr-hint { font-size: 12px; color: var(--muted); margin: 2px 0 12px; line-height: 1.5; }
+    .kr-method-card {
+      display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-radius: 12px;
+      background: var(--dark2); border: 1.5px solid var(--border); cursor: pointer; margin-bottom: 8px; transition: border-color .2s, background .2s;
+    }
+    .kr-method-card:hover { border-color: rgba(201,168,76,.3); }
+    .kr-method-card.selected { border-color: var(--gold); background: rgba(201,168,76,.07); }
+    .kr-method-icon { font-size: 20px; flex-shrink: 0; }
+    .kr-method-label { font-size: 13px; font-weight: 700; color: #8a8aaa; margin-bottom: 2px; }
+    .kr-method-card.selected .kr-method-label { color: #fff; }
+    .kr-method-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+    .kr-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #334; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: auto; }
+    .kr-method-card.selected .kr-radio { border-color: var(--gold); }
+    .kr-radio-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--gold); }
+    .kr-sub-form { background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.06); border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+    .kr-sub-form.open { display: block; }
+    .kr-sub-title { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .5px; margin-bottom: 14px; }
+    .kr-field { margin-bottom: 12px; }
+    .kr-field label { display: block; font-size: 12px; color: #99a; margin-bottom: 6px; }
+    .kr-field input, .kr-field textarea, .kr-field select { width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 9px; padding: 11px 13px; color: var(--text); font-size: 13px; resize: vertical; box-sizing: border-box; }
+    .kr-field textarea { min-height: 70px; }
+    .kr-checkbox-row { display: flex; align-items: flex-start; gap: 10px; padding: 12px; background: rgba(90,180,232,.05); border: 1px solid rgba(90,180,232,.15); border-radius: 10px; cursor: pointer; margin-top: 10px; }
+    .kr-checkbox { width: 18px; height: 18px; border-radius: 4px; border: 2px solid #334; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .kr-checkbox.checked { background: var(--accent); border-color: var(--accent); }
+    .kr-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+    .kr-checkbox-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    /* Unaccompanied consent row (step 2) */
+    .return-consent-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: rgba(201,168,76,.05); border: 1px solid rgba(201,168,76,.2); border-radius: 10px; margin-bottom: 14px; cursor: pointer; margin-top: 10px; }
+    .return-consent-row .rw-box { border-color: rgba(201,168,76,.4); }
+    .return-consent-row .rw-box.checked { background: var(--gold); border-color: var(--gold); }
+    .return-consent-row p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
     /* Airport dropdown */
     .airport-trigger {
       width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
@@ -468,13 +501,89 @@
                   <button class="tt-btn" id="rw-no" onclick="setReturnWith(false)">🔑 🚗 No — return my car</button>
                 </div>
               </div>
-              <!-- Unaccompanied key return details -->
+              <!-- Unaccompanied: Key Return Method -->
               <div id="bk-key-return-wrap" style="display:none;">
-                <div class="form-row">
-                  <div class="field"><label>Key Return Method</label><select id="bk-key-method"><option value="">Select…</option><option value="key_safe">Key Safe / Lockbox</option><option value="letterbox">Post through Letterbox</option><option value="direct">Return Directly to Me</option><option value="authorised_person">Hand to Authorised Person</option><option value="concierge">Leave with Concierge</option><option value="other">Other Arrangements</option></select></div>
-                  <div class="field"><label>Key Return Details</label><input type="text" id="bk-key-details" placeholder="e.g. lockbox code 1234" /></div>
+                <label style="display:block;font-size:13px;color:#99a;margin:14px 0 4px;">Key Return Method <span style="color:var(--gold)">*</span></label>
+                <p class="kr-hint">How should the chauffeur secure your key after returning the vehicle?</p>
+
+                <!-- Method cards -->
+                <div class="kr-method-card" id="kr-card-direct" onclick="selectKeyReturnMethod('direct')">
+                  <span class="kr-method-icon">🤝</span>
+                  <div style="flex:1"><div class="kr-method-label">Return directly to me</div><div class="kr-method-desc">Chauffeur meets you in person to hand over the key</div></div>
+                  <div class="kr-radio" id="kr-radio-direct"><div class="kr-radio-dot" style="display:none"></div></div>
                 </div>
-                <div class="field"><label>Full Key Return Instructions</label><textarea id="bk-key-instructions" placeholder="Full instructions for the chauffeur on how to return your keys safely…"></textarea></div>
+                <div class="kr-method-card" id="kr-card-letterbox" onclick="selectKeyReturnMethod('letterbox')">
+                  <span class="kr-method-icon">📬</span>
+                  <div style="flex:1"><div class="kr-method-label">Post through letterbox</div><div class="kr-method-desc">Chauffeur posts key through your front door</div></div>
+                  <div class="kr-radio" id="kr-radio-letterbox"><div class="kr-radio-dot" style="display:none"></div></div>
+                </div>
+                <div class="kr-method-card" id="kr-card-key_safe" onclick="selectKeyReturnMethod('key_safe')">
+                  <span class="kr-method-icon">🔐</span>
+                  <div style="flex:1"><div class="kr-method-label">Leave in a key safe</div><div class="kr-method-desc">Chauffeur deposits key in your key safe</div></div>
+                  <div class="kr-radio" id="kr-radio-key_safe"><div class="kr-radio-dot" style="display:none"></div></div>
+                </div>
+                <div class="kr-method-card" id="kr-card-authorised_person" onclick="selectKeyReturnMethod('authorised_person')">
+                  <span class="kr-method-icon">👤</span>
+                  <div style="flex:1"><div class="kr-method-label">Hand to authorised person</div><div class="kr-method-desc">A trusted person you nominate will receive the key</div></div>
+                  <div class="kr-radio" id="kr-radio-authorised_person"><div class="kr-radio-dot" style="display:none"></div></div>
+                </div>
+                <div class="kr-method-card" id="kr-card-concierge" onclick="selectKeyReturnMethod('concierge')">
+                  <span class="kr-method-icon">🏢</span>
+                  <div style="flex:1"><div class="kr-method-label">Leave with building concierge</div><div class="kr-method-desc">Concierge will hold the key on your behalf</div></div>
+                  <div class="kr-radio" id="kr-radio-concierge"><div class="kr-radio-dot" style="display:none"></div></div>
+                </div>
+                <div class="kr-method-card" id="kr-card-other" onclick="selectKeyReturnMethod('other')">
+                  <span class="kr-method-icon">📝</span>
+                  <div style="flex:1"><div class="kr-method-label">Other arrangements</div><div class="kr-method-desc">Describe your own key return arrangement</div></div>
+                  <div class="kr-radio" id="kr-radio-other"><div class="kr-radio-dot" style="display:none"></div></div>
+                </div>
+
+                <!-- Sub-forms per method -->
+                <div class="kr-sub-form" id="kr-sub-direct">
+                  <div class="kr-sub-title">🤝 Direct handover details</div>
+                  <div class="kr-field"><label>Meeting Address <span style="color:var(--gold)">*</span></label><input type="text" id="krd-meeting_address" placeholder="Address where you can be met" /></div>
+                  <div class="kr-field"><label>Contact Number <span style="color:var(--gold)">*</span></label><input type="tel" id="krd-contact_number" placeholder="e.g. 07700 900000" /></div>
+                  <div class="kr-field"><label>Meeting Time (optional)</label><input type="text" id="krd-meeting_time" placeholder="e.g. by 2pm" /></div>
+                  <div class="kr-field"><label>Additional Instructions</label><textarea id="krd-instructions" placeholder="Any further details…"></textarea></div>
+                </div>
+
+                <div class="kr-sub-form" id="kr-sub-letterbox">
+                  <div class="kr-sub-title">📬 Letterbox details</div>
+                  <div class="kr-field"><label>Confirm Return Address <span style="color:var(--gold)">*</span></label><input type="text" id="krd-confirm_address" placeholder="Full address of the property" /></div>
+                  <div class="kr-field"><label>Special Instructions</label><textarea id="krd-lb_instructions" placeholder="e.g. Side entrance letterbox"></textarea></div>
+                  <div class="kr-checkbox-row" id="kr-lb-confirm-row" onclick="toggleKRCheckbox('letterbox_confirmed')">
+                    <div class="kr-checkbox" id="kr-cb-letterbox_confirmed"></div>
+                    <span class="kr-checkbox-text">I understand the key will be posted through the letterbox once the vehicle has been secured.</span>
+                  </div>
+                </div>
+
+                <div class="kr-sub-form" id="kr-sub-key_safe">
+                  <div class="kr-sub-title">🔐 Key safe details</div>
+                  <div class="kr-field"><label>Key Safe Code <span style="color:var(--gold)">*</span></label><input type="password" id="krd-key_safe_code" placeholder="e.g. 1234" /></div>
+                  <div class="kr-field"><label>Key Safe Location <span style="color:var(--gold)">*</span></label><textarea id="krd-key_safe_location" placeholder="e.g. Black key safe attached to left gate post"></textarea></div>
+                  <div class="kr-field"><label>Additional Instructions</label><textarea id="krd-ks_instructions" placeholder="Anything else the chauffeur should know…"></textarea></div>
+                </div>
+
+                <div class="kr-sub-form" id="kr-sub-authorised_person">
+                  <div class="kr-sub-title">👤 Authorised person details</div>
+                  <div class="kr-field"><label>Full Name <span style="color:var(--gold)">*</span></label><input type="text" id="krd-person_name" placeholder="e.g. John Smith" /></div>
+                  <div class="kr-field"><label>Relationship</label><input type="text" id="krd-person_relationship" placeholder="e.g. Brother, Neighbour, Partner" /></div>
+                  <div class="kr-field"><label>Telephone Number <span style="color:var(--gold)">*</span></label><input type="tel" id="krd-person_phone" placeholder="e.g. 07700 900000" /></div>
+                  <div class="kr-field"><label>Security PIN (optional)</label><input type="text" id="krd-person_pin" placeholder="PIN the chauffeur can verify with the recipient" /></div>
+                </div>
+
+                <div class="kr-sub-form" id="kr-sub-concierge">
+                  <div class="kr-sub-title">🏢 Concierge details</div>
+                  <div class="kr-field"><label>Building Name <span style="color:var(--gold)">*</span></label><input type="text" id="krd-building_name" placeholder="e.g. Harbour Point Apartments" /></div>
+                  <div class="kr-field"><label>Apartment / Flat Number <span style="color:var(--gold)">*</span></label><input type="text" id="krd-apartment_number" placeholder="e.g. Flat 12B" /></div>
+                  <div class="kr-field"><label>Concierge Name (optional)</label><input type="text" id="krd-concierge_name" placeholder="e.g. Marco" /></div>
+                  <div class="kr-field"><label>Collection Reference (optional)</label><input type="text" id="krd-collection_reference" placeholder="e.g. booking reference or note for desk" /></div>
+                </div>
+
+                <div class="kr-sub-form" id="kr-sub-other">
+                  <div class="kr-sub-title">📝 Your arrangements</div>
+                  <div class="kr-field"><label>Instructions <span style="color:var(--gold)">*</span></label><textarea id="krd-other_instructions" placeholder="Describe in full how the chauffeur should return and secure the key…" style="min-height:90px;"></textarea></div>
+                </div>
               </div>
             </div>
             <div class="field"><label>Purpose (optional)</label><input type="text" id="bk-purpose" placeholder="e.g. Airport transfer, Business meeting" /></div>
@@ -492,6 +601,10 @@
             <div class="roadworthy-check" id="rw-check" onclick="toggleRoadworthy()">
               <div class="rw-box" id="rw-box"></div>
               <p>I confirm that my vehicle is roadworthy, has a valid MOT, is properly insured, and is in a safe operating condition for this booking.</p>
+            </div>
+            <div class="return-consent-row" id="bk-return-consent-row" style="display:none;" onclick="toggleReturnConsent()">
+              <div class="rw-box" id="rc-box"></div>
+              <p>I expressly authorise the assigned chauffeur to drive and return my vehicle to the address specified, unaccompanied, following airport drop-off. I confirm I have removed valuables and provided accurate key return instructions. I understand the chauffeur must not use the vehicle for any unauthorised purpose. I have read and accept Section 14 of the Terms &amp; Conditions.</p>
             </div>
             <div style="display:flex;gap:12px;">
               <button class="btn-outline" onclick="goBookStep(1)">← Back</button>
@@ -592,7 +705,10 @@ let map = null;
 let chauffeurMarker = null;
 let tripType = 'regular';
 let ownerReturnsWith = true;
+let keyReturnMethod = '';
+let keyReturnDetails = {};
 let rwChecked = false;
+let returnConsentGiven = false;
 let lastEstimate = null;
 let disputeBookingId = null;
 let allBookings = [];
@@ -887,11 +1003,62 @@ function setReturnWith(val) {
   document.getElementById('rw-no').classList.toggle('active', !val);
   document.getElementById('bk-key-return-wrap').style.display = val?'none':'';
   document.getElementById('bk-wait-wrap').style.display = val?'':'none';
+  if (!val) { keyReturnMethod=''; keyReturnDetails={}; resetKeyReturnUI(); }
+}
+function resetKeyReturnUI() {
+  ['direct','letterbox','key_safe','authorised_person','concierge','other'].forEach(id=>{
+    const card=document.getElementById('kr-card-'+id);
+    if(card) card.classList.remove('selected');
+    const dot=document.querySelector('#kr-radio-'+id+' .kr-radio-dot');
+    if(dot) dot.style.display='none';
+    const sub=document.getElementById('kr-sub-'+id);
+    if(sub) sub.classList.remove('open');
+  });
+}
+function selectKeyReturnMethod(id) {
+  keyReturnMethod = id;
+  keyReturnDetails = {};
+  resetKeyReturnUI();
+  const card=document.getElementById('kr-card-'+id);
+  if(card) card.classList.add('selected');
+  const dot=document.querySelector('#kr-radio-'+id+' .kr-radio-dot');
+  if(dot) dot.style.display='';
+  const sub=document.getElementById('kr-sub-'+id);
+  if(sub) sub.classList.add('open');
+  // Clear all sub-form inputs
+  document.querySelectorAll('[id^="krd-"]').forEach(el=>{ if(el.type==='checkbox') el.checked=false; else el.value=''; });
+  document.querySelectorAll('.kr-checkbox').forEach(el=>el.classList.remove('checked'));
+}
+function toggleKRCheckbox(field) {
+  const val = !keyReturnDetails[field];
+  keyReturnDetails[field] = val;
+  const el = document.getElementById('kr-cb-'+field);
+  if(el) el.classList.toggle('checked', val);
+}
+function getKRDetails() {
+  const d = {};
+  document.querySelectorAll('[id^="krd-"]').forEach(el=>{
+    const field = el.id.replace('krd-','');
+    const v = (el.value||'').trim();
+    if(v) d[field] = v;
+  });
+  // merge booleans from keyReturnDetails
+  Object.assign(d, Object.fromEntries(Object.entries(keyReturnDetails).filter(([,v])=>typeof v==='boolean')));
+  return d;
 }
 function toggleRoadworthy() {
   rwChecked = !rwChecked;
   document.getElementById('rw-box').classList.toggle('checked', rwChecked);
-  document.getElementById('bk-confirm-btn').disabled = !rwChecked;
+  updateConfirmBtn();
+}
+function toggleReturnConsent() {
+  returnConsentGiven = !returnConsentGiven;
+  document.getElementById('rc-box').classList.toggle('checked', returnConsentGiven);
+  updateConfirmBtn();
+}
+function updateConfirmBtn() {
+  const isUnaccompanied = tripType==='airport_roundtrip' && !ownerReturnsWith;
+  document.getElementById('bk-confirm-btn').disabled = !rwChecked || (isUnaccompanied && !returnConsentGiven);
 }
 function goBookStep(n) {
   document.querySelectorAll('.booking-step').forEach(s=>s.classList.remove('active'));
@@ -913,6 +1080,28 @@ async function getEstimate() {
   const dur = document.getElementById('bk-duration').value;
   if (!dt) return showErr('book-err-1','Please select a date and time.');
   if (tripType!=='airport_drop' && !(tripType==='airport_roundtrip'&&!ownerReturnsWith) && !dur) return showErr('book-err-1','Please select a duration.');
+  if (tripType==='airport_roundtrip' && !ownerReturnsWith) {
+    if (!keyReturnMethod) return showErr('book-err-1','Please select a key return method.');
+    const d = getKRDetails();
+    if (keyReturnMethod==='direct') {
+      if (!d.meeting_address) return showErr('book-err-1','Please enter a meeting address for direct handover.');
+      if (!d.contact_number)  return showErr('book-err-1','Please enter a contact number for direct handover.');
+    } else if (keyReturnMethod==='letterbox') {
+      if (!d.confirm_address) return showErr('book-err-1','Please confirm the return address for letterbox drop.');
+      if (!keyReturnDetails.letterbox_confirmed) return showErr('book-err-1','Please confirm you understand the key will be posted through the letterbox.');
+    } else if (keyReturnMethod==='key_safe') {
+      if (!d.key_safe_code)     return showErr('book-err-1','Please enter the key safe code.');
+      if (!d.key_safe_location) return showErr('book-err-1','Please describe the key safe location.');
+    } else if (keyReturnMethod==='authorised_person') {
+      if (!d.person_name)  return showErr('book-err-1','Please enter the authorised person\'s name.');
+      if (!d.person_phone) return showErr('book-err-1','Please enter the authorised person\'s phone number.');
+    } else if (keyReturnMethod==='concierge') {
+      if (!d.building_name)    return showErr('book-err-1','Please enter the building name for concierge drop.');
+      if (!d.apartment_number) return showErr('book-err-1','Please enter the apartment/flat number.');
+    } else if (keyReturnMethod==='other') {
+      if (!d.other_instructions) return showErr('book-err-1','Please describe your key return arrangements.');
+    }
+  }
   const dtVal = new Date(dt);
   if (dtVal < new Date(Date.now()+15*60*1000)) return showErr('book-err-1','Booking time must be at least 15 minutes from now.');
   const pickup = buildFullPickup();
@@ -928,7 +1117,12 @@ async function getEstimate() {
     lastEstimate = await apiFetch('/bookings/estimate',{method:'POST',body:JSON.stringify(body)});
     renderPriceCard(lastEstimate);
     prefillBookingVehicle();
-    rwChecked=false; document.getElementById('rw-box').classList.remove('checked'); document.getElementById('bk-confirm-btn').disabled=true;
+    rwChecked=false; returnConsentGiven=false;
+    document.getElementById('rw-box').classList.remove('checked');
+    document.getElementById('rc-box').classList.remove('checked');
+    const isUnaccompanied = tripType==='airport_roundtrip'&&!ownerReturnsWith;
+    document.getElementById('bk-return-consent-row').style.display = isUnaccompanied?'':'none';
+    updateConfirmBtn();
     goBookStep(2);
   } catch(e) { showErr('book-err-1',e.message); }
   finally { btn.disabled=false; btn.textContent='Get Price Estimate →'; }
@@ -968,9 +1162,9 @@ async function createBooking() {
       body.owner_returns_with_chauffeur=ownerReturnsWith;
       if (ownerReturnsWith) body.duration_hours=parseFloat(document.getElementById('bk-wait').value)||0;
       if (!ownerReturnsWith) {
-        body.key_return_method=document.getElementById('bk-key-method').value||undefined;
-        body.key_return_details=document.getElementById('bk-key-details').value.trim()||undefined;
-        body.key_return_instructions=document.getElementById('bk-key-instructions').value.trim()||undefined;
+        body.key_return_method = keyReturnMethod || undefined;
+        const d = getKRDetails();
+        if (Object.keys(d).length) body.key_return_details = d;
       }
     }
     const booking = await apiFetch('/bookings',{method:'POST',body:JSON.stringify(body)});
