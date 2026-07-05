@@ -394,6 +394,57 @@
     .modal-btns { display: flex; gap: 10px; }
     .modal-btns .btn-primary { flex: 1; }
     .modal-btns .btn-outline { flex: 1; }
+    /* Payment overlay */
+    #pay-overlay { position:fixed; inset:0; z-index:1001; background:#0a0a12; overflow-y:auto; display:none; }
+    .pay-content { max-width:480px; margin:0 auto; padding:24px 20px 60px; }
+    .pay-back-btn { background:none; border:none; color:#5a5a7a; font-size:14px; cursor:pointer; padding:8px 0; margin-bottom:24px; font-family:'Inter',sans-serif; display:block; }
+    .pay-back-btn:hover { color:#9a9ab0; }
+    .pay-header-row { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; }
+    .pay-title { font-size:26px; font-weight:700; color:#fff; margin-bottom:6px; font-family:'Playfair Display',serif; }
+    .pay-subtitle { font-size:13px; color:#556; }
+    .pay-ssl-badge { background:#0d2a0d; border:1px solid #1a4a1a; border-radius:10px; padding:8px 12px; text-align:center; }
+    .pay-card { background:#13132a; border-radius:18px; padding:20px; margin-bottom:16px; border:1px solid #1e1e3f; }
+    .pay-card-title { color:#e94560; font-size:10px; font-weight:700; letter-spacing:2px; margin-bottom:16px; }
+    .pay-fare-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+    .pay-fare-row span:first-child { color:#778; font-size:14px; flex:1; margin-right:8px; }
+    .pay-fare-row span:last-child { color:#ccd; font-size:14px; font-weight:500; }
+    .pay-fare-divider { height:1px; background:#1e1e3f; margin:12px 0; }
+    .pay-fare-total-row { display:flex; justify-content:space-between; align-items:center; }
+    .pay-fare-total-label { color:#fff; font-size:16px; font-weight:700; }
+    .pay-fare-total-val { color:#e94560; font-size:26px; font-weight:700; }
+    .pay-vat-note { color:#334; font-size:11px; font-style:italic; margin-top:10px; }
+    .pay-method-grid { display:flex; flex-wrap:wrap; gap:10px; }
+    .pay-method-card { width:calc(33.33% - 7px); background:#0d0d1f; border-radius:12px; padding:12px 8px; border:1.5px solid #1e1e3f; display:flex; flex-direction:column; align-items:center; cursor:pointer; min-height:76px; justify-content:center; box-sizing:border-box; }
+    .pay-method-card:hover { border-color:#333360; }
+    .pay-method-card.active { background:#1a0d1a; border-color:#e94560; }
+    .pay-method-badge { border-radius:6px; padding:4px 8px; margin-bottom:6px; min-width:36px; text-align:center; font-size:11px; font-weight:700; letter-spacing:.5px; }
+    .pay-method-label { color:#556; font-size:10px; text-align:center; }
+    .pay-method-card.active .pay-method-label { color:#e94560; }
+    .pay-saved-method { display:flex; justify-content:space-between; align-items:center; background:#0a0a1a; border-radius:12px; padding:14px; border:1.5px solid #1e1e3f; margin-bottom:8px; cursor:pointer; }
+    .pay-saved-method.active { border-color:#c9a84c; background:#0f0d00; }
+    .pay-saved-radio { width:18px; height:18px; border-radius:9px; border:2px solid #3a3a5a; display:flex; align-items:center; justify-content:center; margin-right:12px; flex-shrink:0; }
+    .pay-saved-radio.active { border-color:#c9a84c; }
+    .pay-saved-radio-dot { width:8px; height:8px; border-radius:4px; background:#c9a84c; }
+    .pay-add-new-btn { width:100%; border:1px dashed rgba(201,168,76,.27); border-radius:10px; padding:12px; background:none; color:#c9a84c; font-size:13px; font-weight:600; cursor:pointer; margin-top:4px; font-family:'Inter',sans-serif; }
+    .pay-field-label { color:#778; font-size:13px; margin:14px 0 8px; }
+    .pay-input { width:100%; background:#0d0d1f; color:#fff; border-radius:12px; padding:14px; font-size:15px; border:1px solid #1e1e3f; box-sizing:border-box; font-family:'Inter',sans-serif; }
+    .pay-input:focus { outline:none; border-color:#e94560; }
+    .pay-remember-row { display:flex; align-items:flex-start; gap:12px; background:#0a0a1a; border-radius:12px; padding:14px; border:1px solid #1e1e3f; margin-bottom:12px; cursor:pointer; }
+    .pay-remember-check { width:20px; height:20px; border-radius:5px; border:2px solid #3a3a5a; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; font-size:11px; font-weight:700; color:#070710; }
+    .pay-remember-check.checked { background:#c9a84c; border-color:#c9a84c; }
+    .pay-btn { width:100%; background:#e94560; color:#fff; border:none; border-radius:16px; padding:20px; font-size:18px; font-weight:700; letter-spacing:.8px; cursor:pointer; margin:8px 0; font-family:'Inter',sans-serif; }
+    .pay-btn:disabled { background:#3a1a22; cursor:not-allowed; }
+    .pay-cancel-bk-btn { width:100%; border:1.5px solid #e94560; border-radius:16px; padding:16px; background:none; color:#e94560; font-size:15px; font-weight:600; cursor:pointer; margin:12px 0 8px; font-family:'Inter',sans-serif; }
+    .pay-bank-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #1e1e3f; font-size:13px; }
+    .pay-bank-row span:first-child { color:#556; }
+    .pay-bank-row span:last-child { color:#ccd; font-weight:600; }
+    .pay-success-wrap { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; padding:30px 0; text-align:center; }
+    .pay-success-icon { width:90px; height:90px; border-radius:50%; background:#0d2a0d; border:3px solid #4caf50; display:flex; align-items:center; justify-content:center; font-size:44px; color:#4caf50; font-weight:700; margin-bottom:24px; }
+    .pay-success-title { color:#fff; font-size:28px; font-weight:700; margin-bottom:10px; font-family:'Playfair Display',serif; }
+    .pay-success-sub { color:#556; font-size:14px; line-height:22px; margin-bottom:32px; max-width:280px; }
+    .pay-success-amount-box { background:#13132a; border:1px solid rgba(233,69,96,.19); border-radius:16px; padding:24px 40px; margin-bottom:16px; width:100%; box-sizing:border-box; }
+    .pay-find-btn { background:#e94560; color:#fff; border:none; border-radius:14px; padding:16px 40px; font-size:16px; font-weight:700; letter-spacing:.6px; cursor:pointer; font-family:'Inter',sans-serif; }
+    .pay-find-btn:hover { opacity:.9; }
   </style>
 </head>
 <body>
@@ -876,6 +927,104 @@
     <div class="modal-btns">
       <button class="btn-outline" onclick="closeDispute()">Cancel</button>
       <button class="btn-primary" id="dispute-submit-btn" onclick="submitDispute()">Submit Dispute</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT OVERLAY -->
+<div id="pay-overlay">
+  <div class="pay-content">
+    <!-- Payment phase -->
+    <div id="pay-phase-payment">
+      <button class="pay-back-btn" onclick="closePaymentOverlay()">← Back</button>
+      <div class="pay-header-row">
+        <div>
+          <div class="pay-title">Secure Payment</div>
+          <div class="pay-subtitle">Review your booking and complete payment</div>
+        </div>
+        <div class="pay-ssl-badge"><div style="font-size:18px;">🔒</div><div style="font-size:10px;color:#4caf50;font-weight:700;letter-spacing:1px;margin-top:2px;">SSL</div></div>
+      </div>
+
+      <div class="pay-card">
+        <div class="pay-card-title">FARE BREAKDOWN</div>
+        <div id="pay-fare-rows"></div>
+        <div class="pay-fare-divider"></div>
+        <div class="pay-fare-total-row">
+          <span class="pay-fare-total-label">Total Fare</span>
+          <span class="pay-fare-total-val" id="pay-total-display">£0.00</span>
+        </div>
+        <div class="pay-vat-note">All prices include VAT where applicable</div>
+      </div>
+
+      <div class="pay-card">
+        <div class="pay-card-title">PAYMENT METHOD</div>
+        <div id="pay-saved-section" style="display:none;">
+          <div style="color:#4a4a6a;font-size:10px;font-weight:700;letter-spacing:1.5px;margin-bottom:8px;">SAVED METHODS</div>
+          <div id="pay-saved-list"></div>
+          <button class="pay-add-new-btn" onclick="payUseDifferent()">+ Use a different payment method</button>
+        </div>
+        <div id="pay-method-grid" class="pay-method-grid"></div>
+      </div>
+
+      <div class="pay-card" id="pay-card-details" style="display:none;">
+        <div class="pay-card-title">CARD DETAILS</div>
+        <div class="pay-field-label">Cardholder Name</div>
+        <input class="pay-input" id="pay-card-name" type="text" placeholder="e.g. John Smith" oninput="updatePayBtn()">
+        <div class="pay-field-label">Card Number</div>
+        <input class="pay-input" id="pay-card-number" type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtPayCardNumber(this);updatePayBtn()">
+        <div style="display:flex;gap:12px;">
+          <div style="flex:1;">
+            <div class="pay-field-label">Expiry Date</div>
+            <input class="pay-input" id="pay-card-expiry" type="text" placeholder="MM/YY" maxlength="5" oninput="fmtPayExpiry(this);updatePayBtn()">
+            <div id="pay-expiry-err" style="display:none;background:#2a0d10;border:1px solid rgba(233,69,96,.25);border-radius:8px;padding:10px;margin-top:6px;color:#e94560;font-size:12px;line-height:17px;"></div>
+          </div>
+          <div style="flex:1;">
+            <div class="pay-field-label">CVV</div>
+            <input class="pay-input" id="pay-card-cvv" type="text" placeholder="123" maxlength="4" oninput="updatePayBtn()">
+          </div>
+        </div>
+        <div class="pay-field-label">Billing Address <span style="color:#334;font-size:11px;font-style:italic;">(optional)</span></div>
+        <input class="pay-input" id="pay-card-billing" type="text" placeholder="e.g. 14 Park Lane, London, W1K 1BE">
+        <div style="background:#0d1a0d;border:1px solid #1a3a1a;border-radius:10px;padding:12px;margin-top:16px;color:#4caf50;font-size:12px;">🔒 Your card details are encrypted and never stored</div>
+      </div>
+
+      <div class="pay-card" id="pay-bank-details" style="display:none;">
+        <div class="pay-card-title">BANK TRANSFER DETAILS</div>
+        <div class="pay-bank-row"><span>Account Name</span><span>Private Chauffeur Connect Ltd</span></div>
+        <div class="pay-bank-row"><span>Sort Code</span><span>20-45-63</span></div>
+        <div class="pay-bank-row"><span>Account Number</span><span>83741920</span></div>
+        <div class="pay-bank-row"><span>Reference</span><span id="pay-bank-ref-val">—</span></div>
+        <div style="background:#0d1a0d;border:1px solid #1a3a1a;border-radius:10px;padding:12px;margin-top:14px;color:#4caf50;font-size:12px;line-height:18px;">Please use your booking reference as the payment reference. Your booking will be confirmed once payment is received (1–2 business days).</div>
+      </div>
+
+      <div class="pay-card" id="pay-wallet-details" style="display:none;">
+        <div class="pay-card-title" id="pay-wallet-title">REDIRECT</div>
+        <div id="pay-wallet-msg" style="color:#778;font-size:14px;line-height:22px;"></div>
+      </div>
+
+      <div class="pay-remember-row" id="pay-remember-row" style="display:none;" onclick="togglePayRemember()">
+        <div class="pay-remember-check" id="pay-remember-check"></div>
+        <div style="color:#6a6a9a;font-size:13px;line-height:19px;flex:1;">Remember this payment method for future bookings</div>
+      </div>
+
+      <button class="pay-btn" id="pay-btn" onclick="handlePay()" disabled>🔒 &nbsp;Pay £0.00</button>
+      <button class="pay-cancel-bk-btn" onclick="payHandleCancel()">Cancel Booking</button>
+      <div style="color:#334;font-size:11px;text-align:center;line-height:17px;margin-bottom:40px;padding:0 10px;">By completing this payment you agree to our Terms of Service and Cancellation Policy.</div>
+    </div>
+
+    <!-- Success phase -->
+    <div id="pay-phase-success" style="display:none;">
+      <div class="pay-success-wrap">
+        <div class="pay-success-icon">✓</div>
+        <div class="pay-success-title">Payment Confirmed!</div>
+        <div class="pay-success-sub">Your booking has been confirmed and your chauffeur has been notified.</div>
+        <div class="pay-success-amount-box">
+          <div style="color:#556;font-size:13px;margin-bottom:8px;">Amount Paid</div>
+          <div id="pay-success-amount" style="color:#e94560;font-size:36px;font-weight:700;">£0.00</div>
+        </div>
+        <div id="pay-success-ref" style="color:#334;font-size:12px;margin-bottom:32px;"></div>
+        <button class="pay-find-btn" onclick="payFindChauffeur()">Find My Chauffeur</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1459,12 +1608,8 @@ async function createBooking() {
       }
     }
     const booking = await apiFetch('/bookings',{method:'POST',body:JSON.stringify(body)});
-    try { await apiFetch('/bookings/'+booking.id+'/dispatch',{method:'POST',body:'{}'}); } catch(_){}
-    activeBooking = booking;
-    allBookings = [booking, ...allBookings];
-    document.getElementById('tnav-active').style.display='';
-    goBookStep(3);
-    startPolling(booking.id);
+    btn.disabled=false; btn.textContent='Confirm Booking';
+    showPaymentOverlay(booking, lastEstimate);
   } catch(e) { showErr('book-err-2',e.message); btn.disabled=!rwChecked; btn.textContent='Confirm Booking'; }
 }
 
@@ -1843,6 +1988,259 @@ const observer = new MutationObserver(()=>{
   }
 });
 observer.observe(document.body,{childList:true,subtree:true});
+
+// ── Payment overlay ───────────────────────────────────────
+const PAY_METHODS = [
+  {id:'visa',      label:'Visa',          badge:'VISA',   bg:'#1a1f71', fg:'#fff'},
+  {id:'mastercard',label:'Mastercard',    badge:'MC',     bg:'#eb001b', fg:'#fff'},
+  {id:'amex',      label:'Amex',          badge:'AMEX',   bg:'#007bc1', fg:'#fff'},
+  {id:'applepay',  label:'Apple Pay',     badge:'',      bg:'#000',    fg:'#fff'},
+  {id:'googlepay', label:'Google Pay',    badge:'G Pay',  bg:'#fff',    fg:'#111'},
+  {id:'paypal',    label:'PayPal',        badge:'PayPal', bg:'#003087', fg:'#fff'},
+  {id:'bank',      label:'Bank Transfer', badge:'🏦',     bg:'#1a2a1a', fg:'#4caf50'},
+];
+const PAY_CARD_METHODS   = ['visa','mastercard','amex'];
+const PAY_WALLET_METHODS = ['applepay','googlepay','paypal'];
+const PAY_WALLET_LABELS  = {applepay:'Apple Pay', googlepay:'Google Pay', paypal:'PayPal'};
+
+let payBooking=null, payEstimate=null, paySavedMethods=[];
+let paySelectedMethod=null, payUsingSaved=false, paySelectedSavedId=null;
+let payRememberCard=false, payProcessing=false;
+
+function showPaymentOverlay(booking, estimate) {
+  payBooking=booking; payEstimate=estimate;
+  paySelectedMethod=null; payUsingSaved=false; paySelectedSavedId=null;
+  payRememberCard=false; payProcessing=false;
+  renderPayFare(estimate);
+  renderPayMethodGrid();
+  document.getElementById('pay-bank-ref-val').textContent = 'BK-'+booking.id.slice(0,8).toUpperCase();
+  ['pay-card-name','pay-card-number','pay-card-expiry','pay-card-cvv','pay-card-billing'].forEach(id=>{ document.getElementById(id).value=''; });
+  document.getElementById('pay-expiry-err').style.display='none';
+  document.getElementById('pay-card-details').style.display='none';
+  document.getElementById('pay-bank-details').style.display='none';
+  document.getElementById('pay-wallet-details').style.display='none';
+  document.getElementById('pay-remember-row').style.display='none';
+  document.getElementById('pay-remember-check').className='pay-remember-check';
+  document.getElementById('pay-remember-check').textContent='';
+  document.getElementById('pay-phase-payment').style.display='';
+  document.getElementById('pay-phase-success').style.display='none';
+  document.getElementById('pay-overlay').style.display='block';
+  document.getElementById('pay-overlay').scrollTop=0;
+  updatePayBtn();
+  loadSavedPayMethods();
+}
+
+function renderPayFare(est) {
+  const fmt = v=>'£'+parseFloat(v||0).toFixed(2);
+  let rows='';
+  if ((est.mileageCost||0)>0) rows+=`<div class="pay-fare-row"><span>Mileage Cost (${(est.distanceMiles||0).toFixed(1)} mi)</span><span>${fmt(est.mileageCost)}</span></div>`;
+  if ((est.waitingCost||0)>0) rows+=`<div class="pay-fare-row"><span>Waiting / Duration</span><span>${fmt(est.waitingCost)}</span></div>`;
+  if ((est.travelAllowance||0)>0) rows+=`<div class="pay-fare-row"><span>Travel Allowance</span><span>${fmt(est.travelAllowance)}</span></div>`;
+  if (!rows) {
+    const lbl = tripType==='regular'?'Regular Journey':tripType==='airport_drop'?'Airport Drop-Off':'Airport Return';
+    rows=`<div class="pay-fare-row"><span>${lbl}</span><span>${fmt(est.price)}</span></div>`;
+  }
+  document.getElementById('pay-fare-rows').innerHTML = rows;
+  const fmtd = fmt(est.price);
+  document.getElementById('pay-total-display').textContent = fmtd;
+  document.getElementById('pay-btn').textContent = '🔒  Pay '+fmtd;
+}
+
+function renderPayMethodGrid() {
+  document.getElementById('pay-method-grid').innerHTML = PAY_METHODS.map(m=>`
+    <div class="pay-method-card" id="pay-mc-${m.id}" onclick="selectPayMethod('${m.id}')">
+      <div class="pay-method-badge" style="background:${m.bg};color:${m.fg};">${m.badge}</div>
+      <div class="pay-method-label">${m.label}</div>
+    </div>
+  `).join('');
+}
+
+async function loadSavedPayMethods() {
+  try { paySavedMethods = await apiFetch('/owners/payment-methods'); } catch { paySavedMethods=[]; }
+  const section = document.getElementById('pay-saved-section');
+  const grid    = document.getElementById('pay-method-grid');
+  if (!paySavedMethods.length) { section.style.display='none'; grid.style.display=''; return; }
+  renderSavedPayList();
+  section.style.display='';
+  const def = paySavedMethods.find(m=>m.is_default);
+  if (def) { payUsingSaved=true; paySelectedSavedId=def.id; renderSavedPayList(); grid.style.display='none'; updatePayBtn(); }
+  else grid.style.display='';
+}
+
+function renderSavedPayList() {
+  const ML={bank:'Bank Transfer',paypal:'PayPal',googlepay:'Google Pay',applepay:'Apple Pay'};
+  document.getElementById('pay-saved-list').innerHTML = paySavedMethods.map(m=>{
+    const active = payUsingSaved && paySelectedSavedId===m.id;
+    const name = m.card_brand || ML[m.method_type] || m.method_type;
+    const masked = m.last_four ? '************'+m.last_four : null;
+    return `
+      <div class="pay-saved-method ${active?'active':''}" onclick="selectSavedPayMethod('${m.id}')">
+        <div style="display:flex;align-items:center;">
+          <div class="pay-saved-radio ${active?'active':''}">
+            ${active?'<div class="pay-saved-radio-dot"></div>':''}
+          </div>
+          <div>
+            <div style="color:${active?'#fff':'#8a8aaa'};font-size:14px;font-weight:600;margin-bottom:2px;">${name}</div>
+            ${masked?`<div style="color:#4a4a6a;font-size:12px;font-family:monospace;">${masked}</div>`:''}
+            ${m.expiry_display?`<div style="color:#4a4a6a;font-size:11px;margin-top:2px;">Expires ${m.expiry_display}</div>`:''}
+          </div>
+        </div>
+        <span onclick="removePayMethod(event,'${m.id}')" style="color:#e94560;font-size:14px;font-weight:700;padding:4px;cursor:pointer;">✕</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectSavedPayMethod(id) {
+  payUsingSaved=true; paySelectedSavedId=id; paySelectedMethod=null;
+  renderSavedPayList();
+  document.getElementById('pay-method-grid').style.display='none';
+  document.getElementById('pay-card-details').style.display='none';
+  document.getElementById('pay-bank-details').style.display='none';
+  document.getElementById('pay-wallet-details').style.display='none';
+  document.getElementById('pay-remember-row').style.display='none';
+  updatePayBtn();
+}
+
+function payUseDifferent() {
+  payUsingSaved=false; paySelectedSavedId=null;
+  document.getElementById('pay-method-grid').style.display='';
+  renderSavedPayList();
+  updatePayBtn();
+}
+
+function selectPayMethod(id) {
+  payUsingSaved=false; paySelectedSavedId=null; paySelectedMethod=id;
+  PAY_METHODS.forEach(m=>document.getElementById('pay-mc-'+m.id).classList.toggle('active',m.id===id));
+  document.getElementById('pay-card-details').style.display = PAY_CARD_METHODS.includes(id)?'':'none';
+  document.getElementById('pay-bank-details').style.display = id==='bank'?'':'none';
+  const isWallet = PAY_WALLET_METHODS.includes(id);
+  document.getElementById('pay-wallet-details').style.display = isWallet?'':'none';
+  if (isWallet) {
+    document.getElementById('pay-wallet-title').textContent = 'REDIRECT TO '+id.toUpperCase();
+    const amt = document.getElementById('pay-total-display').textContent;
+    document.getElementById('pay-wallet-msg').innerHTML = `You will be redirected to <strong style="color:#ccd;">${PAY_WALLET_LABELS[id]}</strong> to complete your payment of <span style="color:#e94560;font-weight:700;">${amt}</span>.`;
+  }
+  document.getElementById('pay-remember-row').style.display='';
+  updatePayBtn();
+}
+
+function removePayMethod(e, id) {
+  e.stopPropagation();
+  if (!confirm('Remove this payment method?')) return;
+  apiFetch('/owners/payment-methods/'+id,{method:'DELETE'}).then(()=>{
+    paySavedMethods = paySavedMethods.filter(m=>m.id!==id);
+    if (paySelectedSavedId===id) { payUsingSaved=false; paySelectedSavedId=null; }
+    if (!paySavedMethods.length) { document.getElementById('pay-saved-section').style.display='none'; document.getElementById('pay-method-grid').style.display=''; }
+    else renderSavedPayList();
+    updatePayBtn();
+  }).catch(()=>alert('Could not remove payment method.'));
+}
+
+function togglePayRemember() {
+  payRememberCard=!payRememberCard;
+  const cb=document.getElementById('pay-remember-check');
+  cb.classList.toggle('checked',payRememberCard);
+  cb.textContent=payRememberCard?'✓':'';
+}
+
+function validatePayExpiry(val) {
+  const d=val.replace(/\D/g,'');
+  if(d.length<4) return {complete:false,valid:false,error:null};
+  const mo=parseInt(d.slice(0,2),10), yr=parseInt('20'+d.slice(2,4),10);
+  if(mo<1||mo>12) return {complete:true,valid:false,error:'Invalid month — must be 01 to 12.'};
+  const now=new Date();
+  if(yr<now.getFullYear()||(yr===now.getFullYear()&&mo<now.getMonth()+1))
+    return {complete:true,valid:false,error:'This card has expired. Please use a valid payment card.'};
+  return {complete:true,valid:true,error:null};
+}
+
+function fmtPayCardNumber(el) { el.value=el.value.replace(/\D/g,'').slice(0,16).replace(/(.{4})/g,'$1 ').trim(); }
+
+function fmtPayExpiry(el) {
+  const d=el.value.replace(/\D/g,'').slice(0,4);
+  el.value=d.length>=3?d.slice(0,2)+'/'+d.slice(2):d;
+  const v=validatePayExpiry(el.value);
+  const err=document.getElementById('pay-expiry-err');
+  if(v.complete&&v.error){err.textContent=v.error;err.style.display='';}else{err.style.display='none';}
+}
+
+function payCardDetailsValid() {
+  if(!PAY_CARD_METHODS.includes(paySelectedMethod)) return true;
+  const name=(document.getElementById('pay-card-name').value||'').trim();
+  const num =(document.getElementById('pay-card-number').value||'').replace(/\s/g,'');
+  const exp =(document.getElementById('pay-card-expiry').value||'');
+  const cvv =(document.getElementById('pay-card-cvv').value||'');
+  return name.length>0 && num.length===16 && validatePayExpiry(exp).valid && cvv.length>=3;
+}
+
+function updatePayBtn() {
+  const canPay = !payProcessing&&((payUsingSaved&&!!paySelectedSavedId)||(!!paySelectedMethod&&payCardDetailsValid()));
+  document.getElementById('pay-btn').disabled=!canPay;
+}
+
+function handlePay() {
+  if(payProcessing) return;
+  if(!payUsingSaved&&!paySelectedMethod) return alert('Please select a payment method.');
+  if(payUsingSaved&&!paySelectedSavedId) return alert('Please select a saved payment method.');
+  if(!payUsingSaved&&PAY_CARD_METHODS.includes(paySelectedMethod)) {
+    const num=(document.getElementById('pay-card-number').value||'').replace(/\s/g,'');
+    const ev=validatePayExpiry(document.getElementById('pay-card-expiry').value||'');
+    if(!(document.getElementById('pay-card-name').value||'').trim()) return alert('Please enter the cardholder name.');
+    if(num.length<16) return alert('Card number must be 16 digits.');
+    if((document.getElementById('pay-card-cvv').value||'').length<3) return alert('CVV must be 3 or 4 digits.');
+    if(!ev.valid) return alert(ev.error||'Please enter a valid, non-expired expiry date.');
+  }
+  payProcessing=true;
+  const btn=document.getElementById('pay-btn');
+  btn.disabled=true; btn.textContent='Processing…';
+  setTimeout(async()=>{
+    if(payRememberCard&&!payUsingSaved) {
+      try {
+        const BRAND={visa:'Visa',mastercard:'Mastercard',amex:'Amex'};
+        const ML={bank:'Bank Transfer',paypal:'PayPal',googlepay:'Google Pay',applepay:'Apple Pay'};
+        const p={method_type:paySelectedMethod};
+        if(PAY_CARD_METHODS.includes(paySelectedMethod)) {
+          const num=(document.getElementById('pay-card-number').value||'').replace(/\s/g,'');
+          p.card_brand=BRAND[paySelectedMethod]||paySelectedMethod;
+          p.last_four=num.slice(-4);
+          p.expiry_display=document.getElementById('pay-card-expiry').value;
+          p.billing_name=(document.getElementById('pay-card-name').value||'').trim();
+        } else { p.card_brand=ML[paySelectedMethod]||paySelectedMethod; }
+        await apiFetch('/owners/payment-methods',{method:'POST',body:JSON.stringify(p)});
+      } catch {}
+    }
+    const fmt=v=>'£'+parseFloat(v||0).toFixed(2);
+    document.getElementById('pay-success-amount').textContent=fmt(payEstimate.price);
+    document.getElementById('pay-success-ref').textContent='Booking ref: #'+payBooking.id.slice(0,8).toUpperCase();
+    document.getElementById('pay-phase-payment').style.display='none';
+    document.getElementById('pay-phase-success').style.display='';
+    document.getElementById('pay-overlay').scrollTop=0;
+  }, 2500);
+}
+
+async function payFindChauffeur() {
+  try { await apiFetch('/bookings/'+payBooking.id+'/dispatch',{method:'POST',body:'{}'}); } catch {}
+  activeBooking=payBooking;
+  allBookings=[payBooking,...allBookings.filter(b=>b.id!==payBooking.id)];
+  document.getElementById('tnav-active').style.display='';
+  document.getElementById('pay-overlay').style.display='none';
+  goBookStep(3);
+  startPolling(payBooking.id);
+}
+
+function payHandleCancel() {
+  if(!confirm('Are you sure you want to cancel this booking? This cannot be undone.')) return;
+  apiFetch('/bookings/'+payBooking.id+'/cancel',{method:'POST',body:JSON.stringify({reason:'My plans have changed'})})
+    .then(()=>{ document.getElementById('pay-overlay').style.display='none'; })
+    .catch(e=>alert(e.message||'Could not cancel booking.'));
+}
+
+function closePaymentOverlay() {
+  if(!confirm('Leave payment? Your booking will be cancelled.')) return;
+  apiFetch('/bookings/'+payBooking.id+'/cancel',{method:'POST',body:JSON.stringify({reason:'My plans have changed'})}).catch(()=>{});
+  document.getElementById('pay-overlay').style.display='none';
+}
 
 // ── Initialise ───────────────────────────────────────────
 document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&document.getElementById('view-login')&&!document.getElementById('view-login').hidden) doLogin(); });
