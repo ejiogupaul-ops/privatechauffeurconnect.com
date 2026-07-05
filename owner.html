@@ -332,6 +332,59 @@
     .airport-opt.selected { background: rgba(201,168,76,.12); }
     .airport-opt .ao-name { font-size: 13px; font-weight: 600; color: var(--text); }
     .airport-opt .ao-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    /* Cancel booking overlay */
+    #cancel-overlay { position: fixed; inset: 0; z-index: 1000; background: #0a0a12; overflow-y: auto; display: none; }
+    .cancel-content { max-width: 520px; margin: 0 auto; padding: 20px 20px 60px; }
+    .cancel-back-btn { background: none; border: none; color: #5a5a7a; font-size: 14px; cursor: pointer; padding: 8px 0; margin-bottom: 24px; font-family: 'Inter', sans-serif; display: block; }
+    .cancel-back-btn:hover { color: var(--muted); }
+    .cancel-icon-circle { width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid rgba(201,168,76,.3); background: rgba(201,168,76,.08); display: flex; align-items: center; justify-content: center; margin: 8px auto 20px; font-size: 32px; }
+    .cancel-icon-circle.red   { border-color: rgba(233,69,96,.3);   background: rgba(233,69,96,.08); }
+    .cancel-icon-circle.green { border-color: rgba(76,175,80,.3);   background: rgba(76,175,80,.08); }
+    .cancel-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .cancel-sub   { font-size: 13px; color: #5a5a7a; line-height: 1.7; margin-bottom: 24px; }
+    .cancel-alt-card { display: flex; align-items: center; gap: 14px; background: #0f0f1e; border: 1px solid #1e1e3f; border-radius: 14px; padding: 16px; margin-bottom: 10px; cursor: pointer; text-decoration: none; transition: border-color .2s; color: inherit; }
+    .cancel-alt-card:hover { border-color: rgba(201,168,76,.25); }
+    .cancel-alt-icon  { font-size: 22px; width: 30px; text-align: center; flex-shrink: 0; }
+    .cancel-alt-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+    .cancel-alt-sub   { font-size: 12px; color: #4a4a6a; }
+    .cancel-recommended { background: rgba(76,175,80,.15); border: 1px solid rgba(76,175,80,.3); border-radius: 6px; padding: 2px 7px; font-size: 9px; font-weight: 700; color: #4caf50; letter-spacing: .5px; display: inline-block; margin-left: 6px; vertical-align: middle; }
+    .cancel-divider { height: 1px; background: #1a1a3a; margin: 20px 0; }
+    .cancel-warning-box { background: #0a0820; border: 1px solid #3a3a6a; border-radius: 12px; padding: 16px; margin-bottom: 24px; font-size: 13px; color: #7a7a9a; line-height: 1.7; }
+    .cancel-keep-btn { width: 100%; border: 1.5px solid #2a2a4a; border-radius: 14px; padding: 17px; background: none; color: #6a6a8a; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; margin-bottom: 10px; display: block; }
+    .cancel-keep-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .cancel-red-btn { width: 100%; background: rgba(233,69,96,.1); border: 1.5px solid rgba(233,69,96,.4); border-radius: 14px; padding: 17px; color: var(--red); font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; display: block; transition: background .2s; }
+    .cancel-red-btn:hover { background: rgba(233,69,96,.18); }
+    .cancel-red-btn.solid { background: var(--red); color: #fff; border: none; }
+    .cancel-red-btn.solid:hover { opacity: .9; }
+    .cancel-red-btn:disabled { opacity: .45; cursor: default; }
+    .cancel-gold-btn { width: 100%; background: var(--gold); border: none; border-radius: 14px; padding: 17px; color: #070710; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 20px; display: block; }
+    .cancel-gold-btn:disabled { background: #1a1a2a; color: #3a3a5a; cursor: default; }
+    .cancel-reason-row { display: flex; align-items: center; gap: 14px; background: #0f0f1e; border: 1px solid #1e1e3f; border-radius: 12px; padding: 14px; margin-bottom: 8px; cursor: pointer; transition: border-color .2s, background .2s; }
+    .cancel-reason-row:hover { border-color: rgba(233,69,96,.2); }
+    .cancel-reason-row.sel { border-color: rgba(233,69,96,.4); background: rgba(233,69,96,.06); }
+    .cancel-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #3a3a5a; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cancel-reason-row.sel .cancel-radio { border-color: var(--red); }
+    .cancel-radio-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--red); display: none; }
+    .cancel-reason-row.sel .cancel-radio-dot { display: block; }
+    .cancel-reason-text { color: #8a8aaa; font-size: 14px; }
+    .cancel-reason-row.sel .cancel-reason-text { color: #fff; }
+    .cancel-notes { width: 100%; background: #090918; border: 1px solid #2a2a4a; border-radius: 12px; padding: 14px; color: #ccd; font-size: 13px; resize: vertical; min-height: 80px; box-sizing: border-box; font-family: 'Inter', sans-serif; margin-top: 4px; }
+    .cancel-preview-card { background: #0f0f1e; border: 1px solid #1e1e3f; border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .cancel-preview-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .cancel-preview-label { color: #6a6a8a; font-size: 14px; }
+    .cancel-preview-label.sm { font-size: 12px; color: #4a4a6a; padding-left: 14px; }
+    .cancel-preview-val { font-size: 16px; font-weight: 700; color: #fff; }
+    .cancel-preview-val.sm { font-size: 13px; }
+    .cancel-preview-hr { height: 1px; background: #1e1e3f; margin: 14px 0; }
+    .cancel-comp-note { background: rgba(243,156,18,.07); border: 1px solid rgba(243,156,18,.2); border-radius: 12px; padding: 14px; margin-bottom: 16px; font-size: 12px; color: #8a7a4a; line-height: 1.7; }
+    .cancel-support-card { background: #0f0f1e; border: 1px solid #1e1e3f; border-radius: 14px; padding: 20px; margin-bottom: 24px; }
+    .cancel-support-lbl { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: #4a4a6a; margin-bottom: 6px; }
+    .cancel-support-link { color: var(--gold); font-size: 14px; text-decoration: underline; display: block; }
+    .cancel-support-ref { color: #fff; font-size: 16px; font-weight: 700; margin-top: 4px; }
+    .cancel-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 0; gap: 16px; }
+    .cancel-spinner { width: 36px; height: 36px; border: 3px solid rgba(201,168,76,.2); border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* Dispute modal */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.open { display: flex; }
@@ -692,18 +745,124 @@
   </div>
 </div>
 
-<!-- Cancel Confirmation Modal -->
-<div class="modal-overlay" id="cancel-modal">
-  <div class="modal" style="max-width:420px;">
-    <div style="text-align:center;margin-bottom:20px;">
-      <div style="font-size:36px;margin-bottom:12px;">⚠️</div>
-      <h3 style="color:#fff;font-size:20px;font-weight:700;margin-bottom:10px;">Cancel Booking</h3>
-      <p style="color:var(--muted);font-size:13px;line-height:1.7;">Are you sure you want to cancel this booking?<br>Depending on when you cancel, cancellation charges may apply.</p>
+<!-- Cancel Booking — Full Multi-Step Overlay -->
+<div id="cancel-overlay">
+  <div class="cancel-content">
+    <button class="cancel-back-btn" id="cancel-back-btn" onclick="cancelStepBack()">← Back</button>
+
+    <!-- STEP: contact_support -->
+    <div class="cancel-step" id="cs-contact_support" style="display:none;">
+      <div class="cancel-icon-circle">📞</div>
+      <div class="cancel-title">Contact Support</div>
+      <div class="cancel-sub">This booking cannot be cancelled through the dashboard because the journey is already in progress. Please contact our support team directly.</div>
+      <div class="cancel-support-card">
+        <div class="cancel-support-lbl">EMAIL</div>
+        <a class="cancel-support-link" href="mailto:support@privatechauffeurconnect.com">support@privatechauffeurconnect.com</a>
+        <div class="cancel-support-lbl" style="margin-top:16px;">BOOKING REFERENCE</div>
+        <div class="cancel-support-ref" id="cs-support-ref"></div>
+      </div>
+      <button class="cancel-keep-btn" onclick="closeCancelOverlay()">Back to Booking</button>
     </div>
-    <div class="modal-btns" style="flex-direction:column;gap:10px;">
-      <button class="btn-primary" style="width:100%;" onclick="closeCancelModal()">Keep Booking</button>
-      <button class="btn-danger" style="width:100%;" id="cancel-proceed-btn" onclick="executeCancelBooking()">Continue Cancellation</button>
+
+    <!-- STEP: alternatives -->
+    <div class="cancel-step" id="cs-alternatives" style="display:none;">
+      <div class="cancel-title">Before you cancel…</div>
+      <div class="cancel-sub">Would one of these options help instead?</div>
+      <a class="cancel-alt-card" id="ca-reschedule" href="#">
+        <span class="cancel-alt-icon">📅</span>
+        <div style="flex:1;">
+          <div class="cancel-alt-title">Reschedule your booking <span class="cancel-recommended">RECOMMENDED</span></div>
+          <div class="cancel-alt-sub">Change the date or time of your trip</div>
+        </div>
+        <span style="color:#3a3a5a;font-size:18px;">›</span>
+      </a>
+      <a class="cancel-alt-card" id="ca-time" href="#">
+        <span class="cancel-alt-icon">🕐</span>
+        <div style="flex:1;">
+          <div class="cancel-alt-title">Change your pickup time</div>
+          <div class="cancel-alt-sub">Adjust when your chauffeur should arrive</div>
+        </div>
+        <span style="color:#3a3a5a;font-size:18px;">›</span>
+      </a>
+      <a class="cancel-alt-card" id="ca-dest" href="#">
+        <span class="cancel-alt-icon">📍</span>
+        <div style="flex:1;">
+          <div class="cancel-alt-title">Update your destination</div>
+          <div class="cancel-alt-sub">Modify the drop-off or return location</div>
+        </div>
+        <span style="color:#3a3a5a;font-size:18px;">›</span>
+      </a>
+      <div id="ca-chauffeur-wrap" style="display:none;">
+        <a class="cancel-alt-card" id="ca-chauffeur" href="#">
+          <span class="cancel-alt-icon">📞</span>
+          <div style="flex:1;">
+            <div class="cancel-alt-title">Contact your chauffeur</div>
+            <div class="cancel-alt-sub">Call or message your assigned chauffeur directly</div>
+          </div>
+          <span style="color:#3a3a5a;font-size:18px;">›</span>
+        </a>
+      </div>
+      <div class="cancel-divider"></div>
+      <button class="cancel-red-btn" onclick="showCancelStep('warning')">Continue to Cancel Booking →</button>
     </div>
+
+    <!-- STEP: warning -->
+    <div class="cancel-step" id="cs-warning" style="display:none;">
+      <div class="cancel-icon-circle red">⚠️</div>
+      <div class="cancel-title">Cancel Booking</div>
+      <div class="cancel-sub">Are you sure you want to cancel this booking?</div>
+      <div class="cancel-warning-box">Depending on when you cancel, cancellation charges may apply. You will see the exact refund amount before confirming.</div>
+      <button class="cancel-keep-btn" onclick="closeCancelOverlay()">Keep Booking</button>
+      <button class="cancel-red-btn" onclick="showCancelStep('reason')">Continue Cancellation</button>
+    </div>
+
+    <!-- STEP: reason -->
+    <div class="cancel-step" id="cs-reason" style="display:none;">
+      <div class="cancel-title">Reason for Cancellation</div>
+      <div class="cancel-sub">Why are you cancelling? (Required)</div>
+      <div id="cs-reason-list"></div>
+      <textarea class="cancel-notes" id="cs-reason-notes" placeholder="Please describe your reason…" style="display:none;" oninput="updateReasonNextBtn()"></textarea>
+      <button class="cancel-gold-btn" id="cs-reason-next" onclick="loadCancelPreview()" disabled>See Refund Calculation →</button>
+    </div>
+
+    <!-- STEP: preview_loading -->
+    <div class="cancel-step" id="cs-preview_loading" style="display:none;">
+      <div class="cancel-loading">
+        <div class="cancel-spinner"></div>
+        <div style="font-size:13px;color:#5a5a7a;">Calculating your refund…</div>
+      </div>
+    </div>
+
+    <!-- STEP: preview -->
+    <div class="cancel-step" id="cs-preview" style="display:none;">
+      <div class="cancel-title">Cancellation Summary</div>
+      <div class="cancel-sub">Review before confirming. This cannot be undone.</div>
+      <div class="cancel-preview-card" id="cs-preview-card"></div>
+      <div id="cs-comp-note" class="cancel-comp-note" style="display:none;">
+        This compensation will be shared between your assigned chauffeur and Private Chauffeur Connect in accordance with our Terms &amp; Conditions.
+      </div>
+      <div id="cs-preview-notice"></div>
+      <button class="cancel-keep-btn" onclick="closeCancelOverlay()">Go Back — Keep Booking</button>
+      <button class="cancel-red-btn solid" id="cs-confirm-btn" onclick="confirmCancelBooking()">Confirm Cancellation</button>
+    </div>
+
+    <!-- STEP: confirming -->
+    <div class="cancel-step" id="cs-confirming" style="display:none;">
+      <div class="cancel-loading">
+        <div class="cancel-spinner"></div>
+        <div style="font-size:13px;color:#5a5a7a;">Cancelling booking…</div>
+      </div>
+    </div>
+
+    <!-- STEP: success -->
+    <div class="cancel-step" id="cs-success" style="display:none;">
+      <div class="cancel-icon-circle green" style="width:90px;height:90px;border-radius:50%;font-size:40px;">✓</div>
+      <div class="cancel-title" style="text-align:center;">Booking Cancelled</div>
+      <div class="cancel-sub" style="text-align:center;">Your booking has been cancelled successfully.</div>
+      <div class="cancel-preview-card" id="cs-success-card"></div>
+      <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Done</button>
+    </div>
+
   </div>
 </div>
 
@@ -1443,41 +1602,179 @@ async function submitDispute() {
   } catch(e) { showErr('dispute-err',e.message); }
   finally { btn.disabled=false; btn.textContent='Submit Dispute'; }
 }
-let pendingCancelId = null;
+// ── Cancel Booking — full multi-step flow ─────────────────
+const CANCEL_JOURNEY_STATUSES = ['outbound_journey','at_destination','waiting_at_destination','return_ready_confirmation','return_journey'];
+const CANCEL_REASONS = [
+  'My plans have changed','I booked the wrong date or time','Flight cancelled',
+  'Vehicle unavailable','I no longer require a chauffeur','Price too high',
+  'Found another service','Emergency','Other',
+];
+let cancelBookingId = null;
+let cancelBookingObj = null;
+let cancelReason = '';
+let cancelReasonNotes = '';
+let cancelPreviewData = null;
+let cancelStepStack = [];
+
 function cancelBooking(id) {
-  pendingCancelId = id;
-  document.getElementById('cancel-modal').style.display = 'flex';
+  cancelBookingId = id;
+  cancelReason = ''; cancelReasonNotes = ''; cancelPreviewData = null; cancelStepStack = [];
+  const bk = allBookings.find(b=>b.id===id) || activeBooking;
+  cancelBookingObj = bk;
+  document.getElementById('cancel-overlay').style.display = 'block';
+  document.getElementById('cancel-overlay').scrollTop = 0;
+  // Wire alternative mailto links
+  const ref = '#'+(id||'').slice(0,8).toUpperCase();
+  document.getElementById('cs-support-ref').textContent = ref;
+  document.getElementById('ca-reschedule').href = 'mailto:support@privatechauffeurconnect.com?subject=Reschedule%20Booking%20'+encodeURIComponent(ref);
+  document.getElementById('ca-time').href = 'mailto:support@privatechauffeurconnect.com?subject=Change%20Pickup%20Time%20'+encodeURIComponent(ref);
+  document.getElementById('ca-dest').href = 'mailto:support@privatechauffeurconnect.com?subject=Update%20Destination%20'+encodeURIComponent(ref);
+  const phone = bk?.chauffeur_profile?.users?.phone;
+  if (phone) {
+    document.getElementById('ca-chauffeur-wrap').style.display = '';
+    document.getElementById('ca-chauffeur').href = 'tel:'+phone;
+  } else {
+    document.getElementById('ca-chauffeur-wrap').style.display = 'none';
+  }
+  // Build reason list
+  const list = document.getElementById('cs-reason-list');
+  list.innerHTML = CANCEL_REASONS.map(r=>`
+    <div class="cancel-reason-row" onclick="selectCancelReason('${r.replace(/'/g,"\\'")}')">
+      <div class="cancel-radio"><div class="cancel-radio-dot"></div></div>
+      <span class="cancel-reason-text">${r}</span>
+    </div>`).join('');
+  document.getElementById('cs-reason-notes').style.display = 'none';
+  document.getElementById('cs-reason-next').disabled = true;
+  const isInJourney = bk && CANCEL_JOURNEY_STATUSES.includes(bk.status);
+  showCancelStep(isInJourney ? 'contact_support' : 'alternatives');
 }
-function closeCancelModal() {
-  document.getElementById('cancel-modal').style.display = 'none';
-  pendingCancelId = null;
+
+function showCancelStep(step) {
+  document.querySelectorAll('.cancel-step').forEach(el=>el.style.display='none');
+  const el = document.getElementById('cs-'+step);
+  if (el) el.style.display = 'block';
+  cancelStepStack.push(step);
+  const ov = document.getElementById('cancel-overlay');
+  ov.scrollTop = 0;
+  // Back button label
+  const backBtn = document.getElementById('cancel-back-btn');
+  if (step === 'contact_support' || step === 'alternatives') {
+    backBtn.textContent = '← Back to Booking';
+  } else {
+    backBtn.textContent = '← Back';
+  }
 }
-async function executeCancelBooking() {
-  if (!pendingCancelId) return;
-  const id = pendingCancelId;
-  const btn = document.getElementById('cancel-proceed-btn');
-  btn.disabled = true; btn.textContent = 'Cancelling…';
+
+function cancelStepBack() {
+  if (cancelStepStack.length <= 1) { closeCancelOverlay(); return; }
+  cancelStepStack.pop();
+  const prev = cancelStepStack.pop();
+  if (prev) showCancelStep(prev);
+  else closeCancelOverlay();
+}
+
+function closeCancelOverlay() {
+  document.getElementById('cancel-overlay').style.display = 'none';
+  cancelBookingId = null; cancelBookingObj = null; cancelStepStack = [];
+}
+
+function selectCancelReason(r) {
+  cancelReason = r;
+  document.querySelectorAll('.cancel-reason-row').forEach((el,i)=>{
+    el.classList.toggle('sel', CANCEL_REASONS[i]===r);
+  });
+  const notesEl = document.getElementById('cs-reason-notes');
+  notesEl.style.display = r==='Other' ? 'block' : 'none';
+  if (r !== 'Other') { notesEl.value = ''; cancelReasonNotes = ''; }
+  updateReasonNextBtn();
+}
+
+function updateReasonNextBtn() {
+  cancelReasonNotes = document.getElementById('cs-reason-notes').value.trim();
+  const ok = cancelReason && (cancelReason !== 'Other' || cancelReasonNotes.length > 0);
+  document.getElementById('cs-reason-next').disabled = !ok;
+}
+
+async function loadCancelPreview() {
+  showCancelStep('preview_loading');
   try {
-    await apiFetch('/bookings/'+id+'/cancel',{method:'POST',body:JSON.stringify({reason:'Owner cancelled via dashboard'})});
-    closeCancelModal();
+    const data = await apiFetch('/bookings/'+cancelBookingId+'/cancellation-preview');
+    if (!data.canCancel) { showCancelStep('contact_support'); return; }
+    cancelPreviewData = data;
+    renderCancelPreview(data);
+    showCancelStep('preview');
+  } catch(e) {
+    alert(e.message||'Could not calculate refund. Please try again.');
+    showCancelStep('reason');
+  }
+}
+
+function renderCancelPreview(p) {
+  const fmt = v => '£'+parseFloat(v||0).toFixed(2);
+  const noRefund = p.refundAmount === 0;
+  const fullRefund = p.refundPct === 100;
+  let rows = `
+    <div class="cancel-preview-row"><span class="cancel-preview-label">Booking Total</span><span class="cancel-preview-val">${fmt(p.totalPaid)}</span></div>
+    <div class="cancel-preview-hr"></div>
+    <div class="cancel-preview-row">
+      <span class="cancel-preview-label">Your Refund</span>
+      <span class="cancel-preview-val" style="color:${noRefund?'var(--red)':'#4caf50'}">${noRefund?'No Refund':fmt(p.refundAmount)}</span>
+    </div>`;
+  if (p.compensationAmount > 0) {
+    rows += `
+      <div class="cancel-preview-row"><span class="cancel-preview-label">Cancellation Compensation</span><span class="cancel-preview-val" style="color:#f39c12">${fmt(p.compensationAmount)}</span></div>
+      <div class="cancel-preview-row"><span class="cancel-preview-label sm">→ Chauffeur</span><span class="cancel-preview-val sm" style="color:#aaa">${fmt(p.chauffeurComp)}</span></div>
+      <div class="cancel-preview-row"><span class="cancel-preview-label sm">→ Platform</span><span class="cancel-preview-val sm" style="color:#aaa">${fmt(p.platformShareAmount)}</span></div>`;
+  }
+  document.getElementById('cs-preview-card').innerHTML = rows;
+  document.getElementById('cs-comp-note').style.display = p.compensationAmount > 0 ? '' : 'none';
+  const notice = document.getElementById('cs-preview-notice');
+  if (noRefund) {
+    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(233,69,96,.35);background:rgba(233,69,96,.07);color:#cc3344;margin-bottom:16px;">⚠️  No refund applies at this stage of the booking. The chauffeur has been dispatched and is considered to have attended.</div>`;
+  } else {
+    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(76,175,80,.25);background:rgba(76,175,80,.06);color:#3a8a50;margin-bottom:16px;">✓  Your refund of ${fmt(p.refundAmount)} will be initiated immediately. Please allow 3–5 working days for your bank to process it.</div>`;
+  }
+}
+
+async function confirmCancelBooking() {
+  if (!cancelPreviewData) return;
+  const p = cancelPreviewData;
+  const noRefund = p.refundAmount === 0;
+  const fmt = v => '£'+parseFloat(v||0).toFixed(2);
+  const msg = noRefund
+    ? 'You will receive no refund. Are you absolutely sure you want to cancel?'
+    : `Confirm cancellation and initiate your refund of ${fmt(p.refundAmount)}?`;
+  if (!window.confirm(msg)) return;
+  showCancelStep('confirming');
+  try {
+    const result = await apiFetch('/bookings/'+cancelBookingId+'/cancel', {
+      method:'POST',
+      body: JSON.stringify({ reason: cancelReason, reasonNotes: cancelReason==='Other'?cancelReasonNotes:undefined }),
+    });
+    renderCancelSuccess(result);
+    showCancelStep('success');
     clearInterval(pollTimer);
     document.getElementById('tnav-active').style.display='none';
     activeBooking = null;
     allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
-    showTab('dash');
+    renderBookingsHistory();
     renderDashboard();
   } catch(e) {
-    try {
-      await apiFetch('/bookings/'+id+'/status',{method:'PATCH',body:JSON.stringify({status:'cancelled'})});
-      closeCancelModal();
-      clearInterval(pollTimer);
-      document.getElementById('tnav-active').style.display='none';
-      activeBooking = null;
-      allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
-      showTab('dash');
-      renderDashboard();
-    } catch(e2) { alert(e2.message||'Could not cancel booking.'); }
-  } finally { btn.disabled=false; btn.textContent='Continue Cancellation'; }
+    alert(e.message||'Could not cancel booking. Please try again.');
+    showCancelStep('preview');
+  }
+}
+
+function renderCancelSuccess(r) {
+  const fmt = v => '£'+parseFloat(v||0).toFixed(2);
+  const ref = '#'+(cancelBookingId||'').slice(0,8).toUpperCase();
+  const hasRefund = (r.refundAmount||0) > 0;
+  document.getElementById('cs-success-card').innerHTML = `
+    <div class="cancel-preview-row"><span class="cancel-preview-label">Refund</span><span class="cancel-preview-val" style="color:${hasRefund?'#4caf50':'#555'}">${hasRefund?fmt(r.refundAmount):'No Refund'}</span></div>
+    <div class="cancel-preview-row"><span class="cancel-preview-label">Status</span><span class="cancel-preview-val" style="color:${hasRefund?'#4caf50':'#555'}">${hasRefund?'Refund Initiated':'No Refund'}</span></div>
+    ${hasRefund?'<div style="font-size:12px;color:#4a4a6a;text-align:center;line-height:1.7;margin-top:8px;">Please allow 3–5 working days for your bank to process your refund.</div>':''}
+    <div class="cancel-preview-hr"></div>
+    <div class="cancel-preview-row"><span class="cancel-preview-label">Reference</span><span class="cancel-preview-val" style="color:var(--gold)">${ref}</span></div>`;
 }
 
 // ── Map ──────────────────────────────────────────────────
