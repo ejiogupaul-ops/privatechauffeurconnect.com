@@ -1971,6 +1971,23 @@ async function renderHistory() {
           <div class="detail-item"><div class="dl">Payment</div><div class="dv">${b.payment_status||'—'}</div></div>
           <div class="detail-item"><div class="dl">Chauffeur</div><div class="dv">${b.chauffeur_profile?.users?.full_name||'Not yet assigned'}</div></div>
         </div>
+        ${b.status==='cancelled' ? `
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+          <div style="color:var(--red);font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:10px;">CANCELLATION AUDIT TRAIL</div>
+          <div class="detail-grid">
+            <div class="detail-item"><div class="dl">Cancelled</div><div class="dv">${b.cancelled_at?fmtDate(b.cancelled_at):'—'}</div></div>
+            <div class="detail-item"><div class="dl">Reason</div><div class="dv">${b.cancellation_audit?.reason||b.cancellation_reason||'—'}</div></div>
+            ${b.cancellation_audit?.reason_notes||b.cancellation_notes?`<div class="detail-item" style="grid-column:1/-1"><div class="dl">Notes</div><div class="dv">${b.cancellation_audit?.reason_notes||b.cancellation_notes}</div></div>`:''}
+            ${b.cancellation_audit?`
+            <div class="detail-item"><div class="dl">Policy Applied</div><div class="dv">${b.cancellation_audit.policy_name||'—'}</div></div>
+            <div class="detail-item"><div class="dl">Total Paid</div><div class="dv">£${parseFloat(b.cancellation_audit.total_paid||0).toFixed(2)}</div></div>
+            <div class="detail-item"><div class="dl">Refund Amount</div><div class="dv" style="color:#4caf50;font-weight:700;">£${parseFloat(b.cancellation_audit.refund_amount||0).toFixed(2)}</div></div>
+            ${parseFloat(b.cancellation_audit.comp_amount||0)>0?`<div class="detail-item"><div class="dl">Cancellation Fee</div><div class="dv" style="color:var(--red);">£${parseFloat(b.cancellation_audit.comp_amount).toFixed(2)}</div></div>`:''}`:''}
+          </div>
+          ${b.cancellation_audit&&parseFloat(b.cancellation_audit.refund_amount||0)>0
+            ?`<div style="margin-top:10px;padding:10px 12px;background:rgba(76,175,80,.07);border-radius:8px;border:1px solid rgba(76,175,80,.2);color:#4caf50;font-size:12px;">💳  Refund of <strong>£${parseFloat(b.cancellation_audit.refund_amount).toFixed(2)}</strong> will be processed within 3–5 business days.</div>`
+            :`<div style="margin-top:10px;padding:10px 12px;background:rgba(233,69,96,.06);border-radius:8px;border:1px solid rgba(233,69,96,.15);color:var(--red);font-size:12px;">No refund applies for this cancellation.</div>`}
+        </div>` : ''}
       </div>`;
   }).join('');
 }
