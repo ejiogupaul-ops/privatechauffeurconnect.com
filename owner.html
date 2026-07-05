@@ -692,6 +692,21 @@
   </div>
 </div>
 
+<!-- Cancel Confirmation Modal -->
+<div class="modal-overlay" id="cancel-modal">
+  <div class="modal" style="max-width:420px;">
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:36px;margin-bottom:12px;">⚠️</div>
+      <h3 style="color:#fff;font-size:20px;font-weight:700;margin-bottom:10px;">Cancel Booking</h3>
+      <p style="color:var(--muted);font-size:13px;line-height:1.7;">Are you sure you want to cancel this booking?<br>Depending on when you cancel, cancellation charges may apply.</p>
+    </div>
+    <div class="modal-btns" style="flex-direction:column;gap:10px;">
+      <button class="btn-primary" style="width:100%;" onclick="closeCancelModal()">Keep Booking</button>
+      <button class="btn-danger" style="width:100%;" id="cancel-proceed-btn" onclick="executeCancelBooking()">Continue Cancellation</button>
+    </div>
+  </div>
+</div>
+
 <!-- Dispute Modal -->
 <div class="modal-overlay" id="dispute-modal">
   <div class="modal">
@@ -1428,17 +1443,41 @@ async function submitDispute() {
   } catch(e) { showErr('dispute-err',e.message); }
   finally { btn.disabled=false; btn.textContent='Submit Dispute'; }
 }
-async function cancelBooking(id) {
-  if (!confirm('Are you sure you want to cancel this booking? Cancellation charges may apply.')) return;
+let pendingCancelId = null;
+function cancelBooking(id) {
+  pendingCancelId = id;
+  document.getElementById('cancel-modal').style.display = 'flex';
+}
+function closeCancelModal() {
+  document.getElementById('cancel-modal').style.display = 'none';
+  pendingCancelId = null;
+}
+async function executeCancelBooking() {
+  if (!pendingCancelId) return;
+  const id = pendingCancelId;
+  const btn = document.getElementById('cancel-proceed-btn');
+  btn.disabled = true; btn.textContent = 'Cancelling…';
   try {
-    await apiFetch('/bookings/'+id+'/status',{method:'PATCH',body:JSON.stringify({status:'cancelled'})});
+    await apiFetch('/bookings/'+id+'/cancel',{method:'POST',body:JSON.stringify({reason:'Owner cancelled via dashboard'})});
+    closeCancelModal();
     clearInterval(pollTimer);
     document.getElementById('tnav-active').style.display='none';
     activeBooking = null;
     allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
     showTab('dash');
     renderDashboard();
-  } catch(e) { alert(e.message||'Could not cancel booking.'); }
+  } catch(e) {
+    try {
+      await apiFetch('/bookings/'+id+'/status',{method:'PATCH',body:JSON.stringify({status:'cancelled'})});
+      closeCancelModal();
+      clearInterval(pollTimer);
+      document.getElementById('tnav-active').style.display='none';
+      activeBooking = null;
+      allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+      showTab('dash');
+      renderDashboard();
+    } catch(e2) { alert(e2.message||'Could not cancel booking.'); }
+  } finally { btn.disabled=false; btn.textContent='Continue Cancellation'; }
 }
 
 // ── Map ──────────────────────────────────────────────────
