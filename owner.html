@@ -171,6 +171,19 @@
     .price-row .value { font-size: 13px; color: var(--text); font-weight: 600; }
     .price-row.total .label { font-size: 15px; font-weight: 700; color: var(--text); }
     .price-row.total .value { font-size: 20px; font-weight: 800; color: var(--gold); }
+    .estimate-badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .estimate-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; border: 1px solid; }
+    .estimate-badge.city { color: #2ecc71; background: rgba(46,204,113,.08); border-color: rgba(46,204,113,.3); }
+    .estimate-badge.intercity { color: #e94560; background: rgba(233,69,96,.08); border-color: rgba(233,69,96,.3); }
+    .intercity-banner { background: rgba(233,69,96,.06); border: 1px solid rgba(233,69,96,.22); border-radius: 14px; padding: 18px 20px; margin-bottom: 18px; }
+    .intercity-banner-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .intercity-banner-icon { font-size: 22px; }
+    .intercity-banner-title { font-size: 13px; font-weight: 700; color: #e94560; letter-spacing: 0.5px; text-transform: uppercase; }
+    .intercity-banner-body { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+    .intercity-hotel-box { background: rgba(74,144,226,.07); border: 1px solid rgba(74,144,226,.2); border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; }
+    .intercity-hotel-box .ih-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .intercity-hotel-box .ih-text { font-size: 12px; color: #6a9aba; line-height: 1.65; }
+    .intercity-hotel-box .ih-text strong { color: #8ab8d8; display: block; margin-bottom: 3px; font-size: 12px; }
     .roadworthy-check { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: rgba(76,175,80,.06); border: 1px solid rgba(76,175,80,.2); border-radius: 10px; margin-bottom: 18px; cursor: pointer; }
     .rw-box { width: 20px; height: 20px; border-radius: 5px; border: 2px solid rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all .2s; }
     .rw-box.checked { background: var(--green); border-color: var(--green); }
@@ -926,6 +939,22 @@
               <div><div class="vc-reg" id="bk-veh-reg-display"></div><div class="vc-info" id="bk-veh-info-display"></div></div>
             </div>
             <div class="price-card" id="bk-price-card"></div>
+            <div class="intercity-banner" id="bk-intercity-banner" style="display:none;">
+              <div class="intercity-banner-head">
+                <span class="intercity-banner-icon">🌍</span>
+                <span class="intercity-banner-title">Intercity Booking</span>
+              </div>
+              <div class="intercity-banner-body">
+                This trip exceeds 120 miles and is classified as an <strong style="color:#e94560;">intercity booking</strong>. The chauffeur will travel a long distance and may need to remain at the destination overnight.
+              </div>
+              <div class="intercity-hotel-box">
+                <span class="ih-icon">🏨</span>
+                <div class="ih-text">
+                  <strong>Accommodation Responsibility</strong>
+                  As the vehicle owner, you are responsible for arranging and funding the chauffeur's overnight accommodation at the destination if an overnight stay is required. We recommend booking a hotel near your destination before confirming this booking.
+                </div>
+              </div>
+            </div>
             <div class="roadworthy-check" id="rw-check" onclick="toggleRoadworthy()">
               <div class="rw-box" id="rw-box"></div>
               <p>I confirm that my vehicle is roadworthy, has a valid MOT, is properly insured, and is in a safe operating condition for this booking.</p>
@@ -2014,16 +2043,24 @@ async function getEstimate() {
   finally { btn.disabled=false; btn.textContent='Get Price Estimate →'; }
 }
 function renderPriceCard(est) {
+  const tripLabel = tripType==='regular'?'🚗  Regular':tripType==='airport_drop'?'✈️  Airport Drop':'🔄  Airport Return';
+  const cityClass = est.isIntercity ? 'intercity' : 'city';
+  const cityLabel = est.isIntercity ? 'Intercity' : 'City';
+  const badges = `<div class="estimate-badge-row">
+    <span class="estimate-badge">${tripLabel}</span>
+    <span class="estimate-badge ${cityClass}">${cityLabel}</span>
+  </div>`;
   const rows = [
     ['Distance',est.distanceMiles?`${est.distanceMiles.toFixed(1)} miles`:'—'],
     ['Mileage Cost', fmtPrice(est.mileageCost)],
-    ['Trip Type', tripType==='regular'?'Regular Journey':tripType==='airport_drop'?'Airport Drop-Off':'Airport Return'],
   ];
   if (est.waitingCost>0) rows.push(['Waiting / Duration',fmtPrice(est.waitingCost)]);
   if (est.travelAllowance>0) rows.push(['Travel Allowance',fmtPrice(est.travelAllowance)]);
-  const html = rows.map(([l,v])=>`<div class="price-row"><span class="label">${l}</span><span class="value">${v}</span></div>`).join('')
+  const html = badges
+    + rows.map(([l,v])=>`<div class="price-row"><span class="label">${l}</span><span class="value">${v}</span></div>`).join('')
     + `<div class="price-row total"><span class="label">Total Price</span><span class="value">${fmtPrice(est.price)}</span></div>`;
   document.getElementById('bk-price-card').innerHTML=html;
+  document.getElementById('bk-intercity-banner').style.display = est.isIntercity ? 'block' : 'none';
 }
 async function createBooking() {
   hideErr('book-err-2');
