@@ -245,6 +245,28 @@
     .pretip-countdown { display:flex; justify-content:space-between; align-items:center; background:#070710; border-radius:10px; padding:8px 14px; margin-bottom:12px; }
     .pretip-countdown-label { font-size:12px; color:var(--muted); }
     .pretip-countdown-val   { font-size:20px; font-weight:800; letter-spacing:2px; color:#c9a84c; font-variant-numeric:tabular-nums; }
+    /* waiting action buttons */
+    .wait-ready-btn { width:100%; background:var(--green); color:#fff; border:none; border-radius:12px; padding:16px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; margin-bottom:10px; }
+    .wait-ready-btn:disabled { opacity:.5; cursor:not-allowed; }
+    .wait-action-row { display:flex; gap:10px; margin-bottom:6px; }
+    .wait-extend-btn { flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); color:#fff; border-radius:10px; padding:13px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; }
+    .wait-extend-opts { background:var(--dark2); border:1px solid var(--border); border-radius:10px; padding:6px; margin-bottom:10px; display:none; }
+    .wait-extend-opts.open { display:block; }
+    .wait-extend-opt { display:block; width:100%; text-align:left; background:none; border:none; color:#ccc; padding:10px 12px; font-size:14px; font-family:'Inter',sans-serif; cursor:pointer; border-radius:6px; }
+    .wait-extend-opt:hover { background:rgba(255,255,255,.05); color:#fff; }
+    .wait-confirming-card { display:flex; gap:12px; align-items:flex-start; background:rgba(124,106,240,.06); border:1px solid rgba(124,106,240,.25); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+    .wait-confirming-icon { font-size:22px; }
+    .wait-confirming-title { font-size:13px; font-weight:700; color:#7c6af0; margin-bottom:2px; }
+    .wait-confirming-sub { font-size:12px; color:var(--muted); }
+    .wait-greyed-btn { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:12px; padding:14px; text-align:center; margin-bottom:10px; }
+    .wait-greyed-title { font-size:14px; font-weight:700; color:#3a3a5a; }
+    .wait-greyed-sub { font-size:12px; color:#2a2a4a; margin-top:4px; }
+    .wait-confirmed-card { display:flex; gap:12px; align-items:flex-start; background:rgba(67,160,71,.06); border:1px solid rgba(67,160,71,.25); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+    .wait-confirmed-icon { font-size:22px; color:#43a047; font-weight:800; }
+    .wait-confirmed-title { font-size:13px; font-weight:700; color:#43a047; margin-bottom:2px; }
+    .wait-confirmed-sub { font-size:12px; color:var(--muted); }
+    .ts-log { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); border-radius:10px; padding:10px 14px; margin-bottom:10px; }
+    .ts-entry { font-size:11px; color:var(--muted); padding:2px 0; }
 
     /* ── POST-TRIP REVIEW OVERLAY ────────────────────────── */
     #rv-overlay { position:fixed; inset:0; z-index:1000; background:#0a0a12; overflow-y:auto; display:none; }
@@ -2128,6 +2150,98 @@ function startPreApprovalCountdown(deadline) {
   preApprovalInterval = setInterval(tick, 1000);
 }
 
+function renderWaitActions(bk) {
+  const el = document.getElementById('wait-actions');
+  if (!el) return;
+  const { status, id, trip_type, waiting_started_at, customer_ready_at, chauffeur_confirmed_at,
+          unavailable_events, included_waiting_secs, waiting_paused_secs } = bk;
+  const isWaiting = status === 'at_destination' || status === 'waiting_at_destination';
+  const isPaused  = status === 'return_ready_confirmation';
+  const isLocked  = status === 'return_journey' || status === 'completed';
+  if (!isWaiting && !isPaused && !isLocked) { el.innerHTML = ''; return; }
+
+  // Compute overtime charge for locked state card
+  const pausedSecs = waiting_paused_secs || 0;
+  const extra = Math.max(0, pausedSecs - (included_waiting_secs || 0));
+  const overtimeCh = ((extra / 3600) * 20).toFixed(2);
+
+  // Timestamp log
+  const entries = [
+    waiting_started_at   ? `<div class="ts-entry">● Wait started: ${new Date(waiting_started_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</div>` : '',
+    customer_ready_at    ? `<div class="ts-entry">● Ready signal sent: ${new Date(customer_ready_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</div>` : '',
+    chauffeur_confirmed_at ? `<div class="ts-entry" style="color:#43a047">✓ Chauffeur confirmed: ${new Date(chauffeur_confirmed_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</div>` : '',
+    ...(Array.isArray(unavailable_events)?unavailable_events:[]).map(ev=>`<div class="ts-entry" style="color:#e94560">✕ Not located: ${new Date(ev.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</div>`),
+  ].filter(Boolean);
+  const tsHtml = entries.length ? `<div class="ts-log">${entries.join('')}</div>` : '';
+
+  let html = tsHtml;
+
+  if (isWaiting) {
+    const readyLabel = trip_type === 'airport_roundtrip' ? '✓  Release Chauffeur to Drive Back' : '✓  Ready for Return';
+    html += `
+      <button class="wait-ready-btn" id="wait-ready-btn" onclick="markReturnReady('${id}')">${readyLabel}</button>
+      <div class="wait-action-row">
+        <button class="wait-extend-btn" onclick="toggleExtendOpts()">⏱  Extend Waiting</button>
+      </div>
+      <div class="wait-extend-opts" id="wait-extend-opts">
+        <button class="wait-extend-opt" onclick="sendExtend('${id}',15)">+ 15 minutes</button>
+        <button class="wait-extend-opt" onclick="sendExtend('${id}',30)">+ 30 minutes</button>
+        <button class="wait-extend-opt" onclick="sendExtend('${id}',60)">+ 1 hour</button>
+      </div>`;
+  } else if (isPaused) {
+    html += `
+      <div class="wait-confirming-card">
+        <span class="wait-confirming-icon">⏳</span>
+        <div>
+          <div class="wait-confirming-title">Waiting for Chauffeur Confirmation…</div>
+          <div class="wait-confirming-sub">Your chauffeur has been notified and is confirming your location.</div>
+        </div>
+      </div>
+      <div class="wait-greyed-btn">
+        <div class="wait-greyed-title">✓  Ready for Return</div>
+        <div class="wait-greyed-sub">Waiting for chauffeur confirmation…</div>
+      </div>`;
+  } else if (isLocked) {
+    html += `
+      <div class="wait-confirmed-card">
+        <span class="wait-confirmed-icon">✓</span>
+        <div>
+          <div class="wait-confirmed-title">Return Confirmed</div>
+          <div class="wait-confirmed-sub">Overtime charge locked at £${overtimeCh}. Return journey in progress.</div>
+        </div>
+      </div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+async function markReturnReady(id) {
+  if (!confirm('This will pause your waiting timer and notify your chauffeur.\nThey will confirm your location before starting the return journey.\n\nAre you ready?')) return;
+  const btn = document.getElementById('wait-ready-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending signal…'; }
+  try {
+    await apiFetch('/bookings/'+id+'/return-ready', { method:'PATCH', body:'{}' });
+    await refreshActive(id);
+  } catch(e) {
+    alert(e.message || 'Could not send ready signal. Please try again.');
+    if (btn) { btn.disabled = false; btn.textContent = '✓  Ready for Return'; }
+  }
+}
+
+function toggleExtendOpts() {
+  document.getElementById('wait-extend-opts')?.classList.toggle('open');
+}
+
+async function sendExtend(id, minutes) {
+  document.getElementById('wait-extend-opts')?.classList.remove('open');
+  try {
+    await apiFetch('/bookings/'+id+'/extend-waiting', { method:'PATCH', body:JSON.stringify({minutes}) });
+    await refreshActive(id);
+  } catch(e) {
+    alert(e.message || 'Could not extend waiting time. Please try again.');
+  }
+}
+
 // ── Active Trip ─────────────────────────────────────────
 function startPolling(id) {
   clearInterval(pollTimer);
@@ -2181,7 +2295,7 @@ function renderActiveTripPanel(bk) {
       <div><div class="sb-title">${statusLabel(bk.status)}</div><div class="sb-desc">${statusDesc(bk)}</div></div>
     </div>
     <div id="map"></div>
-    ${showWaitBlock ? '<div id="wait-block"></div>' : ''}
+    ${showWaitBlock ? '<div id="wait-block"></div><div id="wait-actions"></div>' : ''}
     ${chauffeur ? `<div class="chauffeur-card"><div class="ch-avatar">${photoUrl?`<img src="${photoUrl}" alt="${chauffeurName}" />`:'👔'}</div><div><div class="ch-name">${chauffeurName}</div><div class="ch-role">Your assigned chauffeur</div></div></div>` : ''}
     ${showPreApproval ? renderPreApprovalCard(bk) : ''}
     ${showPostReview ? renderPostReviewCard(bk) : ''}
@@ -2203,8 +2317,9 @@ function renderActiveTripPanel(bk) {
     const grid = document.getElementById('pre-photo-grid');
     if (grid) grid.innerHTML = cachedPrePhotos;
   }
-  // Start waiting timer and pre-trip approval countdown
+  // Start waiting timer, action buttons, and pre-trip approval countdown
   startWaitTimer(bk);
+  renderWaitActions(bk);
   if (showPreApproval && bk.pre_trip_approval_deadline) startPreApprovalCountdown(bk.pre_trip_approval_deadline);
   // Init map after render
   setTimeout(()=>{ initMap(); updateMapMarker(bk.chauffeur_lat, bk.chauffeur_lng); }, 100);
