@@ -216,6 +216,83 @@
     .btn-dispute { background: rgba(233,69,96,.12); border: 1px solid rgba(233,69,96,.3); color: var(--red); border-radius: 8px; padding: 11px 20px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; }
     .btn-dispute:hover { background: rgba(233,69,96,.2); }
 
+    /* ── POST-TRIP REVIEW OVERLAY ────────────────────────── */
+    #rv-overlay { position:fixed; inset:0; z-index:1000; background:#0a0a12; overflow-y:auto; display:none; }
+    .rv-wrap { max-width:560px; margin:0 auto; padding:20px 20px 80px; }
+    .rv-back-btn { background:none; border:none; color:#5a5a7a; font-size:14px; cursor:pointer; padding:8px 0; margin-bottom:20px; font-family:'Inter',sans-serif; display:block; }
+    .rv-heading { font-size:20px; font-weight:800; color:#fff; margin-bottom:4px; }
+    .rv-subhead { font-size:13px; color:var(--muted); margin-bottom:20px; }
+    .rv-countdown { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:16px 18px; display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+    .rv-countdown.urgent { border-color:rgba(255,160,0,.4); background:rgba(255,160,0,.07); }
+    .rv-countdown.expired { border-color:rgba(233,69,96,.4); background:rgba(233,69,96,.07); }
+    .rv-cd-icon { font-size:26px; }
+    .rv-cd-text { flex:1; }
+    .rv-cd-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+    .rv-cd-timer { font-size:28px; font-weight:800; color:#fff; font-variant-numeric:tabular-nums; }
+    .rv-cd-timer.urgent { color:#ffa000; }
+    .rv-cd-timer.expired { color:var(--red); }
+    .rv-cd-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+    .rv-waiting { background:rgba(255,160,0,.08); border:1px solid rgba(255,160,0,.3); border-radius:12px; padding:16px 18px; margin-bottom:18px; display:flex; gap:12px; align-items:flex-start; }
+    .rv-waiting-icon { font-size:22px; }
+    .rv-waiting-title { font-size:14px; font-weight:700; color:#ffa000; margin-bottom:2px; }
+    .rv-waiting-sub { font-size:13px; color:var(--muted); }
+    .rv-section-label { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:20px 0 10px; }
+    .rv-section-label.green { color:#43a047; }
+    .rv-angle-card { background:var(--dark2); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:12px; }
+    .rv-angle-card.post { border-color:rgba(67,160,71,.25); }
+    .rv-angle-header { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border); }
+    .rv-angle-icon { font-size:18px; }
+    .rv-angle-name { font-size:13px; font-weight:700; color:#fff; flex:1; }
+    .rv-angle-name.green { color:#43a047; }
+    .rv-angle-time { font-size:11px; color:var(--muted); }
+    .rv-angle-photo { width:100%; display:block; max-height:240px; object-fit:cover; }
+    .rv-angle-missing { padding:40px 20px; text-align:center; color:#444; font-size:13px; }
+    .rv-angle-gps { padding:6px 14px; font-size:10px; color:#444; }
+    .rv-locked-note { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:13px 16px; font-size:13px; color:var(--muted); text-align:center; margin:18px 0 10px; }
+    .rv-actions { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
+    .rv-btn-approve { background:var(--green); color:#fff; border:none; border-radius:10px; padding:15px 20px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; width:100%; }
+    .rv-btn-approve:disabled { opacity:.4; cursor:not-allowed; }
+    .rv-btn-dispute { background:rgba(233,69,96,.1); border:1px solid rgba(233,69,96,.3); color:var(--red); border-radius:10px; padding:14px 20px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; width:100%; }
+    .rv-btn-dispute:disabled { opacity:.4; cursor:not-allowed; }
+    .rv-drt-scroll { max-height:55vh; overflow-y:auto; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:16px; margin:16px 0; }
+    .rv-drt-section { margin-bottom:14px; }
+    .rv-drt-section-title { font-size:12px; font-weight:700; color:var(--accent); margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em; }
+    .rv-drt-section-body { font-size:12px; color:#aaa; line-height:1.65; }
+    .rv-drt-agree { display:flex; align-items:center; gap:12px; padding:12px 0; cursor:pointer; }
+    .rv-drt-box { width:22px; height:22px; border-radius:5px; border:2px solid rgba(233,69,96,.5); flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:.15s; }
+    .rv-drt-box.checked { background:var(--red); border-color:var(--red); }
+    .rv-drt-checkmark { color:#fff; font-size:14px; font-weight:700; }
+    .rv-drt-agree-text { font-size:13px; color:#ccc; line-height:1.4; }
+    .rv-drt-continue { width:100%; background:var(--red); color:#fff; border:none; border-radius:10px; padding:14px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; margin-top:8px; }
+    .rv-drt-continue:disabled { opacity:.4; cursor:not-allowed; }
+    .rv-form-label { font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; }
+    .rv-reason-row { display:flex; align-items:flex-start; gap:10px; padding:11px 14px; background:var(--dark2); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; cursor:pointer; transition:.15s; }
+    .rv-reason-row.selected { border-color:rgba(233,69,96,.4); background:rgba(233,69,96,.07); }
+    .rv-radio { width:18px; height:18px; border-radius:50%; border:2px solid #444; flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; }
+    .rv-radio.checked { border-color:var(--red); background:var(--red); }
+    .rv-radio.checked::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
+    .rv-reason-text { font-size:13px; color:#ccc; line-height:1.4; }
+    .rv-reason-text.selected { color:#fff; font-weight:600; }
+    .rv-desc { width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:12px 14px; font-size:13px; color:#fff; font-family:'Inter',sans-serif; resize:vertical; min-height:80px; box-sizing:border-box; }
+    .rv-amount-row { position:relative; }
+    .rv-amount-prefix { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:15px; font-weight:700; color:#fff; pointer-events:none; }
+    .rv-amount-input { width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:12px 14px 12px 30px; font-size:15px; color:#fff; font-family:'Inter',sans-serif; box-sizing:border-box; }
+    .rv-upload-btn { display:block; background:rgba(255,255,255,.05); border:2px dashed rgba(255,255,255,.15); border-radius:10px; padding:14px; text-align:center; font-size:13px; font-weight:600; color:#aaa; cursor:pointer; margin-top:8px; }
+    .rv-upload-btn.required { border-color:rgba(233,69,96,.35); color:var(--red); }
+    .rv-thumbs { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .rv-thumb-wrap { position:relative; width:80px; height:80px; }
+    .rv-thumb { width:80px; height:80px; object-fit:cover; border-radius:8px; }
+    .rv-thumb-remove { position:absolute; top:-5px; right:-5px; width:20px; height:20px; border-radius:50%; background:var(--red); border:none; color:#fff; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+    .rv-submit-btn { width:100%; background:var(--red); color:#fff; border:none; border-radius:10px; padding:15px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; margin-top:18px; }
+    .rv-submit-btn:disabled { opacity:.4; cursor:not-allowed; }
+    .rv-dispute-err { font-size:13px; color:var(--red); margin-top:10px; display:none; }
+    .rv-dispute-err.show { display:block; }
+    .rv-result { text-align:center; padding:40px 20px; }
+    .rv-result-icon { font-size:56px; margin-bottom:16px; }
+    .rv-result-title { font-size:22px; font-weight:800; color:#fff; margin-bottom:8px; }
+    .rv-result-sub { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:28px; }
+    .rv-result-done-btn { background:var(--dark2); border:1px solid var(--border); color:#fff; border-radius:10px; padding:13px 28px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; }
+
     /* ── HISTORY ─────────────────────────────────────────── */
     .booking-row {
       background: var(--dark2); border: 1px solid var(--border); border-radius: 12px;
@@ -860,6 +937,168 @@
   </div>
 </div>
 
+<!-- Post-Trip Review Overlay -->
+<div id="rv-overlay">
+  <div class="rv-wrap">
+    <button class="rv-back-btn" onclick="closeReview()">← Back</button>
+
+    <!-- Main panel: photos + actions -->
+    <div id="rv-panel-main">
+      <div class="rv-heading">📸 Post-Trip Inspection</div>
+      <div class="rv-subhead">Review vehicle photos and confirm condition or raise a dispute.</div>
+
+      <div class="rv-countdown" id="rv-countdown" style="display:none;">
+        <div class="rv-cd-icon">⏱️</div>
+        <div class="rv-cd-text">
+          <div class="rv-cd-label">Review window closes in</div>
+          <div class="rv-cd-timer" id="rv-timer">--:--</div>
+          <div class="rv-cd-sub" id="rv-cd-sub">After this time the payment is auto-released to your chauffeur.</div>
+        </div>
+      </div>
+
+      <div class="rv-waiting" id="rv-waiting" style="display:none;">
+        <div class="rv-waiting-icon">🔄</div>
+        <div>
+          <div class="rv-waiting-title">Waiting for Post-Trip Photos</div>
+          <div class="rv-waiting-sub">Your chauffeur has not yet submitted the post-trip inspection photos. Check back shortly.</div>
+        </div>
+      </div>
+
+      <div id="rv-photos"></div>
+
+      <div class="rv-locked-note" id="rv-locked-note" style="display:none;">Post-trip photos have not been submitted yet. Approve and dispute buttons are locked until photos are verified.</div>
+
+      <div class="rv-actions">
+        <button class="rv-btn-approve" id="rv-approve-btn" onclick="rvApprove()" disabled>✅  Confirm Vehicle Condition &amp; Release Payment</button>
+        <button class="rv-btn-dispute" id="rv-dispute-btn" onclick="rvOpenDrt()" disabled>⚠️  Raise a Dispute</button>
+      </div>
+    </div>
+
+    <!-- DRT consent panel -->
+    <div id="rv-panel-drt" style="display:none;">
+      <div class="rv-heading">⚖️ Dispute Resolution Terms</div>
+      <div class="rv-subhead">You must read and agree to the following terms before raising a dispute.</div>
+      <div class="rv-drt-scroll">
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">1. Scope &amp; Application</div>
+          <div class="rv-drt-section-body">These Dispute Resolution Terms ("DRT") govern all post-trip vehicle condition disputes raised through the Private Chauffeur Connect platform. By raising a dispute you acknowledge that you have read, understood, and agreed to these terms in full.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">2. Evidence Requirement</div>
+          <div class="rv-drt-section-body">You must supply photographic evidence of any alleged damage or discrepancy at the time of raising the dispute. Evidence submitted after the dispute window closes will not be accepted. Claims unsupported by photographic evidence will be dismissed.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">3. Review Window</div>
+          <div class="rv-drt-section-body">Disputes must be raised within the review window shown on the inspection screen. Once the window expires the chauffeur's payment is released automatically and disputes can no longer be initiated through the platform.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">4. Escrow &amp; Payment Hold</div>
+          <div class="rv-drt-section-body">Upon submission of a valid dispute, the chauffeur's payment remains in escrow pending resolution. The platform does not release escrowed funds to either party during an active dispute without a resolution decision.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">5. Investigation Process</div>
+          <div class="rv-drt-section-body">The Private Chauffeur Connect disputes team will review all submitted evidence (pre-trip photos, post-trip photos, your uploaded evidence, and any written description) within 5 business days of the dispute being raised. Both parties may be contacted for additional information.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">6. Resolution Outcomes</div>
+          <div class="rv-drt-section-body">The disputes team may find in favour of the vehicle owner (compensation from escrow), in favour of the chauffeur (full escrow released to chauffeur), or split the award proportionally based on evidence. The platform's decision is final and binding.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">7. False or Malicious Disputes</div>
+          <div class="rv-drt-section-body">Raising a dispute on false, exaggerated, or fabricated grounds is a breach of the platform's Terms of Service. This may result in account suspension, liability for the chauffeur's lost earnings, and potential legal action.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">8. Pre-Trip Baseline</div>
+          <div class="rv-drt-section-body">Only damage or discrepancies that are visible in the post-trip photos but absent from the pre-trip inspection photos are eligible for compensation. Pre-existing conditions documented in pre-trip photos are excluded from any claim.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">9. Claimed Amount</div>
+          <div class="rv-drt-section-body">You may submit an estimated repair or replacement cost. This figure is used as guidance only and does not guarantee that amount will be awarded. Final compensation, if any, is determined by the disputes team based on all available evidence.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">10. GPS &amp; Metadata Verification</div>
+          <div class="rv-drt-section-body">All inspection photos are geo-stamped and time-stamped at the point of capture. This metadata is used to verify authenticity. Tampering with metadata or submitting photos not taken during the trip will result in immediate dismissal of the dispute.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">11. Chauffeur Notification</div>
+          <div class="rv-drt-section-body">When a dispute is raised the chauffeur is notified immediately and given an opportunity to respond with their own written account and supplementary evidence. The disputes team will consider both accounts equally.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">12. Escalation &amp; External Resolution</div>
+          <div class="rv-drt-section-body">If either party is dissatisfied with the platform's decision they may pursue resolution through the relevant small claims court or Alternative Dispute Resolution (ADR) scheme. The platform is not liable for costs incurred in external proceedings.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">13. Data Retention</div>
+          <div class="rv-drt-section-body">Dispute records, including all photos, written descriptions, and resolution decisions, are retained for 6 years in compliance with UK civil limitation periods and may be used as evidence in any legal proceedings.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">14. Governing Law</div>
+          <div class="rv-drt-section-body">These terms are governed by and construed in accordance with the laws of England and Wales. Both parties submit to the exclusive jurisdiction of the courts of England and Wales for the resolution of any disputes arising under these terms.</div>
+        </div>
+        <div class="rv-drt-section">
+          <div class="rv-drt-section-title">15. Amendments</div>
+          <div class="rv-drt-section-body">Private Chauffeur Connect reserves the right to update these Dispute Resolution Terms at any time. Continued use of the platform following any update constitutes acceptance of the revised terms. The version in effect at the time a dispute is raised shall govern that dispute.</div>
+        </div>
+      </div>
+
+      <div class="rv-drt-agree" onclick="rvToggleDrt()">
+        <div class="rv-drt-box" id="rv-drt-box"></div>
+        <div class="rv-drt-agree-text">I have read and agree to the Dispute Resolution Terms and confirm my dispute is genuine and supported by evidence.</div>
+      </div>
+      <button class="rv-drt-continue" id="rv-drt-continue" onclick="rvOpenDisputeForm()" disabled>Continue to Dispute Form →</button>
+    </div>
+
+    <!-- Dispute form panel -->
+    <div id="rv-panel-dispute" style="display:none;">
+      <div class="rv-heading">⚠️ Raise a Dispute</div>
+      <div class="rv-subhead">Provide details about the issue. All disputes are reviewed within 5 business days.</div>
+
+      <div class="rv-form-label" style="margin-top:18px;">Reason for Dispute *</div>
+      <div id="rv-reasons"></div>
+
+      <div class="rv-form-label" style="margin-top:16px;">Description (optional)</div>
+      <textarea class="rv-desc" id="rv-desc" placeholder="Describe the damage or issue in detail…" rows="4"></textarea>
+
+      <div class="rv-form-label" style="margin-top:16px;">Estimated Damage Amount (optional)</div>
+      <div class="rv-amount-row">
+        <span class="rv-amount-prefix">£</span>
+        <input class="rv-amount-input" id="rv-amount" type="number" min="0" step="0.01" placeholder="0.00" />
+      </div>
+
+      <div class="rv-form-label" style="margin-top:16px;">Photo Evidence *</div>
+      <input type="file" id="rv-file-input" accept="image/*" multiple style="display:none;" onchange="rvHandleFiles(this.files)" />
+      <label for="rv-file-input" class="rv-upload-btn required" id="rv-upload-label">
+        <span>📷  Upload Photo of Damage (Required)</span>
+      </label>
+      <div class="rv-thumbs" id="rv-thumbs"></div>
+
+      <div class="rv-dispute-err" id="rv-dispute-err"></div>
+      <button class="rv-submit-btn" id="rv-submit-btn" onclick="rvSubmitDispute()">Submit Dispute</button>
+    </div>
+
+    <!-- Approved result -->
+    <div id="rv-panel-approved" style="display:none;">
+      <div class="rv-result">
+        <div class="rv-result-icon">✅</div>
+        <div class="rv-result-title">Payment Released</div>
+        <div class="rv-result-sub">You have confirmed the vehicle was returned in acceptable condition. The chauffeur's payment has been released from escrow. Thank you for using Private Chauffeur Connect.</div>
+        <button class="rv-result-done-btn" onclick="closeReview()">Back to Dashboard</button>
+      </div>
+    </div>
+
+    <!-- Disputed result -->
+    <div id="rv-panel-disputed" style="display:none;">
+      <div class="rv-result">
+        <div class="rv-result-icon">⚖️</div>
+        <div class="rv-result-title">Dispute Submitted</div>
+        <div class="rv-result-sub">Your dispute has been received. The chauffeur's payment remains in escrow while our team reviews the evidence. You will be contacted within 5 business days with a resolution decision.</div>
+        <button class="rv-result-done-btn" onclick="closeReview()">Back to Dashboard</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- Cancel Booking — Full Multi-Step Overlay -->
 <div id="cancel-overlay">
   <div class="cancel-content">
@@ -981,19 +1220,6 @@
   </div>
 </div>
 
-<!-- Dispute Modal -->
-<div class="modal-overlay" id="dispute-modal">
-  <div class="modal">
-    <h3>Raise a Dispute</h3>
-    <p>Please describe the issue with the vehicle condition so we can investigate.</p>
-    <div class="field"><label>Reason for Dispute</label><textarea id="dispute-reason" placeholder="e.g. Damage to rear bumper not present before the booking…" style="min-height:100px;"></textarea></div>
-    <div class="err" id="dispute-err"></div>
-    <div class="modal-btns">
-      <button class="btn-outline" onclick="closeDispute()">Cancel</button>
-      <button class="btn-primary" id="dispute-submit-btn" onclick="submitDispute()">Submit Dispute</button>
-    </div>
-  </div>
-</div>
 
 <!-- PAYMENT OVERLAY -->
 <div id="pay-overlay">
@@ -1148,7 +1374,9 @@ let keyReturnDetails = {};
 let rwChecked = false;
 let returnConsentGiven = false;
 let lastEstimate = null;
-let disputeBookingId = null;
+let rvBookingId = null, rvPrePhotos = [], rvPostPhotos = [], rvPostVerified = false;
+let rvDisputeReason = '', rvDisputePhotos = [], rvDrtAccepted = false;
+let rvCountdownTimer = null, rvSubmitting = false;
 let allBookings = [];
 let selectedAirport = null;
 
@@ -1871,11 +2099,9 @@ function renderPreApprovalCard(bk) {
 function renderPostReviewCard(bk) {
   return `<div class="approval-card post" id="post-review-card">
     <div class="approval-title">📸 Post-Trip Vehicle Condition</div>
-    <div class="approval-desc">Please review the post-trip photos and confirm the vehicle was returned in good condition, or raise a dispute if there is any damage.</div>
-    <div class="photo-grid" id="post-photo-grid">Loading photos…</div>
+    <div class="approval-desc">Your chauffeur has submitted post-trip inspection photos. Review and confirm the vehicle condition, or raise a dispute if there is any damage.</div>
     <div class="approval-btns">
-      <button class="btn-approve" onclick="approvePost('${bk.id}')">✓ Approve &amp; Release Payment</button>
-      <button class="btn-dispute" onclick="openDispute('${bk.id}')">⚠ Raise a Dispute</button>
+      <button class="btn-approve" onclick="openPostReview('${bk.id}')">📷  Review &amp; Approve Vehicle</button>
     </div>
   </div>`;
 }
@@ -1897,29 +2123,250 @@ async function approvePre(id) {
     await refreshActive(id);
   } catch(e) { alert(e.message); btn.disabled=false; btn.textContent='✓ Approve Condition & Start Journey'; }
 }
-async function approvePost(id) {
-  const btn = event.target; btn.disabled=true; btn.textContent='Releasing payment…';
+// ── Post-Trip Review Overlay ───────────────────────────────
+const RV_ANGLES = [
+  {key:'front',    label:'Front',      icon:'⬆️'},
+  {key:'rear',     label:'Rear',       icon:'⬇️'},
+  {key:'left',     label:'Left Side',  icon:'⬅️'},
+  {key:'right',    label:'Right Side', icon:'➡️'},
+  {key:'odometer', label:'Odometer',   icon:'🔢'},
+];
+const RV_DISPUTE_REASONS = [
+  'Vehicle damage not present before trip',
+  'Vehicle not returned in agreed condition',
+  'Missing items from vehicle',
+  'Fuel level significantly lower than pre-trip',
+  'Interior damage or excessive soiling',
+  'Other concern',
+];
+
+async function openPostReview(bkId) {
+  rvBookingId = bkId;
+  rvPrePhotos = []; rvPostPhotos = []; rvPostVerified = false;
+  rvDisputeReason = ''; rvDisputePhotos = []; rvDrtAccepted = false; rvSubmitting = false;
+  clearInterval(rvCountdownTimer);
+  document.getElementById('rv-overlay').style.display = 'block';
+  document.getElementById('rv-overlay').scrollTop = 0;
+  rvShowPanel('main');
+  document.getElementById('rv-countdown').style.display = 'none';
+  document.getElementById('rv-waiting').style.display = 'none';
+  document.getElementById('rv-locked-note').style.display = 'none';
+  document.getElementById('rv-approve-btn').disabled = true;
+  document.getElementById('rv-dispute-btn').disabled = true;
+  document.getElementById('rv-photos').innerHTML = '<div style="color:#5a5a7a;font-size:13px;padding:20px 0;">Loading inspection photos…</div>';
   try {
-    await apiFetch('/bookings/'+id+'/owner-review',{method:'POST',body:JSON.stringify({action:'approve'})});
-    await refreshActive(id);
-    clearInterval(pollTimer);
-    // Refresh history
-    allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
-  } catch(e) { alert(e.message); btn.disabled=false; btn.textContent='✓ Approve & Release Payment'; }
+    const [bk, pd] = await Promise.all([
+      apiFetch('/bookings/'+bkId),
+      apiFetch('/bookings/'+bkId+'/photos/verification'),
+    ]);
+    rvPrePhotos = pd.prePhotos || [];
+    rvPostPhotos = pd.postPhotos || [];
+    rvPostVerified = !!pd.postVerified;
+    rvRenderMain(bk);
+  } catch(e) {
+    alert('Could not load inspection data: '+(e.message||'Please try again.'));
+    closeReview();
+  }
 }
-function openDispute(id) { disputeBookingId=id; document.getElementById('dispute-modal').classList.add('open'); }
-function closeDispute() { document.getElementById('dispute-modal').classList.remove('open'); }
-async function submitDispute() {
-  hideErr('dispute-err');
-  const reason = document.getElementById('dispute-reason').value.trim();
-  if (!reason) return showErr('dispute-err','Please provide a reason for the dispute.');
-  const btn = document.getElementById('dispute-submit-btn'); btn.disabled=true; btn.textContent='Submitting…';
+
+function closeReview() {
+  clearInterval(rvCountdownTimer);
+  document.getElementById('rv-overlay').style.display = 'none';
+}
+
+function rvShowPanel(name) {
+  ['main','drt','dispute','approved','disputed'].forEach(p => {
+    document.getElementById('rv-panel-'+p).style.display = p===name ? 'block' : 'none';
+  });
+  document.getElementById('rv-overlay').scrollTop = 0;
+}
+
+function rvRenderMain(bk) {
+  if (bk.payment_status === 'released') { rvShowPanel('approved'); return; }
+  if (bk.payment_status === 'disputed') { rvShowPanel('disputed'); return; }
+
+  // Countdown
+  if (bk.owner_review_deadline) {
+    document.getElementById('rv-countdown').style.display = 'flex';
+    rvTickCountdown(bk.owner_review_deadline);
+    rvCountdownTimer = setInterval(() => rvTickCountdown(bk.owner_review_deadline), 1000);
+  }
+
+  // Waiting state
+  document.getElementById('rv-waiting').style.display = rvPostVerified ? 'none' : '';
+
+  // Photos
+  let html = '';
+  html += '<div class="rv-section-label">PRE-TRIP PHOTOS (START OF JOURNEY)</div>';
+  html += RV_ANGLES.map(a => rvAngleCard(a, rvPrePhotos.find(x=>x.angle===a.key), false)).join('');
+  if (rvPostVerified) {
+    html += '<div class="rv-section-label green">POST-TRIP PHOTOS (END OF JOURNEY)</div>';
+    html += RV_ANGLES.map(a => rvAngleCard(a, rvPostPhotos.find(x=>x.angle===a.key), true)).join('');
+  }
+  document.getElementById('rv-photos').innerHTML = html;
+
+  const locked = !rvPostVerified;
+  document.getElementById('rv-locked-note').style.display = locked ? '' : 'none';
+  document.getElementById('rv-approve-btn').disabled = locked;
+  document.getElementById('rv-dispute-btn').disabled = locked;
+}
+
+function rvAngleCard(angle, photo, isPost) {
+  const timeStr = photo?.taken_at ? new Date(photo.taken_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '';
+  const gps = photo?.latitude && photo?.longitude ? `📍 ${parseFloat(photo.latitude).toFixed(5)}, ${parseFloat(photo.longitude).toFixed(5)}` : '';
+  return `<div class="rv-angle-card${isPost?' post':''}">
+    <div class="rv-angle-header">
+      <span class="rv-angle-icon">${angle.icon}</span>
+      <span class="rv-angle-name${isPost?' green':''}">${angle.label}</span>
+      ${timeStr?`<span class="rv-angle-time">${timeStr}</span>`:''}
+    </div>
+    ${photo
+      ? `<img class="rv-angle-photo" src="${photo.image_url}" alt="${angle.label}" loading="lazy" />`
+      : `<div class="rv-angle-missing">No photo on record</div>`}
+    ${gps?`<div class="rv-angle-gps">${gps}</div>`:''}
+  </div>`;
+}
+
+function rvTickCountdown(deadline) {
+  const ms = new Date(deadline).getTime() - Date.now();
+  const cd = document.getElementById('rv-countdown');
+  const timer = document.getElementById('rv-timer');
+  if (ms <= 0) {
+    timer.textContent = '00:00';
+    cd.className = 'rv-countdown expired';
+    timer.className = 'rv-cd-timer expired';
+    document.getElementById('rv-cd-sub').textContent = 'Review window expired — payment auto-released to chauffeur.';
+    clearInterval(rvCountdownTimer);
+    document.getElementById('rv-approve-btn').disabled = true;
+    document.getElementById('rv-dispute-btn').disabled = true;
+    return;
+  }
+  const secs = Math.floor(ms/1000);
+  const mins = Math.floor(secs/60);
+  const ss = secs % 60;
+  timer.textContent = `${String(mins).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+  const isUrgent = ms < 5*60*1000;
+  cd.className = 'rv-countdown' + (isUrgent?' urgent':'');
+  timer.className = 'rv-cd-timer' + (isUrgent?' urgent':'');
+}
+
+async function rvApprove() {
+  if (!confirm('Confirm the vehicle has been returned in acceptable condition. The chauffeur\'s payment will be released immediately.')) return;
+  const btn = document.getElementById('rv-approve-btn');
+  btn.disabled = true; btn.textContent = 'Releasing payment…';
   try {
-    await apiFetch('/bookings/'+disputeBookingId+'/owner-review',{method:'POST',body:JSON.stringify({action:'dispute',reason})});
-    closeDispute();
-    await refreshActive(disputeBookingId);
-  } catch(e) { showErr('dispute-err',e.message); }
-  finally { btn.disabled=false; btn.textContent='Submit Dispute'; }
+    await apiFetch('/bookings/'+rvBookingId+'/owner-review', {method:'POST', body:JSON.stringify({action:'approve'})});
+    clearInterval(rvCountdownTimer);
+    rvShowPanel('approved');
+    allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+    activeBooking = allBookings.find(b=>ACTIVE_STATUSES.includes(b.status))||null;
+    if (!activeBooking) document.getElementById('tnav-active').style.display='none';
+    renderDashboard();
+  } catch(e) {
+    alert(e.message||'Could not approve. Please try again.');
+    btn.disabled = false; btn.textContent = '✅  Confirm Vehicle Condition & Release Payment';
+  }
+}
+
+function rvOpenDrt() {
+  rvDrtAccepted = false;
+  const box = document.getElementById('rv-drt-box');
+  box.classList.remove('checked');
+  box.innerHTML = '';
+  document.getElementById('rv-drt-continue').disabled = true;
+  rvShowPanel('drt');
+}
+
+function rvToggleDrt() {
+  rvDrtAccepted = !rvDrtAccepted;
+  const box = document.getElementById('rv-drt-box');
+  box.classList.toggle('checked', rvDrtAccepted);
+  box.innerHTML = rvDrtAccepted ? '<span class="rv-drt-checkmark">✓</span>' : '';
+  document.getElementById('rv-drt-continue').disabled = !rvDrtAccepted;
+}
+
+function rvOpenDisputeForm() {
+  if (!rvDrtAccepted) return;
+  rvDisputeReason = ''; rvDisputePhotos = [];
+  document.getElementById('rv-desc').value = '';
+  document.getElementById('rv-amount').value = '';
+  document.getElementById('rv-dispute-err').textContent = '';
+  document.getElementById('rv-dispute-err').classList.remove('show');
+  document.getElementById('rv-file-input').value = '';
+  rvRenderReasons(); rvRenderThumbs(); rvUpdateUploadBtn();
+  rvShowPanel('dispute');
+}
+
+function rvRenderReasons() {
+  document.getElementById('rv-reasons').innerHTML = RV_DISPUTE_REASONS.map(r => `
+    <div class="rv-reason-row${r===rvDisputeReason?' selected':''}" onclick="rvSelectReason(${JSON.stringify(r)})">
+      <div class="rv-radio${r===rvDisputeReason?' checked':''}"></div>
+      <span class="rv-reason-text${r===rvDisputeReason?' selected':''}">${r}</span>
+    </div>`).join('');
+}
+
+function rvSelectReason(r) { rvDisputeReason = r; rvRenderReasons(); }
+
+function rvHandleFiles(files) {
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      rvDisputePhotos.push({name:file.name, base64:e.target.result.split(',')[1], url:e.target.result});
+      rvRenderThumbs(); rvUpdateUploadBtn();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function rvRemovePhoto(i) { rvDisputePhotos.splice(i,1); rvRenderThumbs(); rvUpdateUploadBtn(); }
+
+function rvRenderThumbs() {
+  document.getElementById('rv-thumbs').innerHTML = rvDisputePhotos.map((p,i) => `
+    <div class="rv-thumb-wrap">
+      <img class="rv-thumb" src="${p.url}" alt="Evidence ${i+1}" />
+      <button class="rv-thumb-remove" onclick="rvRemovePhoto(${i})">✕</button>
+    </div>`).join('');
+}
+
+function rvUpdateUploadBtn() {
+  const lbl = document.getElementById('rv-upload-label');
+  const has = rvDisputePhotos.length > 0;
+  lbl.className = 'rv-upload-btn' + (has ? '' : ' required');
+  lbl.querySelector('span').textContent = has ? '📷  Add Another Photo' : '📷  Upload Photo of Damage (Required)';
+}
+
+async function rvSubmitDispute() {
+  const errEl = document.getElementById('rv-dispute-err');
+  errEl.classList.remove('show');
+  if (!rvDisputeReason) { errEl.textContent='Please select a reason for your dispute.'; errEl.classList.add('show'); return; }
+  if (rvDisputePhotos.length===0) { errEl.textContent='Please upload at least one photo as supporting evidence.'; errEl.classList.add('show'); return; }
+  if (rvSubmitting) return;
+  rvSubmitting = true;
+  const btn = document.getElementById('rv-submit-btn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  try {
+    const amountVal = parseFloat(document.getElementById('rv-amount').value);
+    await apiFetch('/bookings/'+rvBookingId+'/owner-review', {
+      method:'POST',
+      body: JSON.stringify({
+        action: 'dispute',
+        reason: rvDisputeReason,
+        description: document.getElementById('rv-desc').value.trim() || undefined,
+        disputePhotos: rvDisputePhotos.map(p=>p.base64),
+        claimedAmount: amountVal>0 ? amountVal : undefined,
+      }),
+    });
+    clearInterval(rvCountdownTimer);
+    rvShowPanel('disputed');
+    allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+    renderDashboard();
+  } catch(e) {
+    errEl.textContent = e.message||'Could not submit dispute. Please try again.';
+    errEl.classList.add('show');
+    btn.disabled = false; btn.textContent = 'Submit Dispute';
+  } finally {
+    rvSubmitting = false;
+  }
 }
 // ── Cancel Booking — full multi-step flow ─────────────────
 const CANCEL_JOURNEY_STATUSES = ['outbound_journey','at_destination','waiting_at_destination','return_ready_confirmation','return_journey'];
@@ -2176,7 +2623,6 @@ function toggleDetail(id) {
 const observer = new MutationObserver(()=>{
   if (activeBooking) {
     if (document.getElementById('pre-photo-grid')?.textContent.includes('Loading')) loadPhotos(activeBooking.id,'pre');
-    if (document.getElementById('post-photo-grid')?.textContent.includes('Loading')) loadPhotos(activeBooking.id,'post');
   }
 });
 observer.observe(document.body,{childList:true,subtree:true});
