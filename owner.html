@@ -487,6 +487,13 @@
     }
     .tp-confirm:hover { opacity: .85; }
 
+    /* Postcode autocomplete */
+    .pc-wrap { position: relative; }
+    .pc-suggestions { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 50; background: #0f0f1e; border: 1px solid rgba(233,69,96,.35); border-radius: 10px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,.55); max-height: 180px; overflow-y: auto; }
+    .pc-suggestion { padding: 11px 14px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px; color: var(--text); font-family: 'Inter', sans-serif; transition: background .15s; letter-spacing: .3px; }
+    .pc-suggestion:last-child { border-bottom: none; }
+    .pc-suggestion:hover, .pc-suggestion:focus { background: rgba(233,69,96,.1); }
+
     /* Airport dropdown */
     .airport-trigger {
       width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
@@ -763,7 +770,7 @@
             <!-- PICKUP: address + postcode -->
             <div class="form-row">
               <div class="field"><label>Pickup Street Address <span style="color:var(--red)">*</span></label><input type="text" id="bk-pickup" placeholder="e.g. 12 Park Lane" /></div>
-              <div class="field"><label>Pickup Postcode <span style="color:var(--red)">*</span></label><input type="text" id="bk-pickup-pc" placeholder="e.g. M1 2AB" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" /></div>
+              <div class="field"><label>Pickup Postcode <span style="color:var(--red)">*</span></label><div class="pc-wrap"><input type="text" id="bk-pickup-pc" placeholder="e.g. M1 2AB" style="text-transform:uppercase;" autocomplete="off" oninput="this.value=this.value.toUpperCase();pcFetch('bk-pickup-pc','pc-drop-pickup')" /><div class="pc-suggestions" id="pc-drop-pickup" style="display:none;"></div></div></div>
             </div>
 
             <!-- DESTINATION: Airport dropdown (airport trips) -->
@@ -788,7 +795,7 @@
             <div id="bk-dest-regular-wrap">
               <div class="form-row">
                 <div class="field"><label>Destination Address <span style="color:var(--red)">*</span></label><input type="text" id="bk-dest" placeholder="e.g. 25 Baker Street, London" /></div>
-                <div class="field"><label>Destination Postcode <span style="color:var(--red)">*</span></label><input type="text" id="bk-dest-pc" placeholder="e.g. NW1 6XE" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()" /></div>
+                <div class="field"><label>Destination Postcode <span style="color:var(--red)">*</span></label><div class="pc-wrap"><input type="text" id="bk-dest-pc" placeholder="e.g. NW1 6XE" style="text-transform:uppercase;" autocomplete="off" oninput="this.value=this.value.toUpperCase();pcFetch('bk-dest-pc','pc-drop-dest')" /><div class="pc-suggestions" id="pc-drop-dest" style="display:none;"></div></div></div>
               </div>
             </div>
 
@@ -1883,7 +1890,28 @@ function selectAirport(a) {
   document.getElementById('bk-airport-pc-confirm').style.display = '';
   document.getElementById('bk-airport-dropdown').style.display = 'none';
 }
-document.addEventListener('click', ()=>{ const dd=document.getElementById('bk-airport-dropdown'); if(dd) dd.style.display='none'; });
+document.addEventListener('click', ()=>{
+  const dd=document.getElementById('bk-airport-dropdown'); if(dd) dd.style.display='none';
+  ['pc-drop-pickup','pc-drop-dest'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+});
+async function pcFetch(inputId, dropId) {
+  const q = (document.getElementById(inputId).value||'').trim();
+  const drop = document.getElementById(dropId);
+  if (q.length < 2) { drop.style.display='none'; drop.innerHTML=''; return; }
+  try {
+    const r = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(q)}/autocomplete`);
+    const data = await r.json();
+    const results = data.result || [];
+    if (!results.length) { drop.style.display='none'; drop.innerHTML=''; return; }
+    drop.innerHTML = results.map(pc=>`<div class="pc-suggestion" onmousedown="pcSelect('${inputId}','${dropId}','${pc}')">${pc}</div>`).join('');
+    drop.style.display = 'block';
+  } catch { drop.style.display='none'; }
+}
+function pcSelect(inputId, dropId, postcode) {
+  document.getElementById(inputId).value = postcode;
+  document.getElementById(dropId).style.display = 'none';
+  document.getElementById(dropId).innerHTML = '';
+}
 
 function buildFullPickup() {
   const addr=(document.getElementById('bk-pickup').value||'').trim();
