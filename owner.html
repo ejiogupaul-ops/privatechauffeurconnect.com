@@ -1134,7 +1134,7 @@
         <div class="rv-result-icon">✅</div>
         <div class="rv-result-title">Payment Released</div>
         <div class="rv-result-sub">You have confirmed the vehicle was returned in acceptable condition. The chauffeur's payment has been released from escrow. Thank you for using Private Chauffeur Connect.</div>
-        <button class="rv-result-done-btn" onclick="closeReview()">Back to Dashboard</button>
+        <button class="rv-result-done-btn" onclick="closeReviewToDash()">Back to Dashboard</button>
       </div>
     </div>
 
@@ -1144,7 +1144,7 @@
         <div class="rv-result-icon">⚖️</div>
         <div class="rv-result-title">Dispute Submitted</div>
         <div class="rv-result-sub">Your dispute has been received. The chauffeur's payment remains in escrow while our team reviews the evidence. You will be contacted within 5 business days with a resolution decision.</div>
-        <button class="rv-result-done-btn" onclick="closeReview()">Back to Dashboard</button>
+        <button class="rv-result-done-btn" onclick="closeReviewToDash()">Back to Dashboard</button>
       </div>
     </div>
 
@@ -2437,6 +2437,10 @@ async function openPostReview(bkId) {
 function closeReview() {
   clearInterval(rvCountdownTimer);
   document.getElementById('rv-overlay').style.display = 'none';
+}
+function closeReviewToDash() {
+  closeReview();
+  showTab('dash');
 }
 
 function rvShowPanel(name) {
