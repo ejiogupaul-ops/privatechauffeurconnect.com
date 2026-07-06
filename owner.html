@@ -1168,6 +1168,8 @@ function showTab(name) {
   if (name==='active') { initMap(); if(activeBooking) refreshActive(activeBooking.id); }
   if (name==='history') renderHistory();
   if (name==='dash') renderDashboard();
+  // Reset booking form to step 1 whenever the user returns to the book tab after a confirmation (step 3)
+  if (name==='book' && document.getElementById('book-step-3').classList.contains('active')) goBookStep(1);
 }
 function showErr(id, msg) { const e=document.getElementById(id); e.textContent=msg; e.classList.add('show'); }
 function hideErr(id) { document.getElementById(id).classList.remove('show'); }
@@ -2055,9 +2057,10 @@ async function confirmCancelBooking() {
     renderCancelSuccess(result);
     showCancelStep('success');
     clearInterval(pollTimer);
-    document.getElementById('tnav-active').style.display='none';
-    activeBooking = null;
     allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+    // Recalculate activeBooking from fresh list — do not leave a stale race-condition value
+    activeBooking = allBookings.find(b => ACTIVE_STATUSES.includes(b.status)) || null;
+    if (!activeBooking) document.getElementById('tnav-active').style.display='none';
     renderBookingsHistory();
     renderDashboard();
   } catch(e) {
