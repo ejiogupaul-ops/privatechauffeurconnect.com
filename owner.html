@@ -1780,11 +1780,27 @@ function startPolling(id) {
 async function refreshActive(id) {
   try {
     const booking = await apiFetch('/bookings/'+id);
+    const prevStatus = activeBooking?.status;
     activeBooking = booking;
     renderActiveTripPanel(booking);
     updateMapMarker(booking.chauffeur_lat, booking.chauffeur_lng);
     if (booking.status==='completed'||booking.status==='cancelled') clearInterval(pollTimer);
+    // Announce arrival only on the transition — not on every poll tick
+    if (booking.status==='arrived_at_pickup' && prevStatus!=='arrived_at_pickup') {
+      announceArrival(booking);
+    }
   } catch(e) { /* silent */ }
+}
+function announceArrival(booking) {
+  if (!window.speechSynthesis) return;
+  const name = booking.chauffeur_profile?.users?.full_name || 'Your chauffeur';
+  const msg = `${name} has arrived at your vehicle and is ready for you. Please come outside and review the pre-trip vehicle condition before approving the journey.`;
+  window.speechSynthesis.cancel(); // clear any queued speech
+  const utt = new SpeechSynthesisUtterance(msg);
+  utt.rate = 0.92;
+  utt.pitch = 1;
+  utt.volume = 1;
+  window.speechSynthesis.speak(utt);
 }
 function renderActiveTripPanel(bk) {
   if (!bk) { document.getElementById('active-content').innerHTML='<div class="card" style="text-align:center;padding:36px 24px;"><p style="color:var(--muted);">No active booking.</p></div>'; return; }
