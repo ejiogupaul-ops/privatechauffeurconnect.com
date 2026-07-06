@@ -1323,6 +1323,10 @@
 <script>
 const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
 const ACTIVE_STATUSES = ['pending','accepted','chauffeur_arriving','arrived_at_pickup','outbound_journey','at_destination','waiting_at_destination','return_ready_confirmation','return_journey'];
+// A completed booking whose payment is still held needs the owner review — treat it as active
+function isBookingActive(b) {
+  return ACTIVE_STATUSES.includes(b.status) || (b.status === 'completed' && b.payment_status === 'held');
+}
 
 const UK_AIRPORTS = [
   {name:'Heathrow Airport',           city:'London',       postcode:'TW6 1QG'},
@@ -1520,7 +1524,7 @@ async function launchMain() {
   // Check for active booking
   try {
     allBookings = await apiFetch('/bookings/my');
-    activeBooking = allBookings.find(b=>ACTIVE_STATUSES.includes(b.status)) || null;
+    activeBooking = allBookings.find(isBookingActive) || null;
   } catch(_) { allBookings=[]; }
   if (activeBooking) {
     document.getElementById('tnav-active').style.display='';
@@ -2012,7 +2016,7 @@ async function refreshActive(id) {
     activeBooking = booking;
     renderActiveTripPanel(booking);
     updateMapMarker(booking.chauffeur_lat, booking.chauffeur_lng);
-    if (booking.status==='completed'||booking.status==='cancelled') clearInterval(pollTimer);
+    if (booking.status==='cancelled' || (booking.status==='completed' && booking.payment_status!=='held')) clearInterval(pollTimer);
     // Announce arrival only on the transition — not on every poll tick
     if (booking.status==='arrived_at_pickup' && prevStatus!=='arrived_at_pickup') {
       announceArrival(booking);
@@ -2259,7 +2263,7 @@ async function rvApprove() {
     clearInterval(rvCountdownTimer);
     rvShowPanel('approved');
     allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
-    activeBooking = allBookings.find(b=>ACTIVE_STATUSES.includes(b.status))||null;
+    activeBooking = allBookings.find(isBookingActive) || null;
     if (!activeBooking) document.getElementById('tnav-active').style.display='none';
     renderDashboard();
   } catch(e) {
@@ -2522,7 +2526,7 @@ async function confirmCancelBooking() {
     clearInterval(pollTimer);
     allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
     // Recalculate activeBooking from fresh list — do not leave a stale race-condition value
-    activeBooking = allBookings.find(b => ACTIVE_STATUSES.includes(b.status)) || null;
+    activeBooking = allBookings.find(isBookingActive) || null;
     if (!activeBooking) document.getElementById('tnav-active').style.display='none';
     renderBookingsHistory();
     renderDashboard();
