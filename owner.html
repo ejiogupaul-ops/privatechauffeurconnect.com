@@ -1369,6 +1369,7 @@ let userName = '';
 let myVehicle = null;
 let activeBooking = null;
 let pollTimer = null;
+let cachedPrePhotos = null;
 let map = null;
 let chauffeurMarker = null;
 let tripType = 'regular';
@@ -2006,6 +2007,7 @@ async function createBooking() {
 // ── Active Trip ─────────────────────────────────────────
 function startPolling(id) {
   clearInterval(pollTimer);
+  cachedPrePhotos = null;
   pollTimer = setInterval(()=>refreshActive(id), 5000);
   refreshActive(id);
 }
@@ -2066,6 +2068,11 @@ function renderActiveTripPanel(bk) {
       ${['pending','accepted'].includes(bk.status) ? `<div style="margin-top:18px;"><button class="btn-danger" onclick="cancelBooking('${bk.id}')">Cancel Booking</button></div>` : ''}
     </div>`;
   document.getElementById('active-content').innerHTML=html;
+  // Restore cached pre-trip photos immediately so the grid never flickers back to "Loading…" on each poll
+  if (showPreApproval && cachedPrePhotos) {
+    const grid = document.getElementById('pre-photo-grid');
+    if (grid) grid.innerHTML = cachedPrePhotos;
+  }
   // Init map after render
   setTimeout(()=>{ initMap(); updateMapMarker(bk.chauffeur_lat, bk.chauffeur_lng); }, 100);
 }
@@ -2117,7 +2124,9 @@ async function loadPhotos(bookingId, type) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
     if (!photos||!photos.length) { grid.innerHTML='<p style="color:var(--muted);font-size:13px;grid-column:1/-1;">Photos are still being uploaded. Refresh in a moment.</p>'; return; }
-    grid.innerHTML = photos.map(p=>`<div class="photo-thumb"><img src="${p.image_url}" alt="${p.angle}" loading="lazy" /><div class="angle-label">${p.angle}</div></div>`).join('');
+    const html = photos.map(p=>`<div class="photo-thumb"><img src="${p.image_url}" alt="${p.angle}" loading="lazy" /><div class="angle-label">${p.angle}</div></div>`).join('');
+    grid.innerHTML = html;
+    if (type==='pre') cachedPrePhotos = html;
   } catch(_) {}
 }
 async function approvePre(id) {
