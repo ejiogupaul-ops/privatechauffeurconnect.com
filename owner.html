@@ -2363,6 +2363,8 @@ async function rvSubmitDispute() {
     clearInterval(rvCountdownTimer);
     rvShowPanel('disputed');
     allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+    activeBooking = allBookings.find(isBookingActive) || null;
+    if (!activeBooking) document.getElementById('tnav-active').style.display = 'none';
     renderDashboard();
   } catch(e) {
     errEl.textContent = e.message||'Could not submit dispute. Please try again.';
