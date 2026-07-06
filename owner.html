@@ -299,12 +299,51 @@
     .cal-day.cal-empty { cursor: default; }
     .time-row { display: flex; gap: 10px; margin-top: 2px; }
     .time-row .field { flex: 1; }
-    input[type="time"] {
+    .tp-trigger {
       width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
       border-radius: 10px; padding: 13px 16px; color: var(--text); font-size: 14px;
-      font-family: 'Inter', sans-serif; -webkit-appearance: none;
+      font-family: 'Inter', sans-serif; cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center; transition: border-color .2s; box-sizing: border-box;
     }
-    input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1) opacity(.5); cursor: pointer; }
+    .tp-trigger:hover { border-color: rgba(255,255,255,.25); }
+    .tp-hint-inline {
+      background: rgba(90,180,232,.08); border: 1px solid rgba(90,180,232,.2);
+      border-radius: 8px; padding: 8px 12px; margin-top: 8px;
+      color: #5ab4e8; font-size: 12px; line-height: 1.5;
+    }
+    #tp-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.7);
+      display: none; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .tp-modal {
+      background: #16213e; border-radius: 16px; padding: 24px 20px; width: 300px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+    }
+    .tp-title { color: #fff; font-size: 16px; font-weight: 700; text-align: center; margin-bottom: 14px; }
+    .tp-modal-hint {
+      background: rgba(90,180,232,.08); border: 1px solid rgba(90,180,232,.2);
+      border-radius: 8px; padding: 9px 12px; margin-bottom: 16px;
+      color: #5ab4e8; font-size: 11px; text-align: center; line-height: 1.5;
+    }
+    .tp-columns { display: flex; align-items: flex-start; justify-content: center; gap: 0; }
+    .tp-column { flex: 1; display: flex; flex-direction: column; align-items: center; }
+    .tp-col-label { color: #aaa; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+    .tp-scroll { height: 200px; overflow-y: auto; width: 100%; scrollbar-width: thin; scrollbar-color: #e94560 transparent; }
+    .tp-scroll::-webkit-scrollbar { width: 4px; }
+    .tp-scroll::-webkit-scrollbar-thumb { background: #e94560; border-radius: 2px; }
+    .tp-item {
+      padding: 10px 0; border-radius: 8px; text-align: center;
+      color: #aaa; font-size: 18px; cursor: pointer; transition: background .15s, color .15s; margin-bottom: 2px;
+    }
+    .tp-item:hover:not(.selected) { background: rgba(255,255,255,.06); color: #fff; }
+    .tp-item.selected { background: #e94560; color: #fff; font-weight: 700; }
+    .tp-colon { color: #fff; font-size: 28px; font-weight: 700; padding: 0 6px; margin-top: 36px; }
+    .tp-confirm {
+      width: 100%; background: #e94560; color: #fff; border: none; border-radius: 10px;
+      padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 18px;
+      font-family: 'Inter', sans-serif; transition: opacity .2s;
+    }
+    .tp-confirm:hover { opacity: .85; }
 
     /* Airport dropdown */
     .airport-trigger {
@@ -633,8 +672,13 @@
             <!-- Time + Duration row -->
             <div class="time-row">
               <div class="field">
-                <label>Time (24hr) <span style="color:var(--red)">*</span></label>
-                <input type="time" id="bk-time" />
+                <label>Time (24HR) <span style="color:var(--red)">*</span></label>
+                <input type="hidden" id="bk-time" />
+                <div class="tp-trigger" id="tp-trigger" onclick="tpOpen()">
+                  <span id="tp-display" style="color:#666">Select a time (24hr)</span>
+                  <span style="font-size:16px;opacity:.55;">🕐</span>
+                </div>
+                <div class="tp-hint-inline" id="tp-hint" style="display:none;"></div>
               </div>
               <div class="field" id="bk-duration-wrap">
                 <label>Duration (hours) <span style="color:var(--red)">*</span></label>
@@ -793,6 +837,26 @@
       </div>
 
     </div>
+  </div>
+</div>
+
+<!-- Custom Time Picker Modal -->
+<div id="tp-overlay" onclick="tpClose()">
+  <div class="tp-modal" onclick="event.stopPropagation()">
+    <div class="tp-title">Select Time (24hr)</div>
+    <div class="tp-modal-hint" id="tp-modal-hint" style="display:none;"></div>
+    <div class="tp-columns">
+      <div class="tp-column">
+        <div class="tp-col-label">Hour</div>
+        <div class="tp-scroll" id="tp-hours"></div>
+      </div>
+      <div class="tp-colon">:</div>
+      <div class="tp-column">
+        <div class="tp-col-label">Minute</div>
+        <div class="tp-scroll" id="tp-minutes"></div>
+      </div>
+    </div>
+    <button class="tp-confirm" onclick="tpConfirm()">Confirm Time</button>
   </div>
 </div>
 
@@ -1361,6 +1425,12 @@ function renderCalendar() {
 function selectCalDay(ds) {
   calSelectedDate = ds;
   document.getElementById('bk-date-value').value = ds;
+  // Reset time picker when date changes
+  document.getElementById('bk-time').value='';
+  const disp=document.getElementById('tp-display');
+  disp.textContent='Select a time (24hr)'; disp.style.color='#666';
+  document.getElementById('tp-hint').style.display='none';
+  tpHour='09'; tpMinute='00'; tpMinAllowed=null;
   const [y, m, d] = ds.split('-');
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   document.getElementById('cal-display').textContent = `${parseInt(d)} ${MONTHS[parseInt(m)-1]} ${y}`;
@@ -1381,6 +1451,92 @@ function buildDateTimeISO() {
   if (!dateVal || !timeVal) return null;
   return new Date(`${dateVal}T${timeVal}`).toISOString();
 }
+
+// ── Custom Time Picker ────────────────────────────────────
+const TP_HOURS   = Array.from({length:24},(_,i)=>i.toString().padStart(2,'0'));
+const TP_MINUTES = ['00','05','10','15','20','25','30','35','40','45','50','55'];
+let tpHour='09', tpMinute='00', tpMinAllowed=null;
+
+function tpCalcMin() {
+  const t = new Date(); t.setSeconds(0,0);
+  t.setMinutes(t.getMinutes()+15);
+  const rem = t.getMinutes()%5; if(rem) t.setMinutes(t.getMinutes()+(5-rem));
+  return t;
+}
+function tpIsToday() {
+  const dv = document.getElementById('bk-date-value').value; if(!dv) return false;
+  const n=new Date();
+  return dv===`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;
+}
+function tpOpen() {
+  const today = tpIsToday();
+  tpMinAllowed = today ? tpCalcMin() : null;
+  if(tpMinAllowed) {
+    tpHour   = String(tpMinAllowed.getHours()).padStart(2,'0');
+    tpMinute = String(tpMinAllowed.getMinutes()).padStart(2,'0');
+  }
+  const mh = document.getElementById('tp-modal-hint');
+  if(tpMinAllowed) {
+    mh.textContent = `⏰  Showing available times from ${String(tpMinAllowed.getHours()).padStart(2,'0')}:${String(tpMinAllowed.getMinutes()).padStart(2,'0')} onwards`;
+    mh.style.display='';
+  } else { mh.style.display='none'; }
+  tpRenderHours(); tpRenderMinutes();
+  document.getElementById('tp-overlay').style.display='flex';
+}
+function tpRenderHours() {
+  const minH = tpMinAllowed ? tpMinAllowed.getHours() : -1;
+  document.getElementById('tp-hours').innerHTML = TP_HOURS
+    .filter(h=>parseInt(h)>=minH)
+    .map(h=>`<div class="tp-item${h===tpHour?' selected':''}" onclick="tpSelectHour('${h}')">${h}</div>`)
+    .join('');
+  const sel=document.querySelector('#tp-hours .selected');
+  if(sel) sel.scrollIntoView({block:'center',behavior:'instant'});
+}
+function tpRenderMinutes() {
+  const minH = tpMinAllowed ? tpMinAllowed.getHours() : -1;
+  const minM = tpMinAllowed ? tpMinAllowed.getMinutes() : -1;
+  const hNum = parseInt(tpHour);
+  document.getElementById('tp-minutes').innerHTML = TP_MINUTES
+    .filter(m=>hNum>minH||parseInt(m)>=minM)
+    .map(m=>`<div class="tp-item${m===tpMinute?' selected':''}" onclick="tpSelectMinute('${m}')">${m}</div>`)
+    .join('');
+  const sel=document.querySelector('#tp-minutes .selected');
+  if(sel) sel.scrollIntoView({block:'center',behavior:'instant'});
+}
+function tpSelectHour(h) {
+  tpHour=h;
+  if(tpMinAllowed&&parseInt(h)===tpMinAllowed.getHours()) {
+    const minM=String(tpMinAllowed.getMinutes()).padStart(2,'0');
+    if(tpMinute<minM) tpMinute=minM;
+  }
+  tpRenderHours(); tpRenderMinutes();
+}
+function tpSelectMinute(m) { tpMinute=m; tpRenderMinutes(); }
+function tpConfirm() {
+  const freshMin = tpIsToday() ? tpCalcMin() : null;
+  const h=parseInt(tpHour), m=parseInt(tpMinute);
+  if(freshMin) {
+    const minH=freshMin.getHours(), minM=freshMin.getMinutes();
+    if(h<minH||(h===minH&&m<minM)) {
+      tpMinAllowed=freshMin;
+      tpHour=String(minH).padStart(2,'0'); tpMinute=String(minM).padStart(2,'0');
+      const mh=document.getElementById('tp-modal-hint');
+      mh.textContent=`⏰  That time has passed. Earliest available is now ${String(minH).padStart(2,'0')}:${String(minM).padStart(2,'0')}`;
+      mh.style.display=''; tpRenderHours(); tpRenderMinutes(); return;
+    }
+  }
+  const val=`${tpHour}:${tpMinute}`;
+  document.getElementById('bk-time').value=val;
+  const disp=document.getElementById('tp-display');
+  disp.textContent=val; disp.style.color='var(--text)';
+  const hint=document.getElementById('tp-hint');
+  if(freshMin) {
+    hint.textContent=`⏰  Earliest available today: ${String(freshMin.getHours()).padStart(2,'0')}:${String(freshMin.getMinutes()).padStart(2,'0')}  (15-min advance required)`;
+    hint.style.display='';
+  } else { hint.style.display='none'; }
+  tpClose();
+}
+function tpClose() { document.getElementById('tp-overlay').style.display='none'; }
 
 // ── Airport picker ────────────────────────────────────────
 function renderAirportList(filter) {
