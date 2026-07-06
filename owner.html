@@ -522,6 +522,76 @@
     .airport-opt.selected { background: rgba(201,168,76,.12); }
     .airport-opt .ao-name { font-size: 13px; font-weight: 600; color: var(--text); }
     .airport-opt .ao-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    /* ── Searching overlay ── */
+    #searching-overlay { position: fixed; inset: 0; z-index: 1000; background: #070710; overflow-y: auto; display: none; }
+    .srch-content { max-width: 520px; margin: 0 auto; padding: 20px 20px 60px; }
+    @keyframes srchRing { 0%{transform:scale(.25);opacity:.7} 100%{transform:scale(1.65);opacity:0} }
+    @keyframes srchPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+    .srch-radar { width:220px;height:220px;position:relative;margin:44px auto 36px;display:flex;justify-content:center;align-items:center; }
+    .srch-ring { position:absolute;width:220px;height:220px;border-radius:50%;border:1.5px solid #c9a84c;animation:srchRing 2.6s ease-out infinite; }
+    .srch-ring-2 { animation-delay:.867s;border-color:rgba(201,168,76,.8); }
+    .srch-ring-3 { animation-delay:1.733s;border-color:rgba(201,168,76,.5); }
+    .srch-center { width:90px;height:90px;border-radius:50%;background:#12122a;border:2px solid #c9a84c;display:flex;justify-content:center;align-items:center;font-size:36px;animation:srchPulse 1.8s ease-in-out infinite;box-shadow:0 0 20px rgba(201,168,76,.4); }
+    .srch-title { color:#fff;font-size:22px;font-weight:700;text-align:center;margin-bottom:10px; }
+    .srch-sub { color:#4a4a6a;font-size:14px;text-align:center;line-height:1.6;margin-bottom:28px; }
+    .srch-wait-row { display:flex;background:#0e0e22;border:1px solid #18183a;border-radius:16px;padding:18px;margin-bottom:20px; }
+    .srch-wait-item { flex:1;text-align:center; }
+    .srch-wait-label { color:#4a4a6a;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px; }
+    .srch-wait-value { color:#fff;font-size:15px;font-weight:700; }
+    .srch-wait-divider { width:1px;background:#18183a;align-self:stretch; }
+    .srch-summary-card { background:#0e0e22;border:1px solid #18183a;border-radius:18px;padding:20px;margin-bottom:16px; }
+    .srch-summary-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:16px; }
+    .srch-summary-label { color:#c9a84c;font-size:10px;font-weight:700;letter-spacing:2px; }
+    .srch-pending-pill { display:flex;align-items:center;gap:5px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:20px;padding:4px 10px; }
+    .srch-pending-dot { width:6px;height:6px;border-radius:50%;background:#c9a84c;animation:pulse 1.5s infinite; }
+    .srch-pending-text { color:#c9a84c;font-size:9px;font-weight:700;letter-spacing:1.5px; }
+    .srch-item { display:flex;align-items:flex-start;gap:10px;margin-bottom:12px; }
+    .srch-item-icon { width:20px;text-align:center;flex-shrink:0;font-size:14px; }
+    .srch-item-label { color:#4a4a6a;font-size:13px;width:80px;flex-shrink:0; }
+    .srch-item-value { color:#ccd;font-size:13px;font-weight:500;flex:1; }
+    .srch-summary-divider { height:1px;background:#18183a;margin:12px 0; }
+    .srch-total-row { display:flex;justify-content:space-between;align-items:center; }
+    .srch-total-label { color:#fff;font-size:15px;font-weight:700; }
+    .srch-total-value { color:#c9a84c;font-size:22px;font-weight:700; }
+    .srch-events-card { background:#0e0e22;border:1px solid #18183a;border-radius:18px;padding:20px;margin-bottom:20px; }
+    .srch-events-title { color:#c9a84c;font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:14px; }
+    .srch-event-row { display:flex;align-items:flex-start;gap:12px;margin-bottom:12px; }
+    .srch-event-dot { width:8px;height:8px;border-radius:50%;background:#2a2a4a;border:1px solid #3a3a5a;flex-shrink:0;margin-top:4px; }
+    .srch-event-dot.active { background:#c9a84c;border-color:#c9a84c;box-shadow:0 0 6px rgba(201,168,76,.8); }
+    .srch-event-text { color:#4a4a6a;font-size:13px;line-height:1.5; }
+    .srch-event-text.active { color:#ccd;font-weight:500; }
+    .srch-cancel-btn { width:100%;border:1.5px solid rgba(233,69,96,.4);background:none;border-radius:14px;padding:16px;color:#e94560;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:14px; }
+    .srch-secure-note { color:#2a2a4a;font-size:12px;text-align:center; }
+    .srch-accepted-badge { background:#0a2a0a;border:1px solid #1a4a1a;border-radius:20px;padding:8px 16px;display:inline-block;margin-bottom:32px;color:#4caf50;font-size:11px;font-weight:700;letter-spacing:2px; }
+    .srch-avatar-wrap { position:relative;display:inline-block;margin-bottom:20px; }
+    .srch-avatar-ring { width:110px;height:110px;border-radius:50%;border:2.5px solid #c9a84c;padding:4px;box-shadow:0 0 24px rgba(201,168,76,.6);display:flex;align-items:center;justify-content:center; }
+    .srch-avatar-inner { flex:1;width:100%;height:100%;border-radius:50%;background:#12122a;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;color:#c9a84c;letter-spacing:2px; }
+    .srch-tick { position:absolute;bottom:2px;right:2px;width:28px;height:28px;border-radius:50%;background:#4caf50;border:2px solid #070710;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700; }
+    .srch-chauffeur-name { color:#fff;font-size:24px;font-weight:700;margin-bottom:6px; }
+    .srch-stars { color:#c9a84c;font-size:18px;letter-spacing:2px; }
+    .srch-rating-text { color:#4a4a6a;font-size:13px;margin-top:4px;margin-bottom:24px; }
+    .srch-eta-card { display:flex;background:#0e0e22;border:1px solid #18183a;border-radius:16px;padding:20px;width:100%;margin-bottom:20px; }
+    .srch-eta-item { flex:1;text-align:center; }
+    .srch-eta-label { color:#4a4a6a;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px; }
+    .srch-eta-value { color:#fff;font-size:16px;font-weight:700; }
+    .srch-book-summary-card { background:#0e0e22;border:1px solid #18183a;border-radius:16px;padding:18px;width:100%;margin-bottom:20px; }
+    .srch-book-label { color:#4a4a6a;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px; }
+    .srch-book-value { color:#ccd;font-size:14px;font-weight:500;margin-bottom:14px; }
+    .srch-book-value:last-child { margin-bottom:0; }
+    .srch-dash-btn { width:100%;background:#c9a84c;border:none;border-radius:14px;padding:17px;color:#070710;font-size:16px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 20px rgba(201,168,76,.35); }
+    .srch-timeout-icon { width:90px;height:90px;border-radius:50%;background:#1a0d0d;border:2px solid #e94560;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 24px;box-shadow:0 0 20px rgba(233,69,96,.3); }
+    .srch-timeout-title { color:#fff;font-size:24px;font-weight:700;margin-bottom:12px;text-align:center; }
+    .srch-timeout-sub { color:#4a4a6a;font-size:14px;text-align:center;line-height:1.65;margin-bottom:36px; }
+    .srch-option-card { background:#0e0e22;border-radius:16px;padding:20px;margin-bottom:14px;text-align:center;cursor:pointer;border:1px solid;transition:background .2s; }
+    .srch-option-card.refund { border-color:rgba(233,69,96,.25); }
+    .srch-option-card.refund:hover { background:rgba(233,69,96,.06); }
+    .srch-option-card.retry { border-color:rgba(201,168,76,.25); }
+    .srch-option-card.retry:hover { background:rgba(201,168,76,.06); }
+    .srch-option-title.refund-t { color:#e94560;font-size:15px;font-weight:700;margin-bottom:4px; }
+    .srch-option-title.retry-t { color:#c9a84c;font-size:15px;font-weight:700;margin-bottom:4px; }
+    .srch-option-sub { color:#4a4a6a;font-size:12px; }
+    .srch-home-link { background:none;border:none;color:#3a3a5a;font-size:14px;cursor:pointer;text-decoration:underline;font-family:'Inter',sans-serif;margin-top:8px; }
+
     /* Cancel booking overlay */
     #cancel-overlay { position: fixed; inset: 0; z-index: 1000; background: #0a0a12; overflow-y: auto; display: none; }
     .cancel-content { max-width: 520px; margin: 0 auto; padding: 20px 20px 60px; }
@@ -1187,6 +1257,90 @@
         <div class="rv-result-sub">Your dispute has been received. The chauffeur's payment remains in escrow while our team reviews the evidence. You will be contacted within 5 business days with a resolution decision.</div>
         <button class="rv-result-done-btn" onclick="closeReviewToDash()">Back to Dashboard</button>
       </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Searching for Chauffeur Overlay -->
+<div id="searching-overlay">
+  <div class="srch-content">
+
+    <!-- PHASE: Searching -->
+    <div id="srch-phase-searching">
+      <div class="srch-radar">
+        <div class="srch-ring"></div>
+        <div class="srch-ring srch-ring-2"></div>
+        <div class="srch-ring srch-ring-3"></div>
+        <div class="srch-center">🚗</div>
+      </div>
+      <div class="srch-title" id="srch-title">Searching for a Chauffeur</div>
+      <div class="srch-sub">Please wait while nearby chauffeurs review and accept your request.</div>
+      <div class="srch-wait-row">
+        <div class="srch-wait-item"><div class="srch-wait-label">Elapsed</div><div class="srch-wait-value" id="srch-elapsed">00:00</div></div>
+        <div class="srch-wait-divider"></div>
+        <div class="srch-wait-item"><div class="srch-wait-label">Est. wait</div><div class="srch-wait-value" id="srch-est-wait">2–4 min</div></div>
+        <div class="srch-wait-divider"></div>
+        <div class="srch-wait-item"><div class="srch-wait-label">Status</div><div class="srch-wait-value" style="color:#4caf50;">Active</div></div>
+      </div>
+      <div class="srch-summary-card">
+        <div class="srch-summary-header">
+          <span class="srch-summary-label">BOOKING DETAILS</span>
+          <div class="srch-pending-pill"><div class="srch-pending-dot"></div><span class="srch-pending-text">PENDING</span></div>
+        </div>
+        <div id="srch-booking-items"></div>
+        <div class="srch-summary-divider"></div>
+        <div class="srch-total-row"><span class="srch-total-label">Total Paid</span><span class="srch-total-value" id="srch-total">—</span></div>
+      </div>
+      <div class="srch-events-card">
+        <div class="srch-events-title">LIVE UPDATES</div>
+        <div id="srch-events-list"></div>
+      </div>
+      <button class="srch-cancel-btn" onclick="srchCancel()">Cancel Request</button>
+      <div class="srch-secure-note">🔒&nbsp; Payment secured · Instant refund on cancellation</div>
+    </div>
+
+    <!-- PHASE: Accepted -->
+    <div id="srch-phase-accepted" style="display:none;text-align:center;padding-top:60px;">
+      <div class="srch-accepted-badge">CHAUFFEUR CONFIRMED</div><br>
+      <div class="srch-avatar-wrap">
+        <div class="srch-avatar-ring"><div class="srch-avatar-inner" id="srch-initials">—</div></div>
+        <div class="srch-tick">✓</div>
+      </div>
+      <div class="srch-chauffeur-name" id="srch-chauffeur-name">Your Chauffeur</div>
+      <div class="srch-stars" id="srch-stars">★★★★★</div>
+      <div class="srch-rating-text" id="srch-rating-text">4.9 · Professional Chauffeur</div>
+      <div class="srch-eta-card">
+        <div class="srch-eta-item"><div class="srch-eta-label">ETA</div><div class="srch-eta-value" id="srch-eta">— min</div></div>
+        <div class="srch-wait-divider"></div>
+        <div class="srch-eta-item"><div class="srch-eta-label">Status</div><div class="srch-eta-value" style="color:#4caf50;">En route</div></div>
+        <div class="srch-wait-divider"></div>
+        <div class="srch-eta-item"><div class="srch-eta-label">Rating</div><div class="srch-eta-value" id="srch-rating-val">4.9 ★</div></div>
+      </div>
+      <div class="srch-book-summary-card">
+        <div class="srch-book-label">PICKUP</div>
+        <div class="srch-book-value" id="srch-acc-pickup">—</div>
+        <div class="srch-summary-divider"></div>
+        <div class="srch-book-label">VEHICLE</div>
+        <div class="srch-book-value" id="srch-acc-vehicle">—</div>
+      </div>
+      <button class="srch-dash-btn" id="srch-dash-btn" onclick="srchGoDash()">Going to Dashboard in 3s…</button>
+    </div>
+
+    <!-- PHASE: Timeout / No Chauffeur -->
+    <div id="srch-phase-timeout" style="display:none;text-align:center;padding-top:60px;">
+      <div class="srch-timeout-icon">⚠</div>
+      <div class="srch-timeout-title">No Chauffeur Available</div>
+      <div class="srch-timeout-sub">We're sorry — no chauffeur accepted your request at this time.<br>This can happen during busy periods or late-night hours.</div>
+      <div class="srch-option-card refund" onclick="srchRefund()">
+        <div class="srch-option-title refund-t">💳&nbsp; Request Refund</div>
+        <div class="srch-option-sub">Returned within 3–5 business days</div>
+      </div>
+      <div class="srch-option-card retry" id="srch-retry-card" onclick="srchRetry()">
+        <div class="srch-option-title retry-t" id="srch-retry-title">🔄&nbsp; Try Again</div>
+        <div class="srch-option-sub">Search for the nearest available chauffeur</div>
+      </div>
+      <br><button class="srch-home-link" onclick="srchGoHome()">Return to Home</button>
     </div>
 
   </div>
@@ -3213,8 +3367,181 @@ async function payFindChauffeur() {
   allBookings=[payBooking,...allBookings.filter(b=>b.id!==payBooking.id)];
   document.getElementById('tnav-active').style.display='';
   document.getElementById('pay-overlay').style.display='none';
-  goBookStep(3);
-  startPolling(payBooking.id);
+  openSearchingOverlay(payBooking, payEstimate);
+}
+
+// ── Searching for Chauffeur Overlay ──────────────────────────────────────────
+const SRCH_TIMEOUT = 120;
+const SRCH_EVENTS = [
+  { at:0,  text:'Booking submitted successfully' },
+  { at:4,  text:'Searching for available chauffeurs…' },
+  { at:18, text:'Notifying professional chauffeurs nearby…' },
+  { at:40, text:'Awaiting acceptance from a chauffeur…' },
+  { at:75, text:'Expanding search radius…' },
+];
+let srchBookingId=null, srchElapsed=0, srchPhase='searching';
+let srchTickTimer=null, srchPollTimer=null, srchRedirectTimer=null, srchDotsTimer=null;
+let srchDots='', srchRedirectSecs=3;
+
+function openSearchingOverlay(booking, estimate) {
+  srchBookingId = booking.id;
+  srchElapsed = 0; srchPhase = 'searching'; srchDots = '';
+  document.getElementById('srch-phase-searching').style.display = '';
+  document.getElementById('srch-phase-accepted').style.display = 'none';
+  document.getElementById('srch-phase-timeout').style.display = 'none';
+  // Booking items
+  const bk = booking, est = estimate || {};
+  const dt = bk.date_time ? new Date(bk.date_time) : null;
+  const items = [
+    ['📍','Pickup', bk.pickup_location],
+    ['🏁','Destination', bk.destination],
+    ['📅','Date', dt ? dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—'],
+    ['🕐','Time', dt ? dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : '—'],
+  ];
+  if (bk.car_brand) items.push(['🚗','Vehicle', bk.car_brand+(bk.vehicle_reg?' · '+bk.vehicle_reg:'')]);
+  document.getElementById('srch-booking-items').innerHTML = items.map(([icon,label,val])=>
+    `<div class="srch-item"><span class="srch-item-icon">${icon}</span><span class="srch-item-label">${label}</span><span class="srch-item-value">${val||'—'}</span></div>`
+  ).join('');
+  document.getElementById('srch-total').textContent = est.price ? fmtPrice(est.price) : (bk.price ? fmtPrice(bk.price) : '—');
+  document.getElementById('srch-acc-pickup').textContent = bk.pickup_location || '—';
+  document.getElementById('srch-acc-vehicle').textContent = bk.car_brand ? bk.car_brand+(bk.vehicle_reg?' · '+bk.vehicle_reg:'') : (bk.vehicle_reg||'—');
+  srchRenderEvents([SRCH_EVENTS[0]]); srchUpdateElapsed();
+  document.getElementById('searching-overlay').style.display = 'block';
+  document.getElementById('searching-overlay').scrollTop = 0;
+  srchStartTick(); srchStartPoll(); srchStartDots();
+}
+
+function srchRenderEvents(events) {
+  const list = [...events].reverse();
+  document.getElementById('srch-events-list').innerHTML = list.map((ev,i)=>
+    `<div class="srch-event-row"><div class="srch-event-dot${i===0?' active':''}"></div><div class="srch-event-text${i===0?' active':''}">${ev.text}</div></div>`
+  ).join('');
+}
+
+function srchUpdateElapsed() {
+  const m=Math.floor(srchElapsed/60), s=srchElapsed%60;
+  document.getElementById('srch-elapsed').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  const rem=Math.ceil((SRCH_TIMEOUT-srchElapsed)/60);
+  document.getElementById('srch-est-wait').textContent = rem>0 ? `${rem}–${rem+2} min` : '—';
+}
+
+function srchStartTick() {
+  clearInterval(srchTickTimer);
+  const shown=[SRCH_EVENTS[0]];
+  srchTickTimer = setInterval(()=>{
+    if(srchPhase!=='searching'){clearInterval(srchTickTimer);return;}
+    srchElapsed++; srchUpdateElapsed();
+    const ev=SRCH_EVENTS.find(e=>e.at===srchElapsed);
+    if(ev){shown.push(ev);srchRenderEvents(shown);}
+    if(srchElapsed>=SRCH_TIMEOUT){clearInterval(srchTickTimer);srchShowTimeout();}
+  },1000);
+}
+
+function srchStartDots() {
+  clearInterval(srchDotsTimer);
+  srchDotsTimer = setInterval(()=>{
+    if(srchPhase!=='searching'){clearInterval(srchDotsTimer);return;}
+    srchDots = srchDots.length>=3 ? '' : srchDots+'.';
+    const el=document.getElementById('srch-title');
+    if(el) el.textContent='Searching for a Chauffeur'+srchDots;
+  },480);
+}
+
+function srchStartPoll() {
+  clearInterval(srchPollTimer);
+  srchPollTimer = setInterval(async()=>{
+    if(srchPhase!=='searching'||!srchBookingId){clearInterval(srchPollTimer);return;}
+    try {
+      const data=await apiFetch('/bookings/'+srchBookingId);
+      if(data.status==='accepted'){
+        clearInterval(srchPollTimer);
+        activeBooking=data;
+        allBookings=[data,...allBookings.filter(b=>b.id!==data.id)];
+        srchShowAccepted(data);
+      } else if(['cancelled','rejected','no_chauffeurs'].includes(data.status)){
+        clearInterval(srchPollTimer); srchShowTimeout();
+      }
+    } catch(_){}
+  },6000);
+}
+
+function srchShowAccepted(booking) {
+  srchPhase='accepted';
+  clearInterval(srchTickTimer); clearInterval(srchDotsTimer);
+  const ch=booking.chauffeur_profile||booking.chauffeur||{};
+  const name=ch.full_name||'Your Chauffeur';
+  const rating=parseFloat(ch.avg_rating)||4.9;
+  const initials=name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2)||'—';
+  const eta=8+Math.floor(Math.random()*7);
+  const filled=Math.round(rating);
+  const stars='★'.repeat(filled)+'☆'.repeat(5-filled);
+  document.getElementById('srch-initials').textContent=initials;
+  document.getElementById('srch-chauffeur-name').textContent=name;
+  document.getElementById('srch-stars').textContent=stars;
+  document.getElementById('srch-rating-text').textContent=rating.toFixed(1)+' \xb7 Professional Chauffeur';
+  document.getElementById('srch-eta').textContent=eta+' min';
+  document.getElementById('srch-rating-val').textContent=rating.toFixed(1)+' ★';
+  document.getElementById('srch-phase-searching').style.display='none';
+  document.getElementById('srch-phase-accepted').style.display='';
+  document.getElementById('searching-overlay').scrollTop=0;
+  srchRedirectSecs=3;
+  const btn=document.getElementById('srch-dash-btn');
+  clearInterval(srchRedirectTimer);
+  srchRedirectTimer=setInterval(()=>{
+    srchRedirectSecs--;
+    if(srchRedirectSecs<=0){clearInterval(srchRedirectTimer);srchGoDash();}
+    else if(btn) btn.textContent=`Going to Dashboard in ${srchRedirectSecs}s…`;
+  },1000);
+}
+
+function srchShowTimeout() {
+  srchPhase='timeout';
+  clearInterval(srchTickTimer); clearInterval(srchDotsTimer); clearInterval(srchPollTimer);
+  document.getElementById('srch-phase-searching').style.display='none';
+  document.getElementById('srch-phase-timeout').style.display='';
+  document.getElementById('searching-overlay').scrollTop=0;
+}
+
+function srchGoDash() {
+  clearInterval(srchRedirectTimer);
+  document.getElementById('searching-overlay').style.display='none';
+  document.getElementById('tnav-active').style.display='';
+  showTab('active');
+  startPolling(srchBookingId);
+}
+
+function srchCancel() {
+  clearInterval(srchTickTimer); clearInterval(srchDotsTimer); clearInterval(srchPollTimer);
+  document.getElementById('searching-overlay').style.display='none';
+  cancelBooking(srchBookingId);
+}
+
+async function srchRetry() {
+  const card=document.getElementById('srch-retry-card');
+  const title=document.getElementById('srch-retry-title');
+  card.style.opacity='0.5'; card.style.pointerEvents='none';
+  title.textContent='🔄\xa0 Searching…';
+  try {
+    await apiFetch('/bookings/'+srchBookingId+'/retry',{method:'POST',body:'{}'});
+    srchElapsed=0; srchPhase='searching';
+    srchRenderEvents([SRCH_EVENTS[0]]); srchUpdateElapsed();
+    document.getElementById('srch-phase-timeout').style.display='none';
+    document.getElementById('srch-phase-searching').style.display='';
+    document.getElementById('searching-overlay').scrollTop=0;
+    srchStartTick(); srchStartPoll(); srchStartDots();
+  } catch(_){ srchGoHome(); }
+  finally { card.style.opacity=''; card.style.pointerEvents=''; title.textContent='🔄\xa0 Try Again'; }
+}
+
+function srchRefund() {
+  document.getElementById('searching-overlay').style.display='none';
+  cancelBooking(srchBookingId);
+}
+
+function srchGoHome() {
+  clearInterval(srchTickTimer); clearInterval(srchDotsTimer); clearInterval(srchPollTimer);
+  document.getElementById('searching-overlay').style.display='none';
+  showTab('dash');
 }
 
 function payHandleCancel() {
