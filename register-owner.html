@@ -213,6 +213,60 @@
     .pe-label { font-size: 10px; font-weight: 700; color: #60c090; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
     .plain-english > p { font-size: 12px; color: #80c0a0; line-height: 1.75; margin: 0; }
     .legal-text { font-size: 12px; color: var(--muted); line-height: 1.8; margin-bottom: 4px; }
+
+    /* ── COUNTRY PICKER ──────────────────────────────── */
+    .country-selector {
+      width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px; padding: 13px 16px; font-size: 14px; color: var(--text);
+      font-family: 'Inter', sans-serif; cursor: pointer; display: flex;
+      align-items: center; justify-content: space-between; transition: border-color .2s;
+    }
+    .country-selector:hover { border-color: var(--gold); }
+    .country-selector.selected { border-color: rgba(201,168,76,.5); }
+    .country-selector span { color: #3a3050; }
+    .country-selector.selected span { color: var(--text); }
+    .country-drop-arrow { color: var(--muted); font-size: 12px; flex-shrink: 0; }
+
+    .country-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 99;
+      background: #0f0c1a; border: 1px solid rgba(201,168,76,.3); border-radius: 10px;
+      overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,.7); max-height: 220px; overflow-y: auto;
+      display: none;
+    }
+    .country-dropdown.open { display: block; }
+    .country-option {
+      padding: 12px 16px; cursor: pointer; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.04);
+      font-size: 13px; color: var(--text); transition: background .15s;
+    }
+    .country-option:last-child { border-bottom: none; }
+    .country-option:hover { background: rgba(201,168,76,.08); }
+    .country-option.dim { color: #3a3050; cursor: default; }
+    .country-option.dim:hover { background: none; }
+    .cs-badge {
+      font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: .5px;
+      background: rgba(201,168,76,.1); border: 1px solid rgba(201,168,76,.3);
+      border-radius: 20px; padding: 2px 8px; flex-shrink: 0;
+    }
+
+    /* Coming Soon modal */
+    .cs-modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,.75); align-items: center; justify-content: center;
+    }
+    .cs-modal-overlay.open { display: flex; }
+    .cs-modal {
+      background: #0f0c1a; border: 1px solid rgba(201,168,76,.3); border-radius: 20px;
+      padding: 36px 32px; max-width: 360px; width: 90%; text-align: center;
+    }
+    .cs-modal h3 { font-family: 'Playfair Display',serif; color: var(--gold); font-size: 22px; margin-bottom: 14px; }
+    .cs-modal p { color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 24px; }
+    .cs-modal button {
+      background: var(--gold); color: #000; border: none; border-radius: 10px;
+      padding: 13px 32px; font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: 'Inter',sans-serif;
+    }
+    .cs-modal button:hover { background: var(--gold2); }
   </style>
 </head>
 <body>
@@ -283,6 +337,17 @@
   <div class="reg-card">
     <div id="owner-form-area">
       <div class="access-err" id="ow-err"></div>
+
+      <div class="form-field" style="position:relative;">
+        <label>Country of Location</label>
+        <div class="country-selector" id="ow-country-selector" onclick="toggleCountryDrop('ow')">
+          <span id="ow-country-label">Select your country…</span>
+          <span class="country-drop-arrow">▼</span>
+        </div>
+        <div class="country-dropdown" id="ow-country-dropdown">
+          <div style="padding:12px 16px;font-size:12px;color:#4a4060;">Loading countries…</div>
+        </div>
+      </div>
 
       <div class="form-field">
         <label>Full Name</label>
@@ -409,13 +474,75 @@
   </div>
 </footer>
 
+<!-- Coming Soon modal -->
+<div class="cs-modal-overlay" id="cs-modal-overlay" onclick="closeComingSoon()">
+  <div class="cs-modal" onclick="event.stopPropagation()">
+    <h3>Coming Soon</h3>
+    <p id="cs-modal-msg">Private Chauffeur Connect is not currently active in this country. Please select an available country or check back soon.</p>
+    <button onclick="closeComingSoon()">OK</button>
+  </div>
+</div>
+
 <script>
 const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
+let owCountries = [], owSelectedCountry = null;
+
+// Fetch countries and populate dropdown
+(async()=>{
+  try{
+    const r=await fetch(`${API}/countries`);
+    owCountries=await r.json();
+  }catch{ owCountries=[{country_name:'United Kingdom',country_code:'GB',status:'active'}]; }
+  const drop=document.getElementById('ow-country-dropdown');
+  if(!owCountries.length){ drop.innerHTML='<div style="padding:12px 16px;font-size:12px;color:#e94560;">Could not load countries</div>'; return; }
+  drop.innerHTML=owCountries.map(c=>{
+    const isActive=c.status==='active';
+    return `<div class="country-option${isActive?'':' dim'}" onclick="selectCountry('ow','${c.country_code}','${c.country_name}',${isActive})">
+      <span>${c.country_name}</span>
+      ${!isActive?'<span class="cs-badge">Coming Soon</span>':''}
+    </div>`;
+  }).join('');
+})();
+
+function toggleCountryDrop(prefix){
+  const drop=document.getElementById(prefix+'-country-dropdown');
+  drop.classList.toggle('open');
+}
+function selectCountry(prefix,code,name,isActive){
+  document.getElementById(prefix+'-country-dropdown').classList.remove('open');
+  if(!isActive){
+    document.getElementById('cs-modal-msg').textContent=`Private Chauffeur Connect is not currently active in ${name}. Please select an available country or check back soon.`;
+    document.getElementById('cs-modal-overlay').classList.add('open');
+    return;
+  }
+  owSelectedCountry={country_code:code,country_name:name};
+  const sel=document.getElementById(prefix+'-country-selector');
+  sel.classList.add('selected');
+  document.getElementById(prefix+'-country-label').textContent=name;
+  recheckBtn();
+}
+function closeComingSoon(){
+  document.getElementById('cs-modal-overlay').classList.remove('open');
+}
+// Close dropdown when clicking outside
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#ow-country-selector')&&!e.target.closest('#ow-country-dropdown')){
+    const d=document.getElementById('ow-country-dropdown');
+    if(d) d.classList.remove('open');
+  }
+});
+
+function recheckBtn(){
+  const liab=document.getElementById('ow-liability-check').classList.contains('checked');
+  const tc=document.getElementById('ow-tc-check').classList.contains('checked');
+  document.getElementById('ow-btn').disabled=!(liab&&tc&&owSelectedCountry);
+}
+
 function togglePw(id, btn) { const i=document.getElementById(id); const s=i.type==='password'; i.type=s?'text':'password'; btn.textContent=s?'🙈':'👁'; }
 function toggleLiability(id) { const b=document.getElementById(id); const btn=document.getElementById(id+'-btn'); const o=b.classList.toggle('open'); if(btn) btn.textContent=o?'▲ Hide':'▼ Read'; }
 function toggleConsent(id, btnId, otherId) {
   document.getElementById(id).classList.toggle('checked');
-  if(btnId){ const both=document.getElementById(id).classList.contains('checked')&&document.getElementById(otherId).classList.contains('checked'); document.getElementById(btnId).disabled=!both; }
+  recheckBtn();
 }
 function showErr(m){ const e=document.getElementById('ow-err'); e.textContent=m; e.classList.add('show'); }
 function hideErr(){ document.getElementById('ow-err').classList.remove('show'); }
@@ -425,11 +552,12 @@ async function doRegister(){
   const email=document.getElementById('ow-email').value.trim();
   const phone=document.getElementById('ow-phone').value.trim();
   const pw=document.getElementById('ow-pw').value;
+  if(!owSelectedCountry) return showErr('Please select your country of location.');
   if(!name||!email||!phone||!pw) return showErr('All fields are required.');
   if(pw.length<8) return showErr('Password must be at least 8 characters.');
   const btn=document.getElementById('ow-btn');
   btn.disabled=true; btn.textContent='Creating account…';
-  const payload=JSON.stringify({full_name:name,email,phone,password:pw,role:'owner',liability_consent_at:new Date().toISOString(),tc_consent_at:new Date().toISOString()});
+  const payload=JSON.stringify({full_name:name,email,phone,password:pw,role:'owner',country_code:owSelectedCountry.country_code,liability_consent_at:new Date().toISOString(),tc_consent_at:new Date().toISOString()});
   async function attempt(){
     const ctrl=new AbortController();
     const t=setTimeout(()=>ctrl.abort(),30000);
@@ -437,12 +565,13 @@ async function doRegister(){
     finally{ clearTimeout(t); }
   }
   try{
-    let res;
+    let res, wasRetry=false;
     try{ res=await attempt(); }
     catch{
       // First attempt failed (network error / cold-start timeout) — retry once
       btn.textContent='Retrying…';
       await new Promise(r=>setTimeout(r,3000));
+      wasRetry=true;
       res=await attempt();
     }
     const data=await res.json();
@@ -455,14 +584,14 @@ async function doRegister(){
     }
     if(res.ok){
       showSuccess(email);
+    } else if(wasRetry && (data.error||'').toLowerCase().includes('already exists')){
+      // Only the retry path can mean "attempt 1 actually succeeded but its response was
+      // lost". A same-attempt "already exists" is a genuine pre-existing account.
+      showSuccess(email);
+    } else if((data.error||'').toLowerCase().includes('already exists')){
+      showErr('An account with this email already exists. Please sign in instead, or use "Forgot password" if needed.');
     } else {
-      // If retry returns "already exists" the account was created in attempt 1 but the
-      // response was lost — treat it as a success so the user isn't left confused.
-      if((data.error||'').toLowerCase().includes('already exists')){
-        showSuccess(email);
-      } else {
-        showErr(data.error||data.message||'Registration failed.');
-      }
+      showErr(data.error||data.message||'Registration failed.');
     }
   }catch{ showErr('Cannot reach server. Please check your internet connection and try again.'); }
   finally{ btn.disabled=false; btn.textContent='Register as Vehicle Owner'; }
