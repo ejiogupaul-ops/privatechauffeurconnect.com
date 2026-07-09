@@ -487,13 +487,15 @@
 const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
 let owCountries = [], owSelectedCountry = null;
 
-// Fetch countries and populate dropdown
-(async()=>{
+// Fetch countries and populate dropdown. Called on load, then again every time the
+// dropdown is opened, so an admin toggling a country's status shows up without a refresh.
+async function loadCountries(showLoading){
+  const drop=document.getElementById('ow-country-dropdown');
+  if(showLoading) drop.innerHTML='<div style="padding:12px 16px;font-size:12px;color:#4a4060;">Refreshing…</div>';
   try{
     const r=await fetch(`${API}/countries`);
     owCountries=await r.json();
   }catch{ owCountries=[{country_name:'United Kingdom',country_code:'GB',status:'active'}]; }
-  const drop=document.getElementById('ow-country-dropdown');
   if(!owCountries.length){ drop.innerHTML='<div style="padding:12px 16px;font-size:12px;color:#e94560;">Could not load countries</div>'; return; }
   drop.innerHTML=owCountries.map(c=>{
     const isActive=c.status==='active';
@@ -502,10 +504,24 @@ let owCountries = [], owSelectedCountry = null;
       ${!isActive?'<span class="cs-badge">Coming Soon</span>':''}
     </div>`;
   }).join('');
-})();
+  // If the already-selected country went inactive in the meantime, clear it and say why.
+  if(owSelectedCountry){
+    const match=owCountries.find(c=>c.country_code===owSelectedCountry.country_code);
+    if(!match||match.status!=='active'){
+      owSelectedCountry=null;
+      document.getElementById('ow-country-selector').classList.remove('selected');
+      document.getElementById('ow-country-label').textContent='Select your country…';
+      recheckBtn();
+      showErr('Your selected country is no longer available. Please choose another.');
+    }
+  }
+}
+loadCountries(false);
 
 function toggleCountryDrop(prefix){
   const drop=document.getElementById(prefix+'-country-dropdown');
+  const opening=!drop.classList.contains('open');
+  if(opening) loadCountries(true);
   drop.classList.toggle('open');
 }
 function selectCountry(prefix,code,name,isActive){
