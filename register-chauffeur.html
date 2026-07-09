@@ -315,6 +315,17 @@
     <div id="chauffeur-form-area">
       <div class="access-err" id="ch-err"></div>
 
+      <div class="form-field" style="position:relative;z-index:50;">
+        <label>Country of Location</label>
+        <div class="country-selector" id="ch-country-selector" onclick="toggleCountryDrop('ch')">
+          <span id="ch-country-label">Select your country…</span>
+          <span class="country-drop-arrow">▼</span>
+        </div>
+        <div class="country-dropdown" id="ch-country-dropdown">
+          <div style="padding:12px 16px;font-size:12px;color:#4a4060;">Loading countries…</div>
+        </div>
+      </div>
+
       <div class="form-field">
         <label>Full Name</label>
         <input type="text" id="ch-name" placeholder="Your full name" autocomplete="name" />
@@ -435,13 +446,75 @@
   </div>
 </footer>
 
+<!-- Coming Soon modal -->
+<div class="cs-modal-overlay" id="cs-modal-overlay" onclick="closeComingSoon()">
+  <div class="cs-modal" onclick="event.stopPropagation()">
+    <h3>Coming Soon</h3>
+    <p id="cs-modal-msg">Private Chauffeur Connect is not currently active in this country. Please select an available country or check back soon.</p>
+    <button onclick="closeComingSoon()">OK</button>
+  </div>
+</div>
+
 <script>
 const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
+let chCountries = [], chSelectedCountry = null;
+
+// Fetch countries and populate dropdown
+(async()=>{
+  try{
+    const r=await fetch(`${API}/countries`);
+    chCountries=await r.json();
+  }catch{ chCountries=[{country_name:'United Kingdom',country_code:'GB',status:'active'}]; }
+  const drop=document.getElementById('ch-country-dropdown');
+  if(!chCountries.length){ drop.innerHTML='<div style="padding:12px 16px;font-size:12px;color:#e94560;">Could not load countries</div>'; return; }
+  drop.innerHTML=chCountries.map(c=>{
+    const isActive=c.status==='active';
+    return `<div class="country-option${isActive?'':' dim'}" onclick="selectCountry('ch','${c.country_code}','${c.country_name}',${isActive})">
+      <span>${c.country_name}</span>
+      ${!isActive?'<span class="cs-badge">Coming Soon</span>':''}
+    </div>`;
+  }).join('');
+})();
+
+function toggleCountryDrop(prefix){
+  const drop=document.getElementById(prefix+'-country-dropdown');
+  drop.classList.toggle('open');
+}
+function selectCountry(prefix,code,name,isActive){
+  document.getElementById(prefix+'-country-dropdown').classList.remove('open');
+  if(!isActive){
+    document.getElementById('cs-modal-msg').textContent=`Private Chauffeur Connect is not currently active in ${name}. Please select an available country or check back soon.`;
+    document.getElementById('cs-modal-overlay').classList.add('open');
+    return;
+  }
+  chSelectedCountry={country_code:code,country_name:name};
+  const sel=document.getElementById(prefix+'-country-selector');
+  sel.classList.add('selected');
+  document.getElementById(prefix+'-country-label').textContent=name;
+  recheckBtn();
+}
+function closeComingSoon(){
+  document.getElementById('cs-modal-overlay').classList.remove('open');
+}
+// Close dropdown when clicking outside
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#ch-country-selector')&&!e.target.closest('#ch-country-dropdown')){
+    const d=document.getElementById('ch-country-dropdown');
+    if(d) d.classList.remove('open');
+  }
+});
+
+function recheckBtn(){
+  const liab=document.getElementById('ch-liability-check').classList.contains('checked');
+  const tc=document.getElementById('ch-tc-check').classList.contains('checked');
+  document.getElementById('ch-btn').disabled=!(liab&&tc&&chSelectedCountry);
+}
+
 function togglePw(id, btn) { const i = document.getElementById(id); const s = i.type==='password'; i.type=s?'text':'password'; btn.textContent=s?'🙈':'👁'; }
 function toggleLiability(id) { const b=document.getElementById(id); const btn=document.getElementById(id+'-btn'); const o=b.classList.toggle('open'); if(btn) btn.textContent=o?'▲ Hide':'▼ Read'; }
 function toggleConsent(id, btnId, otherId) {
   document.getElementById(id).classList.toggle('checked');
-  if(btnId){ const both=document.getElementById(id).classList.contains('checked')&&document.getElementById(otherId).classList.contains('checked'); document.getElementById(btnId).disabled=!both; }
+  recheckBtn();
 }
 function showErr(m){ const e=document.getElementById('ch-err'); e.textContent=m; e.classList.add('show'); }
 function hideErr(){ document.getElementById('ch-err').classList.remove('show'); }
@@ -451,11 +524,12 @@ async function doRegister(){
   const email=document.getElementById('ch-email').value.trim();
   const phone=document.getElementById('ch-phone').value.trim();
   const pw=document.getElementById('ch-pw').value;
+  if(!chSelectedCountry) return showErr('Please select your country of location.');
   if(!name||!email||!phone||!pw) return showErr('All fields are required.');
   if(pw.length<8) return showErr('Password must be at least 8 characters.');
   const btn=document.getElementById('ch-btn');
   btn.disabled=true; btn.textContent='Creating account…';
-  const payload=JSON.stringify({full_name:name,email,phone,password:pw,role:'chauffeur',liability_consent_at:new Date().toISOString(),tc_consent_at:new Date().toISOString()});
+  const payload=JSON.stringify({full_name:name,email,phone,password:pw,role:'chauffeur',country_code:chSelectedCountry.country_code,liability_consent_at:new Date().toISOString(),tc_consent_at:new Date().toISOString()});
   async function attempt(){
     const ctrl=new AbortController();
     const t=setTimeout(()=>ctrl.abort(),30000);
