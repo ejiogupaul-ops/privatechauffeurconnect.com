@@ -3087,8 +3087,10 @@ function renderCancelPreview(p) {
   }
 }
 
+let cancelSubmitting = false;
+
 async function confirmCancelBooking() {
-  if (!cancelPreviewData) return;
+  if (!cancelPreviewData || cancelSubmitting) return;
   const p = cancelPreviewData;
   const noRefund = p.refundAmount === 0;
   const fmt = v => '£'+parseFloat(v||0).toFixed(2);
@@ -3096,6 +3098,8 @@ async function confirmCancelBooking() {
     ? 'You will receive no refund. Are you absolutely sure you want to cancel?'
     : `Confirm cancellation and initiate your refund of ${fmt(p.refundAmount)}?`;
   if (!window.confirm(msg)) return;
+  if (cancelSubmitting) return; // guards a double-click racing past the confirm() dialog twice
+  cancelSubmitting = true;
   showCancelStep('confirming');
   try {
     const result = await apiFetch('/bookings/'+cancelBookingId+'/cancel', {
@@ -3113,14 +3117,24 @@ async function confirmCancelBooking() {
     renderDashboard();
   } catch(e) {
     const msg = e.message || 'Could not cancel booking. Please try again.';
-    alert(msg);
     const terminal = msg.includes('already cancelled') || msg.includes('cannot be cancelled') || msg.includes('Completed');
     if (terminal) {
+      // The booking is already in its final state (e.g. a duplicate submission
+      // landed after the first succeeded) — no need to interrupt with an alert,
+      // just take the owner straight back to see the current, correct state.
       closeCancelOverlay();
-      apiFetch('/bookings/my').then(d => { allBookings = d; renderBookingsHistory(); renderDashboard(); }).catch(()=>{});
+      allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+      activeBooking = allBookings.find(isBookingActive) || null;
+      if (!activeBooking) document.getElementById('tnav-active').style.display='none';
+      renderBookingsHistory();
+      showTab('dash');
+      renderDashboard();
     } else {
+      alert(msg);
       showCancelStep('preview');
     }
+  } finally {
+    cancelSubmitting = false;
   }
 }
 
