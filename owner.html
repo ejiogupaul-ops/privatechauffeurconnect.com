@@ -2989,19 +2989,29 @@ function cancelBooking(id) {
   showCancelStep(isInJourney ? 'contact_support' : 'alternatives');
 }
 
+// Transient steps that auto-advance on their own (spinners, waiting screens) —
+// these must never be recorded in cancelStepStack, or "back" can land on a
+// spinner with nothing left to drive it forward.
+const CANCEL_STEP_TRANSIENT = [
+  'preview_loading', 'confirming',
+  'reschedule_preview_loading', 'reschedule_confirming', 'reschedule_awaiting',
+];
+
 function showCancelStep(step) {
   document.querySelectorAll('.cancel-step').forEach(el=>el.style.display='none');
   const el = document.getElementById('cs-'+step);
   if (el) el.style.display = 'block';
-  cancelStepStack.push(step);
+  const isTransient = CANCEL_STEP_TRANSIENT.includes(step);
+  if (!isTransient) cancelStepStack.push(step);
   const ov = document.getElementById('cancel-overlay');
   ov.scrollTop = 0;
-  // Back button label
+  // Back button label / visibility
   const backBtn = document.getElementById('cancel-back-btn');
-  if (step === 'contact_support' || step === 'alternatives') {
-    backBtn.textContent = '← Back to Booking';
+  if (isTransient) {
+    backBtn.style.display = 'none';
   } else {
-    backBtn.textContent = '← Back';
+    backBtn.style.display = '';
+    backBtn.textContent = (step === 'contact_support' || step === 'alternatives') ? '← Back to Booking' : '← Back';
   }
 }
 
