@@ -1464,6 +1464,67 @@
       <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Done</button>
     </div>
 
+    <!-- STEP: reschedule_picking -->
+    <div class="cancel-step" id="cs-reschedule_picking" style="display:none;">
+      <div class="cancel-title">Reschedule Booking</div>
+      <div class="cancel-sub" id="rs-current-time"></div>
+      <div id="rs-picking-err" class="cancel-warning-box" style="display:none;border-color:rgba(233,69,96,.35);background:rgba(233,69,96,.07);color:#cc3344;"></div>
+      <div class="field"><label>New Date</label><input type="date" class="pay-input" id="rs-date" style="color-scheme:dark;" onchange="rsInputsChanged()" /></div>
+      <div class="field"><label>New Time (24hr)</label><input type="time" class="pay-input" id="rs-time" style="color-scheme:dark;" onchange="rsInputsChanged()" /></div>
+      <button class="cancel-gold-btn" id="rs-continue-btn" onclick="loadReschedulePreview()" disabled>Continue →</button>
+    </div>
+
+    <!-- STEP: reschedule_preview_loading -->
+    <div class="cancel-step" id="cs-reschedule_preview_loading" style="display:none;">
+      <div class="cancel-loading">
+        <div class="cancel-spinner"></div>
+        <div style="font-size:13px;color:#5a5a7a;">Checking this time…</div>
+      </div>
+    </div>
+
+    <!-- STEP: reschedule_preview -->
+    <div class="cancel-step" id="cs-reschedule_preview" style="display:none;">
+      <div class="cancel-title">Confirm Reschedule</div>
+      <div class="cancel-sub">Review before confirming.</div>
+      <div class="cancel-preview-card" id="rs-preview-card"></div>
+      <div id="rs-preview-notice"></div>
+      <button class="cancel-keep-btn" onclick="showCancelStep('reschedule_picking')">Choose a Different Time</button>
+      <button class="cancel-red-btn solid" onclick="confirmReschedule()">Confirm Reschedule</button>
+    </div>
+
+    <!-- STEP: reschedule_confirming -->
+    <div class="cancel-step" id="cs-reschedule_confirming" style="display:none;">
+      <div class="cancel-loading">
+        <div class="cancel-spinner"></div>
+        <div style="font-size:13px;color:#5a5a7a;">Requesting reschedule…</div>
+      </div>
+    </div>
+
+    <!-- STEP: reschedule_awaiting -->
+    <div class="cancel-step" id="cs-reschedule_awaiting" style="display:none;">
+      <div class="cancel-icon-circle" style="border-color:rgba(243,156,18,.4);background:rgba(243,156,18,.1);">
+        <div class="cancel-spinner" style="border-top-color:#f39c12;"></div>
+      </div>
+      <div class="cancel-title" style="text-align:center;">Waiting for Your Chauffeur</div>
+      <div class="cancel-sub" style="text-align:center;">We've asked your chauffeur to confirm the new time. This can take up to 10 minutes — this page will update automatically.</div>
+    </div>
+
+    <!-- STEP: reschedule_no_chauffeurs -->
+    <div class="cancel-step" id="cs-reschedule_no_chauffeurs" style="display:none;">
+      <div class="cancel-icon-circle red" style="width:90px;height:90px;border-radius:50%;font-size:40px;">😕</div>
+      <div class="cancel-title" style="text-align:center;">No Chauffeur Available</div>
+      <div class="cancel-sub" style="text-align:center;">Your previous chauffeur couldn't make the new time, and we couldn't find a replacement. Your booking is still active at the new time — you can try again shortly, or contact support.</div>
+      <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Back to Dashboard</button>
+    </div>
+
+    <!-- STEP: reschedule_success -->
+    <div class="cancel-step" id="cs-reschedule_success" style="display:none;">
+      <div class="cancel-icon-circle green" style="width:90px;height:90px;border-radius:50%;font-size:40px;">✓</div>
+      <div class="cancel-title" style="text-align:center;">Booking Rescheduled</div>
+      <div class="cancel-sub" style="text-align:center;" id="rs-success-sub"></div>
+      <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Done</button>
+    </div>
+
   </div>
 </div>
 
@@ -2896,7 +2957,8 @@ function cancelBooking(id) {
   // Wire alternative mailto links
   const ref = '#'+(id||'').slice(0,8).toUpperCase();
   document.getElementById('cs-support-ref').textContent = ref;
-  document.getElementById('ca-reschedule').href = 'mailto:support@privatechauffeurconnect.com?subject=Reschedule%20Booking%20'+encodeURIComponent(ref);
+  document.getElementById('ca-reschedule').href = '#';
+  document.getElementById('ca-reschedule').onclick = function(e){ e.preventDefault(); openReschedulePicker(); };
   document.getElementById('ca-time').href = 'mailto:support@privatechauffeurconnect.com?subject=Change%20Pickup%20Time%20'+encodeURIComponent(ref);
   document.getElementById('ca-dest').href = 'mailto:support@privatechauffeurconnect.com?subject=Update%20Destination%20'+encodeURIComponent(ref);
   const phone = bk?.chauffeur_profile?.users?.phone;
@@ -2946,6 +3008,7 @@ function cancelStepBack() {
 function closeCancelOverlay() {
   document.getElementById('cancel-overlay').style.display = 'none';
   cancelBookingId = null; cancelBookingObj = null; cancelStepStack = [];
+  clearInterval(reschedulePollTimer);
 }
 
 function selectCancelReason(r) {
@@ -3053,6 +3116,127 @@ function renderCancelSuccess(r) {
     ${hasRefund?'<div style="font-size:12px;color:#4a4a6a;text-align:center;line-height:1.7;margin-top:8px;">Please allow 3–5 working days for your bank to process your refund.</div>':''}
     <div class="cancel-preview-hr"></div>
     <div class="cancel-preview-row"><span class="cancel-preview-label">Reference</span><span class="cancel-preview-val" style="color:var(--gold)">${ref}</span></div>`;
+}
+
+// ── Reschedule ───────────────────────────────────────────
+const RESCHEDULE_ERRORS = {
+  blocked_status:             'This booking can no longer be rescheduled through the dashboard — the journey is already in progress or too close to departure. Please contact support instead.',
+  reschedule_already_pending: 'A reschedule request is already in progress for this booking.',
+  pickup_too_imminent:        'Your pickup is too soon to reschedule — please contact support instead.',
+  new_time_too_soon:          'Please choose a time at least 15 minutes from now.',
+  invalid_date:               'Please choose a valid date and time.',
+};
+let reschedulePreviewData = null;
+let reschedulePollTimer = null;
+
+function openReschedulePicker() {
+  document.getElementById('rs-picking-err').style.display = 'none';
+  document.getElementById('rs-date').value = '';
+  document.getElementById('rs-time').value = '';
+  document.getElementById('rs-continue-btn').disabled = true;
+  document.getElementById('rs-current-time').textContent = 'Current pickup: ' + fmtDate(cancelBookingObj?.date_time);
+  showCancelStep('reschedule_picking');
+}
+
+function rsInputsChanged() {
+  document.getElementById('rs-picking-err').style.display = 'none';
+  const d = document.getElementById('rs-date').value;
+  const t = document.getElementById('rs-time').value;
+  document.getElementById('rs-continue-btn').disabled = !(d && t);
+}
+
+function buildRescheduleDateTimeISO() {
+  const d = document.getElementById('rs-date').value;
+  const t = document.getElementById('rs-time').value;
+  if (!d || !t) return null;
+  const dt = new Date(d + 'T' + t + ':00');
+  return isNaN(dt.getTime()) ? null : dt.toISOString();
+}
+
+async function loadReschedulePreview() {
+  const newDateTime = buildRescheduleDateTimeISO();
+  if (!newDateTime) return;
+  showCancelStep('reschedule_preview_loading');
+  try {
+    const data = await apiFetch('/bookings/'+cancelBookingId+'/reschedule-preview?newDateTime='+encodeURIComponent(newDateTime));
+    if (!data.canReschedule) {
+      showCancelStep('reschedule_picking');
+      const errEl = document.getElementById('rs-picking-err');
+      errEl.textContent = RESCHEDULE_ERRORS[data.reason] || 'This time cannot be selected. Please choose another.';
+      errEl.style.display = 'block';
+      return;
+    }
+    reschedulePreviewData = data;
+    renderReschedulePreview(data);
+    showCancelStep('reschedule_preview');
+  } catch(e) {
+    alert(e.message || 'Could not check this time. Please try again.');
+    showCancelStep('reschedule_picking');
+  }
+}
+
+function renderReschedulePreview(p) {
+  document.getElementById('rs-preview-card').innerHTML = `
+    <div class="cancel-preview-row"><span class="cancel-preview-label">Current Time</span><span class="cancel-preview-val" style="color:#8a8aaa;font-size:14px;">${fmtDate(p.oldDateTime)}</span></div>
+    <div class="cancel-preview-hr"></div>
+    <div class="cancel-preview-row"><span class="cancel-preview-label">New Time</span><span class="cancel-preview-val" style="color:var(--gold)">${fmtDate(p.newDateTime)}</span></div>`;
+  const notice = document.getElementById('rs-preview-notice');
+  if (p.requiresChauffeurConfirmation) {
+    const eligibilityNote = p.currentChauffeurLikelyEligible === false
+      ? '<br><br>Heads up: based on the new time, your current chauffeur may not be available — a replacement search may start immediately.'
+      : '';
+    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(243,156,18,.35);background:rgba(243,156,18,.07);color:#c9942a;">⏰  Your chauffeur will be asked to confirm they're still available for the new time. We'll notify you within 10 minutes either way — if they can't make it, we'll automatically search for a replacement.${eligibilityNote}</div>`;
+  } else {
+    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(76,175,80,.25);background:rgba(76,175,80,.06);color:#3a8a50;">✓  No chauffeur is assigned yet, so this change applies immediately.</div>`;
+  }
+}
+
+async function confirmReschedule() {
+  if (!reschedulePreviewData) return;
+  if (!window.confirm('Change your pickup to '+fmtDate(reschedulePreviewData.newDateTime)+'?')) return;
+  showCancelStep('reschedule_confirming');
+  try {
+    const result = await apiFetch('/bookings/'+cancelBookingId+'/reschedule', {
+      method:'POST',
+      body: JSON.stringify({ newDateTime: reschedulePreviewData.newDateTime }),
+    });
+    if (result.status === 'awaiting_chauffeur_confirmation') {
+      showCancelStep('reschedule_awaiting');
+      startReschedulePoll();
+    } else {
+      document.getElementById('rs-success-sub').textContent = 'Your new pickup time is ' + fmtDate(result.booking?.date_time) + '.';
+      showCancelStep('reschedule_success');
+      await refreshBookingsAfterReschedule();
+    }
+  } catch(e) {
+    alert(e.message || 'Could not reschedule. Please try again.');
+    showCancelStep('reschedule_preview');
+  }
+}
+
+function startReschedulePoll() {
+  clearInterval(reschedulePollTimer);
+  reschedulePollTimer = setInterval(async () => {
+    try {
+      const bk = await apiFetch('/bookings/'+cancelBookingId);
+      if (bk.reschedule_status) return; // still provisional — keep waiting
+      clearInterval(reschedulePollTimer);
+      if (bk.status === 'no_chauffeurs') {
+        showCancelStep('reschedule_no_chauffeurs');
+      } else {
+        document.getElementById('rs-success-sub').textContent = 'Your new pickup time is ' + fmtDate(bk.date_time) + '.';
+        showCancelStep('reschedule_success');
+      }
+      await refreshBookingsAfterReschedule();
+    } catch(e) {}
+  }, 5000);
+}
+
+async function refreshBookingsAfterReschedule() {
+  allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
+  activeBooking = allBookings.find(isBookingActive) || null;
+  renderBookingsHistory();
+  renderDashboard();
 }
 
 // ── Map ──────────────────────────────────────────────────
