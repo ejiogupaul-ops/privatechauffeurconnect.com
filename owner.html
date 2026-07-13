@@ -1464,6 +1464,14 @@
       <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Done</button>
     </div>
 
+    <!-- STEP: reschedule_blocked -->
+    <div class="cancel-step" id="cs-reschedule_blocked" style="display:none;">
+      <div class="cancel-icon-circle">📞</div>
+      <div class="cancel-title">Unable to Reschedule</div>
+      <div class="cancel-sub">This booking can no longer be rescheduled through the app because the chauffeur has started preparing for or carrying out the journey. Please contact Private Chauffeur Connect Support.</div>
+      <a class="cancel-red-btn solid" style="display:block;text-align:center;text-decoration:none;" href="#" onclick="event.preventDefault();window.location.href='mailto:support@privatechauffeurconnect.com?subject=Reschedule%20Booking%20'+encodeURIComponent('#'+(cancelBookingId||'').slice(0,8).toUpperCase());">Contact Support</a>
+    </div>
+
     <!-- STEP: reschedule_picking -->
     <div class="cancel-step" id="cs-reschedule_picking" style="display:none;">
       <div class="cancel-title">Reschedule Booking</div>
@@ -3119,17 +3127,27 @@ function renderCancelSuccess(r) {
 }
 
 // ── Reschedule ───────────────────────────────────────────
+const RESCHEDULE_BLOCKED_STATUSES = [
+  'completed', 'cancelled', 'rejected',
+  'outbound_journey', 'at_destination', 'waiting_at_destination',
+  'return_ready_confirmation', 'return_journey',
+  'chauffeur_arriving', 'arrived_at_pickup',
+];
 const RESCHEDULE_ERRORS = {
-  blocked_status:             'This booking can no longer be rescheduled through the dashboard — the journey is already in progress or too close to departure. Please contact support instead.',
+  blocked_status:             'This booking can no longer be rescheduled through the dashboard.',
   reschedule_already_pending: 'A reschedule request is already in progress for this booking.',
-  pickup_too_imminent:        'Your pickup is too soon to reschedule — please contact support instead.',
-  new_time_too_soon:          'Please choose a time at least 30 minutes from now.',
+  insufficient_change:        'The new pickup time must be at least 30 minutes earlier or later than the current pickup time.',
+  new_time_in_past:           'Please choose a time in the future.',
   invalid_date:               'Please choose a valid date and time.',
 };
 let reschedulePreviewData = null;
 let reschedulePollTimer = null;
 
 function openReschedulePicker() {
+  if (RESCHEDULE_BLOCKED_STATUSES.includes(cancelBookingObj?.status)) {
+    showCancelStep('reschedule_blocked');
+    return;
+  }
   document.getElementById('rs-picking-err').style.display = 'none';
   document.getElementById('rs-date').value = '';
   document.getElementById('rs-time').value = '';
