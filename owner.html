@@ -1530,7 +1530,7 @@
       <div class="cancel-icon-circle green" style="width:90px;height:90px;border-radius:50%;font-size:40px;">✓</div>
       <div class="cancel-title" style="text-align:center;">Booking Rescheduled</div>
       <div class="cancel-sub" style="text-align:center;" id="rs-success-sub"></div>
-      <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Done</button>
+      <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('active');">Done</button>
     </div>
 
   </div>
@@ -3128,12 +3128,13 @@ function renderCancelSuccess(r) {
   const fmt = v => '£'+parseFloat(v||0).toFixed(2);
   const ref = '#'+(cancelBookingId||'').slice(0,8).toUpperCase();
   const hasRefund = (r.refundAmount||0) > 0;
+  const charge = (r.totalPaid||0) - (r.refundAmount||0);
   document.getElementById('cs-success-card').innerHTML = `
     <div class="cancel-preview-row"><span class="cancel-preview-label">Refund</span><span class="cancel-preview-val" style="color:${hasRefund?'#4caf50':'#555'}">${hasRefund?fmt(r.refundAmount):'No Refund'}</span></div>
-    <div class="cancel-preview-row"><span class="cancel-preview-label">Status</span><span class="cancel-preview-val" style="color:${hasRefund?'#4caf50':'#555'}">${hasRefund?'Refund Initiated':'No Refund'}</span></div>
-    ${hasRefund?'<div style="font-size:12px;color:#4a4a6a;text-align:center;line-height:1.7;margin-top:8px;">Please allow 3–5 working days for your bank to process your refund.</div>':''}
+    <div class="cancel-preview-row"><span class="cancel-preview-label">Cancellation Charge</span><span class="cancel-preview-val" style="color:#e94560">${fmt(charge)}</span></div>
     <div class="cancel-preview-hr"></div>
-    <div class="cancel-preview-row"><span class="cancel-preview-label">Reference</span><span class="cancel-preview-val" style="color:var(--gold)">${ref}</span></div>`;
+    <div class="cancel-preview-row"><span class="cancel-preview-label">Reference</span><span class="cancel-preview-val" style="color:var(--gold)">${ref}</span></div>
+    <div style="font-size:12px;color:#4a4a6a;text-align:center;line-height:1.7;margin-top:12px;">Your refund will be processed in accordance with our Refund Policy.</div>`;
 }
 
 // ── Reschedule ───────────────────────────────────────────
