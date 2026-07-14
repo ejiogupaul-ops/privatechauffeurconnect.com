@@ -2611,7 +2611,14 @@ function renderActiveTripPanel(bk) {
         <div class="detail-item"><div class="dl">Vehicle</div><div class="dv">${bk.vehicle_reg||'—'}</div></div>
         <div class="detail-item"><div class="dl">Trip Type</div><div class="dv">${bk.trip_type||'—'}</div></div>
       </div>
-      ${['pending','accepted'].includes(bk.status) ? `<div style="margin-top:18px;"><button class="btn-danger" onclick="cancelBooking('${bk.id}')">Cancel Booking</button></div>` : ''}
+      ${['pending','accepted'].includes(bk.status) ? (
+        bk.reschedule_status
+          ? `<div style="margin-top:18px;">
+               <button class="btn-danger" disabled style="opacity:.4;cursor:not-allowed;">Cancel Booking</button>
+               <div style="margin-top:8px;font-size:12px;color:#f39c12;">A reschedule request is already in progress for this booking. Please wait for it to resolve before cancelling.</div>
+             </div>`
+          : `<div style="margin-top:18px;"><button class="btn-danger" onclick="cancelBooking('${bk.id}')">Cancel Booking</button></div>`
+      ) : ''}
     </div>`;
   document.getElementById('active-content').innerHTML=html;
   // Restore cached pre-trip photos immediately so the grid never flickers back to "Loading…" on each poll
