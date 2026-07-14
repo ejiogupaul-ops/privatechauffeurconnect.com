@@ -1513,8 +1513,8 @@
       <div class="cancel-icon-circle" style="border-color:rgba(243,156,18,.4);background:rgba(243,156,18,.1);">
         <div class="cancel-spinner" style="border-top-color:#f39c12;"></div>
       </div>
-      <div class="cancel-title" style="text-align:center;">Waiting for Your Chauffeur</div>
-      <div class="cancel-sub" style="text-align:center;">We've asked your chauffeur to confirm the new time. This can take up to 10 minutes — this page will update automatically.</div>
+      <div class="cancel-title" style="text-align:center;" id="rs-awaiting-title">Waiting for Your Chauffeur</div>
+      <div class="cancel-sub" style="text-align:center;" id="rs-awaiting-sub">We've asked your chauffeur to confirm the new time. This can take up to 10 minutes — this page will update automatically.</div>
     </div>
 
     <!-- STEP: reschedule_no_chauffeurs -->
@@ -3273,6 +3273,8 @@ let rescheduleDeclineAlerted = false;
 function startReschedulePoll() {
   clearInterval(reschedulePollTimer);
   rescheduleDeclineAlerted = false;
+  document.getElementById('rs-awaiting-title').textContent = 'Waiting for Your Chauffeur';
+  document.getElementById('rs-awaiting-sub').textContent = "We've asked your chauffeur to confirm the new time. This can take up to 10 minutes — this page will update automatically.";
   reschedulePollTimer = setInterval(async () => {
     try {
       const bk = await apiFetch('/bookings/'+cancelBookingId);
@@ -3284,16 +3286,23 @@ function startReschedulePoll() {
       if (bk.reschedule_status === 'dispatching' && !rescheduleDeclineAlerted) {
         rescheduleDeclineAlerted = true;
         alert("Your chauffeur couldn't make the new time. We're finding you a replacement.");
+        document.getElementById('rs-awaiting-title').textContent = 'Searching for Another Chauffeur';
+        document.getElementById('rs-awaiting-sub').textContent = "Your original chauffeur couldn't make it — we're now looking for a replacement. This page will update automatically.";
       }
       if (bk.reschedule_status) return; // still provisional — keep waiting
       clearInterval(reschedulePollTimer);
       if (bk.status === 'no_chauffeurs') {
         showCancelStep('reschedule_no_chauffeurs');
+        await refreshBookingsAfterReschedule();
       } else {
-        document.getElementById('rs-success-sub').textContent = 'Your new pickup time is ' + fmtDate(bk.date_time) + '.';
-        showCancelStep('reschedule_success');
+        // Resolved with a chauffeur assigned (same one confirmed, or a
+        // replacement accepted) — go straight to Active Trip to monitor them
+        // rather than requiring an extra click through a success screen.
+        alert('Your booking has been rescheduled to ' + fmtDate(bk.date_time) + '. Taking you to your active trip.');
+        closeCancelOverlay();
+        await refreshBookingsAfterReschedule();
+        showTab('active');
       }
-      await refreshBookingsAfterReschedule();
     } catch(e) {}
   }, 5000);
 }
