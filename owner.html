@@ -3117,11 +3117,22 @@ async function confirmCancelBooking() {
     renderDashboard();
   } catch(e) {
     const msg = e.message || 'Could not cancel booking. Please try again.';
-    const terminal = msg.includes('already cancelled') || msg.includes('cannot be cancelled') || msg.includes('Completed');
-    if (terminal) {
-      // The booking is already in its final state (e.g. a duplicate submission
-      // landed after the first succeeded) — no need to interrupt with an alert,
-      // just take the owner straight back to see the current, correct state.
+    // Don't trust the error message alone — a network blip or slow response
+    // can make a genuinely-successful cancellation look like a failure here.
+    // Check what actually happened server-side before deciding what to show;
+    // string-matching a handful of expected error phrases isn't reliable
+    // enough on its own (confirmed by a real case where cancellation had
+    // actually succeeded but the message didn't match any of them).
+    let actuallyCancelled = false;
+    try {
+      const fresh = await apiFetch('/bookings/'+cancelBookingId);
+      actuallyCancelled = fresh.status === 'cancelled';
+    } catch(_) {}
+
+    if (actuallyCancelled) {
+      // It did go through — take the owner straight back to see the current,
+      // correct state instead of interrupting with an error for something
+      // that isn't actually a failure from their perspective.
       closeCancelOverlay();
       allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
       activeBooking = allBookings.find(isBookingActive) || null;
