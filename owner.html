@@ -3257,11 +3257,23 @@ async function confirmReschedule() {
   }
 }
 
+let rescheduleDeclineAlerted = false;
+
 function startReschedulePoll() {
   clearInterval(reschedulePollTimer);
+  rescheduleDeclineAlerted = false;
   reschedulePollTimer = setInterval(async () => {
     try {
       const bk = await apiFetch('/bookings/'+cancelBookingId);
+      // 'awaiting_chauffeur' -> 'dispatching' means the original chauffeur
+      // declined (or didn't respond in time) and the search has moved on to
+      // find a replacement. Surface that moment while the owner has this page
+      // open — there's no browser-push equivalent for website sessions, this
+      // popup is the only way they'd find out without refreshing blind.
+      if (bk.reschedule_status === 'dispatching' && !rescheduleDeclineAlerted) {
+        rescheduleDeclineAlerted = true;
+        alert("Your chauffeur couldn't make the new time. We're finding you a replacement.");
+      }
       if (bk.reschedule_status) return; // still provisional — keep waiting
       clearInterval(reschedulePollTimer);
       if (bk.status === 'no_chauffeurs') {
