@@ -917,8 +917,8 @@
               <div class="field">
                 <label>Will you be returning home with the chauffeur?</label>
                 <div style="display:flex;gap:10px;margin-top:8px;">
-                  <button class="tt-btn active" id="rw-yes" onclick="setReturnWith(true)">✈️ 🔄 Yes — I'm returning</button>
-                  <button class="tt-btn" id="rw-no" onclick="setReturnWith(false)">🔑 🚗 No — return my car</button>
+                  <button class="tt-btn active" id="rw-yes" onclick="setReturnWith(true)">✈️ 🔄 Yes, I'm returning</button>
+                  <button class="tt-btn" id="rw-no" onclick="setReturnWith(false)">🔑 🚗 No, return my car</button>
                 </div>
               </div>
               <!-- Unaccompanied: Key Return Method -->
@@ -1331,7 +1331,7 @@
     <div id="srch-phase-timeout" style="display:none;text-align:center;padding-top:60px;">
       <div class="srch-timeout-icon">⚠</div>
       <div class="srch-timeout-title">No Chauffeur Available</div>
-      <div class="srch-timeout-sub">We're sorry — no chauffeur accepted your request at this time.<br>This can happen during busy periods or late-night hours.</div>
+      <div class="srch-timeout-sub">We're sorry, no chauffeur accepted your request at this time.<br>This can happen during busy periods or late-night hours.</div>
       <div class="srch-option-card refund" onclick="srchRefund()">
         <div class="srch-option-title refund-t">💳&nbsp; Request Refund</div>
         <div class="srch-option-sub">Returned within 3–5 business days</div>
@@ -1443,7 +1443,7 @@
         This compensation will be shared between your assigned chauffeur and Private Chauffeur Connect in accordance with our Terms &amp; Conditions.
       </div>
       <div id="cs-preview-notice"></div>
-      <button class="cancel-keep-btn" onclick="closeCancelOverlay()">Go Back — Keep Booking</button>
+      <button class="cancel-keep-btn" onclick="closeCancelOverlay()">Go Back and Keep Booking</button>
       <button class="cancel-red-btn solid" id="cs-confirm-btn" onclick="confirmCancelBooking()">Confirm Cancellation</button>
     </div>
 
@@ -1514,14 +1514,14 @@
         <div class="cancel-spinner" style="border-top-color:#f39c12;"></div>
       </div>
       <div class="cancel-title" style="text-align:center;" id="rs-awaiting-title">Waiting for Your Chauffeur</div>
-      <div class="cancel-sub" style="text-align:center;" id="rs-awaiting-sub">We've asked your chauffeur to confirm the new time. This can take up to 10 minutes — this page will update automatically.</div>
+      <div class="cancel-sub" style="text-align:center;" id="rs-awaiting-sub">We've asked your chauffeur to confirm the new time. This can take up to 10 minutes, and this page will update automatically.</div>
     </div>
 
     <!-- STEP: reschedule_no_chauffeurs -->
     <div class="cancel-step" id="cs-reschedule_no_chauffeurs" style="display:none;">
       <div class="cancel-icon-circle red" style="width:90px;height:90px;border-radius:50%;font-size:40px;">😕</div>
       <div class="cancel-title" style="text-align:center;">No Chauffeur Available</div>
-      <div class="cancel-sub" style="text-align:center;">Your previous chauffeur couldn't make the new time, and we couldn't find a replacement. Your booking is still active at the new time — you can try again shortly, or contact support.</div>
+      <div class="cancel-sub" style="text-align:center;">Your previous chauffeur couldn't make the new time, and we couldn't find a replacement. Your booking is still active at the new time. You can try again shortly, or contact support.</div>
       <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Back to Dashboard</button>
     </div>
 
@@ -2393,16 +2393,16 @@ function startWaitTimer(bk) {
     const cardCls     = isPaused ? 'paused' : isLocked ? 'locked' : isOvertime ? 'overtime' : '';
     const titleTxt    = isPaused ? 'TIMER PAUSED'
       : isLocked    ? 'FINAL CHARGES'
-      : isOvertime  ? 'OVERTIME — £20/HR'
+      : isOvertime  ? 'OVERTIME AT £20/HR'
       : 'INCLUDED TIME REMAINING';
     const titleCls    = isPaused ? 'paused' : isLocked ? 'locked' : isOvertime ? 'overtime' : '';
     const timerVal    = isOvertime ? extraSecs : remaining;
     const timerCls    = isPaused ? 'paused' : isLocked ? 'locked' : isOvertime ? 'overtime' : (remaining <= 300 ? 'warning' : '');
-    const subTxt      = isPaused ? 'Paused — awaiting chauffeur confirmation'
-      : isLocked    ? (isOvertime ? 'Overtime duration — charge locked' : 'No overtime — all within included time')
-      : isOvertime  ? 'Overtime running — £20/hr'
+    const subTxt      = isPaused ? 'Paused, awaiting chauffeur confirmation'
+      : isLocked    ? (isOvertime ? 'Overtime duration, charge locked' : 'No overtime, all within included time')
+      : isOvertime  ? 'Overtime running at £20/hr'
       : remaining <= 300 ? '⚠️  Overtime starting soon!'
-      : 'Included in your booking — no extra charge';
+      : 'Included in your booking, no extra charge';
     const stat2Lbl    = isOvertime ? 'Rate' : 'Included Left';
     const stat2Val    = isOvertime ? '£20.00/hr' : fmtTimer(remaining);
     const stat2Color  = (!isOvertime && remaining <= 300) ? '#e94560' : '#fff';
@@ -2813,7 +2813,7 @@ function rvTickCountdown(deadline) {
     timer.textContent = '00:00';
     cd.className = 'rv-countdown expired';
     timer.className = 'rv-cd-timer expired';
-    document.getElementById('rv-cd-sub').textContent = 'Review window expired — payment auto-released to chauffeur.';
+    document.getElementById('rv-cd-sub').textContent = 'Review window expired, payment auto-released to chauffeur.';
     clearInterval(rvCountdownTimer);
     document.getElementById('rv-approve-btn').disabled = true;
     document.getElementById('rv-dispute-btn').disabled = true;
@@ -3244,9 +3244,9 @@ function renderReschedulePreview(p) {
   const notice = document.getElementById('rs-preview-notice');
   if (p.requiresChauffeurConfirmation) {
     const eligibilityNote = p.currentChauffeurLikelyEligible === false
-      ? '<br><br>Heads up: based on the new time, your current chauffeur may not be available — a replacement search may start immediately.'
+      ? '<br><br>Heads up: based on the new time, your current chauffeur may not be available, so a replacement search may start immediately.'
       : '';
-    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(243,156,18,.35);background:rgba(243,156,18,.07);color:#c9942a;">⏰  Your chauffeur will be asked to confirm they're still available for the new time. We'll notify you within 10 minutes either way — if they can't make it, we'll automatically search for a replacement.${eligibilityNote}</div>`;
+    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(243,156,18,.35);background:rgba(243,156,18,.07);color:#c9942a;">⏰  Your chauffeur will be asked to confirm they're still available for the new time. We'll notify you within 10 minutes either way, and if they can't make it, we'll automatically search for a replacement.${eligibilityNote}</div>`;
   } else {
     notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(76,175,80,.25);background:rgba(76,175,80,.06);color:#3a8a50;">✓  No chauffeur is assigned yet, so this change applies immediately.</div>`;
   }
@@ -3281,7 +3281,7 @@ function startReschedulePoll() {
   clearInterval(reschedulePollTimer);
   rescheduleDeclineAlerted = false;
   document.getElementById('rs-awaiting-title').textContent = 'Waiting for Your Chauffeur';
-  document.getElementById('rs-awaiting-sub').textContent = "We've asked your chauffeur to confirm the new time. This can take up to 10 minutes — this page will update automatically.";
+  document.getElementById('rs-awaiting-sub').textContent = "We've asked your chauffeur to confirm the new time. This can take up to 10 minutes, and this page will update automatically.";
   reschedulePollTimer = setInterval(async () => {
     try {
       const bk = await apiFetch('/bookings/'+cancelBookingId);
@@ -3294,7 +3294,7 @@ function startReschedulePoll() {
         rescheduleDeclineAlerted = true;
         alert("Your chauffeur couldn't make the new time. We're finding you a replacement.");
         document.getElementById('rs-awaiting-title').textContent = 'Searching for Another Chauffeur';
-        document.getElementById('rs-awaiting-sub').textContent = "Your original chauffeur couldn't make it — we're now looking for a replacement. This page will update automatically.";
+        document.getElementById('rs-awaiting-sub').textContent = "Your original chauffeur couldn't make it, and we're now looking for a replacement. This page will update automatically.";
       }
       if (bk.reschedule_status) return; // still provisional — keep waiting
       clearInterval(reschedulePollTimer);
@@ -3556,7 +3556,7 @@ function validatePayExpiry(val) {
   const d=val.replace(/\D/g,'');
   if(d.length<4) return {complete:false,valid:false,error:null};
   const mo=parseInt(d.slice(0,2),10), yr=parseInt('20'+d.slice(2,4),10);
-  if(mo<1||mo>12) return {complete:true,valid:false,error:'Invalid month — must be 01 to 12.'};
+  if(mo<1||mo>12) return {complete:true,valid:false,error:'Invalid month. Must be 01 to 12.'};
   const now=new Date();
   if(yr<now.getFullYear()||(yr===now.getFullYear()&&mo<now.getMonth()+1))
     return {complete:true,valid:false,error:'This card has expired. Please use a valid payment card.'};
