@@ -1521,8 +1521,10 @@
     <div class="cancel-step" id="cs-reschedule_no_chauffeurs" style="display:none;">
       <div class="cancel-icon-circle red" style="width:90px;height:90px;border-radius:50%;font-size:40px;">😕</div>
       <div class="cancel-title" style="text-align:center;">No Chauffeur Available</div>
-      <div class="cancel-sub" style="text-align:center;">Your previous chauffeur couldn't make the new time, and we couldn't find a replacement. Your booking is still active at the new time. You can try again shortly, or contact support.</div>
-      <button class="cancel-gold-btn" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Back to Dashboard</button>
+      <div class="cancel-sub" style="text-align:center;">Your previous chauffeur couldn't make the new time, and we couldn't find a replacement for your rescheduled time. You can try searching again, or request a refund.</div>
+      <button class="cancel-gold-btn" id="rs-nc-retry-btn" onclick="retryRescheduleDispatch()">🔄  Try Again</button>
+      <button class="cancel-keep-btn" style="margin-top:10px;" onclick="cancelBooking(cancelBookingId);">💳  Request Refund</button>
+      <button class="cancel-keep-btn" style="margin-top:10px;border:none;" onclick="closeCancelOverlay();showTab('dash');renderDashboard();">Back to Dashboard</button>
     </div>
 
     <!-- STEP: reschedule_success -->
@@ -3312,6 +3314,43 @@ function startReschedulePoll() {
       }
     } catch(e) {}
   }, 5000);
+}
+
+// Re-dispatch at the already-updated (rescheduled) date_time after a failed
+// reschedule search comes up empty — reuses the plain /retry endpoint (same
+// one the original booking-search timeout screen uses), not the reschedule-
+// specific offer machinery, since there's no longer a "previous chauffeur"
+// to reconfirm with.
+async function retryRescheduleDispatch() {
+  const btn = document.getElementById('rs-nc-retry-btn');
+  btn.disabled = true; btn.style.opacity = '0.6';
+  try {
+    await apiFetch('/bookings/'+cancelBookingId+'/retry', { method:'POST', body:'{}' });
+    document.getElementById('rs-awaiting-title').textContent = 'Searching for a Chauffeur';
+    document.getElementById('rs-awaiting-sub').textContent = "We're looking for a chauffeur for your rescheduled time. This page will update automatically.";
+    showCancelStep('reschedule_awaiting');
+    clearInterval(reschedulePollTimer);
+    reschedulePollTimer = setInterval(async () => {
+      try {
+        const bk = await apiFetch('/bookings/'+cancelBookingId);
+        if (bk.status === 'pending') return; // still searching
+        clearInterval(reschedulePollTimer);
+        if (bk.status === 'no_chauffeurs') {
+          showCancelStep('reschedule_no_chauffeurs');
+          await refreshBookingsAfterReschedule();
+        } else {
+          alert('A chauffeur has been found for ' + fmtDate(bk.date_time) + '. Taking you to your active trip.');
+          closeCancelOverlay();
+          await refreshBookingsAfterReschedule();
+          showTab('active');
+        }
+      } catch(e) {}
+    }, 5000);
+  } catch (e) {
+    alert(e.message || 'Could not search again. Please try again.');
+  } finally {
+    btn.disabled = false; btn.style.opacity = '';
+  }
 }
 
 async function refreshBookingsAfterReschedule() {
