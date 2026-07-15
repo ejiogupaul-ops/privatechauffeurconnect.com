@@ -1370,18 +1370,10 @@
       <div class="cancel-title">Before you cancel…</div>
       <div class="cancel-sub">Would one of these options help instead?</div>
       <a class="cancel-alt-card" id="ca-reschedule" href="#">
-        <span class="cancel-alt-icon">📅</span>
-        <div style="flex:1;">
-          <div class="cancel-alt-title">Reschedule your booking <span class="cancel-recommended">RECOMMENDED</span></div>
-          <div class="cancel-alt-sub">Change the date or time of your trip</div>
-        </div>
-        <span style="color:#3a3a5a;font-size:18px;">›</span>
-      </a>
-      <a class="cancel-alt-card" id="ca-time" href="#">
         <span class="cancel-alt-icon">🕐</span>
         <div style="flex:1;">
-          <div class="cancel-alt-title">Change your pickup time</div>
-          <div class="cancel-alt-sub">Adjust when your chauffeur should arrive</div>
+          <div class="cancel-alt-title">Change your pickup time <span class="cancel-recommended">RECOMMENDED</span></div>
+          <div class="cancel-alt-sub">Change the date or time of your trip</div>
         </div>
         <span style="color:#3a3a5a;font-size:18px;">›</span>
       </a>
@@ -2976,7 +2968,6 @@ function cancelBooking(id) {
   document.getElementById('cs-support-ref').textContent = ref;
   document.getElementById('ca-reschedule').href = '#';
   document.getElementById('ca-reschedule').onclick = function(e){ e.preventDefault(); openReschedulePicker(); };
-  document.getElementById('ca-time').href = 'mailto:support@privatechauffeurconnect.com?subject=Change%20Pickup%20Time%20'+encodeURIComponent(ref);
   document.getElementById('ca-dest').href = 'mailto:support@privatechauffeurconnect.com?subject=Update%20Destination%20'+encodeURIComponent(ref);
   const phone = bk?.chauffeur_profile?.users?.phone;
   if (phone) {
