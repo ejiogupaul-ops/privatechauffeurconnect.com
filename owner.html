@@ -2986,7 +2986,11 @@ function cancelBooking(id) {
   document.getElementById('cs-reason-notes').style.display = 'none';
   document.getElementById('cs-reason-next').disabled = true;
   const isInJourney = bk && CANCEL_JOURNEY_STATUSES.includes(bk.status);
-  showCancelStep(isInJourney ? 'contact_support' : 'alternatives');
+  // No chauffeur was ever assigned — the refund is unconditionally 100% and
+  // "reschedule instead" doesn't apply (they've already declined a retry one
+  // screen earlier), so skip straight to the reason step.
+  const noChauffeur = bk && bk.status === 'no_chauffeurs';
+  showCancelStep(isInJourney ? 'contact_support' : noChauffeur ? 'reason' : 'alternatives');
 }
 
 // Transient steps that auto-advance on their own (spinners, waiting screens) —
@@ -3154,12 +3158,20 @@ function renderCancelSuccess(r) {
   const ref = '#'+(cancelBookingId||'').slice(0,8).toUpperCase();
   const hasRefund = (r.refundAmount||0) > 0;
   const charge = (r.totalPaid||0) - (r.refundAmount||0);
-  document.getElementById('cs-success-card').innerHTML = `
-    <div class="cancel-preview-row"><span class="cancel-preview-label">Refund</span><span class="cancel-preview-val" style="color:${hasRefund?'#4caf50':'#555'}">${hasRefund?fmt(r.refundAmount):'No Refund'}</span></div>
-    <div class="cancel-preview-row"><span class="cancel-preview-label">Cancellation Charge</span><span class="cancel-preview-val" style="color:#e94560">${fmt(charge)}</span></div>
-    <div class="cancel-preview-hr"></div>
-    <div class="cancel-preview-row"><span class="cancel-preview-label">Reference</span><span class="cancel-preview-val" style="color:var(--gold)">${ref}</span></div>
-    <div style="font-size:12px;color:#4a4a6a;text-align:center;line-height:1.7;margin-top:12px;">Your refund request is pending admin approval. Once approved, it will be processed within 3–5 working days.</div>`;
+  const noChauffeur = r.policyName === 'No Chauffeur Found' || r.policyName === 'No Chauffeur Assigned';
+  if (noChauffeur) {
+    document.getElementById('cs-success-card').innerHTML = `
+      <div style="font-size:14px;color:#ccc;text-align:center;line-height:1.7;">As no chauffeur accepted your booking, a full refund of ${fmt(r.refundAmount)} will be returned to your original payment method. Refunds are usually completed within 3–5 working days, although your bank or card provider may take longer to process the payment.</div>
+      <div class="cancel-preview-hr"></div>
+      <div class="cancel-preview-row"><span class="cancel-preview-label">Reference</span><span class="cancel-preview-val" style="color:var(--gold)">${ref}</span></div>`;
+  } else {
+    document.getElementById('cs-success-card').innerHTML = `
+      <div class="cancel-preview-row"><span class="cancel-preview-label">Refund</span><span class="cancel-preview-val" style="color:${hasRefund?'#4caf50':'#555'}">${hasRefund?fmt(r.refundAmount):'No Refund'}</span></div>
+      <div class="cancel-preview-row"><span class="cancel-preview-label">Cancellation Charge</span><span class="cancel-preview-val" style="color:#e94560">${fmt(charge)}</span></div>
+      <div class="cancel-preview-hr"></div>
+      <div class="cancel-preview-row"><span class="cancel-preview-label">Reference</span><span class="cancel-preview-val" style="color:var(--gold)">${ref}</span></div>
+      <div style="font-size:12px;color:#4a4a6a;text-align:center;line-height:1.7;margin-top:12px;">Your refund request is pending admin approval. Once approved, it will be processed within 3–5 working days.</div>`;
+  }
 }
 
 // ── Reschedule ───────────────────────────────────────────
