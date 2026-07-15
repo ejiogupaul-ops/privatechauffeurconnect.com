@@ -3092,7 +3092,7 @@ function renderCancelPreview(p) {
   if (noRefund) {
     notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(233,69,96,.35);background:rgba(233,69,96,.07);color:#cc3344;margin-bottom:16px;">⚠️  No refund applies at this stage of the booking. The chauffeur has been dispatched and is considered to have attended.</div>`;
   } else {
-    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(76,175,80,.25);background:rgba(76,175,80,.06);color:#3a8a50;margin-bottom:16px;">✓  Your refund of ${fmt(p.refundAmount)} will be initiated immediately. Please allow 3–5 working days for your bank to process it.</div>`;
+    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(76,175,80,.25);background:rgba(76,175,80,.06);color:#3a8a50;margin-bottom:16px;">✓  Your refund request of ${fmt(p.refundAmount)} has been submitted for admin review. Once approved, please allow 3–5 working days for your bank to process it.</div>`;
   }
 }
 
@@ -3168,7 +3168,7 @@ function renderCancelSuccess(r) {
     <div class="cancel-preview-row"><span class="cancel-preview-label">Cancellation Charge</span><span class="cancel-preview-val" style="color:#e94560">${fmt(charge)}</span></div>
     <div class="cancel-preview-hr"></div>
     <div class="cancel-preview-row"><span class="cancel-preview-label">Reference</span><span class="cancel-preview-val" style="color:var(--gold)">${ref}</span></div>
-    <div style="font-size:12px;color:#4a4a6a;text-align:center;line-height:1.7;margin-top:12px;">Your refund will be processed in accordance with our Refund Policy.</div>`;
+    <div style="font-size:12px;color:#4a4a6a;text-align:center;line-height:1.7;margin-top:12px;">Your refund request is pending admin approval. Once approved, it will be processed within 3–5 working days.</div>`;
 }
 
 // ── Reschedule ───────────────────────────────────────────
