@@ -1428,14 +1428,14 @@
 
     <!-- STEP: preview -->
     <div class="cancel-step" id="cs-preview" style="display:none;">
-      <div class="cancel-title">Cancellation Summary</div>
-      <div class="cancel-sub">Review before confirming. This cannot be undone.</div>
+      <div class="cancel-title" id="cs-preview-title">Cancellation Summary</div>
+      <div class="cancel-sub" id="cs-preview-sub">Review before confirming. This cannot be undone.</div>
       <div class="cancel-preview-card" id="cs-preview-card"></div>
       <div id="cs-comp-note" class="cancel-comp-note" style="display:none;">
         This compensation will be shared between your assigned chauffeur and Private Chauffeur Connect in accordance with our Terms &amp; Conditions.
       </div>
       <div id="cs-preview-notice"></div>
-      <button class="cancel-keep-btn" onclick="closeCancelOverlay()">Go Back and Keep Booking</button>
+      <button class="cancel-keep-btn" id="cs-preview-keep-btn" onclick="closeCancelOverlay()">Go Back and Keep Booking</button>
       <button class="cancel-red-btn solid" id="cs-confirm-btn" onclick="confirmCancelBooking()">Confirm Cancellation</button>
     </div>
 
@@ -2986,11 +2986,19 @@ function cancelBooking(id) {
   document.getElementById('cs-reason-notes').style.display = 'none';
   document.getElementById('cs-reason-next').disabled = true;
   const isInJourney = bk && CANCEL_JOURNEY_STATUSES.includes(bk.status);
-  // No chauffeur was ever assigned — the refund is unconditionally 100% and
-  // "reschedule instead" doesn't apply (they've already declined a retry one
-  // screen earlier), so skip straight to the reason step.
   const noChauffeur = bk && bk.status === 'no_chauffeurs';
-  showCancelStep(isInJourney ? 'contact_support' : noChauffeur ? 'reason' : 'alternatives');
+  if (isInJourney) {
+    showCancelStep('contact_support');
+  } else if (noChauffeur) {
+    // No chauffeur was ever assigned — there's nothing being "cancelled" and
+    // no reason to explain, this is just a refund request for a booking the
+    // platform failed to staff. Skip straight to the refund preview, which
+    // is unconditionally a 100% refund.
+    cancelReason = 'No chauffeur accepted the booking';
+    loadCancelPreview();
+  } else {
+    showCancelStep('alternatives');
+  }
 }
 
 // Transient steps that auto-advance on their own (spinners, waiting screens) —
@@ -3068,6 +3076,15 @@ function renderCancelPreview(p) {
   const fmt = v => '£'+parseFloat(v||0).toFixed(2);
   const noRefund = p.refundAmount === 0;
   const fullRefund = p.refundPct === 100;
+  const noChauffeur = p.policyName === 'No Chauffeur Found' || p.policyName === 'No Chauffeur Assigned';
+
+  document.getElementById('cs-preview-title').textContent = noChauffeur ? 'Request Refund' : 'Cancellation Summary';
+  document.getElementById('cs-preview-sub').textContent = noChauffeur
+    ? "As no chauffeur accepted your booking, you're entitled to a full refund."
+    : 'Review before confirming. This cannot be undone.';
+  document.getElementById('cs-preview-keep-btn').textContent = noChauffeur ? 'Go Back' : 'Go Back and Keep Booking';
+  document.getElementById('cs-confirm-btn').textContent = noChauffeur ? 'Confirm Refund' : 'Confirm Cancellation';
+
   let rows = `
     <div class="cancel-preview-row"><span class="cancel-preview-label">Booking Total</span><span class="cancel-preview-val">${fmt(p.totalPaid)}</span></div>
     <div class="cancel-preview-hr"></div>
@@ -3086,6 +3103,8 @@ function renderCancelPreview(p) {
   const notice = document.getElementById('cs-preview-notice');
   if (noRefund) {
     notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(233,69,96,.35);background:rgba(233,69,96,.07);color:#cc3344;margin-bottom:16px;">⚠️  No refund applies at this stage of the booking. The chauffeur has been dispatched and is considered to have attended.</div>`;
+  } else if (noChauffeur) {
+    notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(76,175,80,.25);background:rgba(76,175,80,.06);color:#3a8a50;margin-bottom:16px;">✓  As no chauffeur accepted your booking, a full refund of ${fmt(p.refundAmount)} will be returned to your original payment method. Refunds are usually completed within 3–5 working days, although your bank or card provider may take longer to process the payment.</div>`;
   } else {
     notice.innerHTML = `<div class="cancel-warning-box" style="border-color:rgba(76,175,80,.25);background:rgba(76,175,80,.06);color:#3a8a50;margin-bottom:16px;">✓  Your refund request of ${fmt(p.refundAmount)} has been submitted for admin review. Once approved, please allow 3–5 working days for your bank to process it.</div>`;
   }
@@ -3097,8 +3116,11 @@ async function confirmCancelBooking() {
   if (!cancelPreviewData || cancelSubmitting) return;
   const p = cancelPreviewData;
   const noRefund = p.refundAmount === 0;
+  const noChauffeur = p.policyName === 'No Chauffeur Found' || p.policyName === 'No Chauffeur Assigned';
   const fmt = v => '£'+parseFloat(v||0).toFixed(2);
-  const msg = noRefund
+  const msg = noChauffeur
+    ? `Request your refund of ${fmt(p.refundAmount)}?`
+    : noRefund
     ? 'You will receive no refund. Are you absolutely sure you want to cancel?'
     : `Confirm cancellation and initiate your refund of ${fmt(p.refundAmount)}?`;
   if (!window.confirm(msg)) return;
