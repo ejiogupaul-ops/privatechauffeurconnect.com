@@ -1377,14 +1377,6 @@
         </div>
         <span style="color:#3a3a5a;font-size:18px;">›</span>
       </a>
-      <a class="cancel-alt-card" id="ca-dest" href="#">
-        <span class="cancel-alt-icon">📍</span>
-        <div style="flex:1;">
-          <div class="cancel-alt-title">Update your destination</div>
-          <div class="cancel-alt-sub">Modify the drop-off or return location</div>
-        </div>
-        <span style="color:#3a3a5a;font-size:18px;">›</span>
-      </a>
       <div id="ca-chauffeur-wrap" style="display:none;">
         <a class="cancel-alt-card" id="ca-chauffeur" href="#">
           <span class="cancel-alt-icon">📞</span>
@@ -2968,7 +2960,6 @@ function cancelBooking(id) {
   document.getElementById('cs-support-ref').textContent = ref;
   document.getElementById('ca-reschedule').href = '#';
   document.getElementById('ca-reschedule').onclick = function(e){ e.preventDefault(); openReschedulePicker(); };
-  document.getElementById('ca-dest').href = 'mailto:support@privatechauffeurconnect.com?subject=Update%20Destination%20'+encodeURIComponent(ref);
   const phone = bk?.chauffeur_profile?.users?.phone;
   if (phone) {
     document.getElementById('ca-chauffeur-wrap').style.display = '';
