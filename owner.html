@@ -1377,16 +1377,6 @@
         </div>
         <span style="color:#3a3a5a;font-size:18px;">›</span>
       </a>
-      <div id="ca-chauffeur-wrap" style="display:none;">
-        <a class="cancel-alt-card" id="ca-chauffeur" href="#">
-          <span class="cancel-alt-icon">📞</span>
-          <div style="flex:1;">
-            <div class="cancel-alt-title">Contact your chauffeur</div>
-            <div class="cancel-alt-sub">Call or message your assigned chauffeur directly</div>
-          </div>
-          <span style="color:#3a3a5a;font-size:18px;">›</span>
-        </a>
-      </div>
       <div class="cancel-divider"></div>
       <button class="cancel-red-btn" onclick="showCancelStep('warning')">Continue to Cancel Booking →</button>
     </div>
@@ -2960,13 +2950,6 @@ function cancelBooking(id) {
   document.getElementById('cs-support-ref').textContent = ref;
   document.getElementById('ca-reschedule').href = '#';
   document.getElementById('ca-reschedule').onclick = function(e){ e.preventDefault(); openReschedulePicker(); };
-  const phone = bk?.chauffeur_profile?.users?.phone;
-  if (phone) {
-    document.getElementById('ca-chauffeur-wrap').style.display = '';
-    document.getElementById('ca-chauffeur').href = 'tel:'+phone;
-  } else {
-    document.getElementById('ca-chauffeur-wrap').style.display = 'none';
-  }
   // Build reason list
   const list = document.getElementById('cs-reason-list');
   list.innerHTML = CANCEL_REASONS.map(r=>`
