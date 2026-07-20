@@ -3130,7 +3130,7 @@ async function confirmCancelBooking() {
     // Recalculate activeBooking from fresh list — do not leave a stale race-condition value
     activeBooking = allBookings.find(isBookingActive) || null;
     if (!activeBooking) document.getElementById('tnav-active').style.display='none';
-    renderBookingsHistory();
+    renderHistory();
     renderDashboard();
   } catch(e) {
     const msg = e.message || 'Could not cancel booking. Please try again.';
@@ -3151,10 +3151,11 @@ async function confirmCancelBooking() {
       // correct state instead of interrupting with an error for something
       // that isn't actually a failure from their perspective.
       closeCancelOverlay();
+      clearInterval(pollTimer);
       allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
       activeBooking = allBookings.find(isBookingActive) || null;
       if (!activeBooking) document.getElementById('tnav-active').style.display='none';
-      renderBookingsHistory();
+      renderHistory();
       showTab('dash');
       renderDashboard();
     } else {
@@ -3372,7 +3373,7 @@ async function retryRescheduleDispatch() {
 async function refreshBookingsAfterReschedule() {
   allBookings = await apiFetch('/bookings/my').catch(()=>allBookings);
   activeBooking = allBookings.find(isBookingActive) || null;
-  renderBookingsHistory();
+  renderHistory();
   renderDashboard();
 }
 
