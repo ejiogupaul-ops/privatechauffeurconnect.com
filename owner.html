@@ -1672,6 +1672,22 @@ let keyReturnMethod = '';
 let keyReturnDetails = {};
 let rwChecked = false;
 let returnConsentGiven = false;
+// Snapshot of the booking tab's original, blank markup — captured once at load
+// (before any user input) so a new booking can be reset to a genuinely clean
+// slate later, rather than just switching which step div is visible while old
+// field values (and a stale price estimate) are still sitting underneath.
+const bookTabPristineHTML = document.getElementById('tab-book').innerHTML;
+function resetBookingForm() {
+  document.getElementById('tab-book').innerHTML = bookTabPristineHTML;
+  tripType = 'regular';
+  ownerReturnsWith = true;
+  keyReturnMethod = '';
+  keyReturnDetails = {};
+  rwChecked = false;
+  returnConsentGiven = false;
+  selectedAirport = null;
+  lastEstimate = null;
+}
 let lastEstimate = null;
 let rvBookingId = null, rvPrePhotos = [], rvPostPhotos = [], rvPostVerified = false;
 let rvDisputeReason = '', rvDisputePhotos = [], rvDrtAccepted = false;
@@ -1688,6 +1704,7 @@ function showPanel(id) {
   });
 }
 function showTab(name) {
+  const wasBookActive = document.getElementById('tab-book').classList.contains('active');
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -1695,8 +1712,13 @@ function showTab(name) {
   if (name==='active') { initMap(); if(activeBooking) refreshActive(activeBooking.id); }
   if (name==='history') renderHistory();
   if (name==='dash') renderDashboard();
-  // Reset booking form to step 1 whenever the user returns to the book tab after a confirmation (step 3)
-  if (name==='book' && document.getElementById('book-step-3').classList.contains('active')) goBookStep(1);
+  // Always start a genuinely blank new booking when arriving at the book tab
+  // from somewhere else. Previously this only reset if step 3 (the plain
+  // success message) had been left showing — but step 2 (the review/confirm
+  // screen, already populated with a real vehicle and price) could just as
+  // easily be left active, and goBookStep() only toggles which step div is
+  // visible, it never clears the underlying field values or estimate.
+  if (name==='book' && !wasBookActive) resetBookingForm();
 }
 function showErr(id, msg) { const e=document.getElementById(id); e.textContent=msg; e.classList.add('show'); }
 function hideErr(id) { document.getElementById(id).classList.remove('show'); }
