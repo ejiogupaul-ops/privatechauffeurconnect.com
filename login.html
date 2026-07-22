@@ -95,6 +95,10 @@
     .success-box .s-icon { font-size:64px; margin-bottom:16px; }
     .success-box h3 { font-size:22px; color:#fff; margin-bottom:10px; }
     .success-box p { font-size:14px; color:var(--muted); line-height:1.7; }
+
+    /* RTL overrides */
+    [dir="rtl"] .pw-wrap input { padding-right:16px; padding-left:48px; }
+    [dir="rtl"] .pw-eye { right:auto; left:14px; }
   </style>
 </head>
 <body>
@@ -103,37 +107,38 @@
   <a href="/" class="nav-logo">
     <img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="nav-logo-img" />
   </a>
-  <a href="/" class="nav-back">← Back to Home</a>
+  <a href="/" class="nav-back" data-i18n="common.back_to_home">← Back to Home</a>
+  <div id="pcc-lang-mount"></div>
 </nav>
 
 <main>
   <!-- LEFT: INFO PANEL -->
   <div class="info-panel">
     <div class="info-content">
-      <div class="info-tag"><div class="dot"></div><span>Trusted Platform</span></div>
+      <div class="info-tag"><div class="dot"></div><span data-i18n="login.info_tag">Trusted Platform</span></div>
       <div class="info-divider"></div>
-      <h1>Welcome Back to<br><em>Private Chauffeur</em><br>Connect</h1>
-      <p>Sign in to manage your bookings, track your earnings and keep your vehicle and profile up to date. Everything is in one place.</p>
+      <h1 data-i18n-html="login.info_title_html">Welcome Back to<br><em>Private Chauffeur</em><br>Connect</h1>
+      <p data-i18n="login.info_subtitle">Sign in to manage your bookings, track your earnings and keep your vehicle and profile up to date. Everything is in one place.</p>
       <div class="info-features">
         <div class="info-feature">
           <div class="info-feature-icon">🚗</div>
           <div class="info-feature-text">
-            <div class="ft">Vehicle Owners</div>
-            <div class="fs">Manage your vehicle, track bookings and view your earnings dashboard.</div>
+            <div class="ft" data-i18n="login.feature_owner_title">Vehicle Owners</div>
+            <div class="fs" data-i18n="login.feature_owner_desc">Manage your vehicle, track bookings and view your earnings dashboard.</div>
           </div>
         </div>
         <div class="info-feature">
           <div class="info-feature-icon">👔</div>
           <div class="info-feature-text">
-            <div class="ft">Chauffeurs</div>
-            <div class="fs">Accept trips, manage your schedule and grow your business.</div>
+            <div class="ft" data-i18n="login.feature_chauffeur_title">Chauffeurs</div>
+            <div class="fs" data-i18n="login.feature_chauffeur_desc">Accept trips, manage your schedule and grow your business.</div>
           </div>
         </div>
         <div class="info-feature">
           <div class="info-feature-icon">📍</div>
           <div class="info-feature-text">
-            <div class="ft">Real-Time Tracking</div>
-            <div class="fs">Live updates on every booking from pickup to drop-off.</div>
+            <div class="ft" data-i18n="login.feature_tracking_title">Real-Time Tracking</div>
+            <div class="fs" data-i18n="login.feature_tracking_desc">Live updates on every booking from pickup to drop-off.</div>
           </div>
         </div>
       </div>
@@ -145,50 +150,52 @@
     <div class="form-box">
 
       <div id="login-form">
-        <h2>Sign In</h2>
-        <p class="sub">Sign in to your account to continue</p>
+        <h2 data-i18n="login.heading">Sign In</h2>
+        <p class="sub" data-i18n="login.subheading">Sign in to your account to continue</p>
 
         <div class="role-tabs">
-          <div class="role-tab active" onclick="setRole('owner',this)">Vehicle Owner</div>
-          <div class="role-tab" onclick="setRole('chauffeur',this)">Chauffeur</div>
+          <div class="role-tab active" data-i18n="login.tab_owner" onclick="setRole('owner',this)">Vehicle Owner</div>
+          <div class="role-tab" data-i18n="login.tab_chauffeur" onclick="setRole('chauffeur',this)">Chauffeur</div>
         </div>
 
         <div class="err-box" id="login-err"></div>
 
         <div class="field">
-          <label>Email Address</label>
+          <label data-i18n="login.label_email">Email Address</label>
           <input type="email" id="login-email" placeholder="your@email.com" />
         </div>
         <div class="field">
-          <label>Password</label>
+          <label data-i18n="login.label_password">Password</label>
           <div class="pw-wrap">
             <input type="password" id="login-pw" placeholder="••••••••" />
             <button class="pw-eye" type="button" onclick="togglePw('login-pw',this)">👁</button>
           </div>
         </div>
 
-        <button class="btn-signin" id="login-btn" onclick="doLogin()">Sign In</button>
+        <button class="btn-signin" id="login-btn" data-i18n="login.btn_signin" onclick="doLogin()">Sign In</button>
 
-        <div class="form-divider">or</div>
-        <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="app-link">
+        <div class="form-divider" data-i18n="login.divider_or">or</div>
+        <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="app-link" data-i18n="login.download_instead">
           📱 Download the App Instead
         </a>
-        <div class="register-link">Don't have an account? <a href="/#access">Register here</a></div>
+        <div class="register-link"><span data-i18n="login.no_account">Don't have an account?</span> <a href="/#access" data-i18n="login.register_here">Register here</a></div>
       </div>
 
       <div class="success-box" id="login-success">
         <div class="s-icon">✅</div>
-        <h3>Signed In!</h3>
-        <p>Redirecting you to your dashboard…</p>
+        <h3 data-i18n="login.success_title">Signed In!</h3>
+        <p data-i18n="login.success_text">Redirecting you to your dashboard…</p>
       </div>
 
     </div>
   </div>
 </main>
 
+<script src="/i18n.js"></script>
 <script>
   const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
   let selectedRole = 'owner';
+  pccRenderSwitcher('#pcc-lang-mount');
 
   function setRole(role, el) {
     selectedRole = role;
@@ -213,9 +220,9 @@
     hideErr();
     const email = document.getElementById('login-email').value.trim();
     const pw = document.getElementById('login-pw').value;
-    if (!email || !pw) return showErr('Please enter your email and password.');
+    if (!email || !pw) return showErr(t('login.err_missing_fields'));
     const btn = document.getElementById('login-btn');
-    btn.disabled = true; btn.textContent = 'Signing in…';
+    btn.disabled = true; btn.textContent = t('login.btn_signing_in');
     try {
       const res = await fetch(`${API}/auth/login`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -223,16 +230,16 @@
       });
       const data = await res.json();
       if (!res.ok) {
-        showErr(data.message || data.error || 'Login failed. Please check your credentials.');
+        showErr(data.message || data.error || t('login.err_login_failed_default'));
         return;
       }
       const role = data.user.role;
       if (selectedRole === 'owner' && role !== 'owner') {
-        showErr('No vehicle owner account found with these details. Please check your role or register as an owner.');
+        showErr(t('login.err_wrong_role_owner'));
         return;
       }
       if (selectedRole === 'chauffeur' && role !== 'chauffeur') {
-        showErr('No chauffeur account found with these details. Please check your role or register as a chauffeur.');
+        showErr(t('login.err_wrong_role_chauffeur'));
         return;
       }
       // Store session
@@ -246,8 +253,8 @@
         if (role === 'owner') window.location.href = '/owner.html';
         else window.location.href = '/';
       }, 1400);
-    } catch { showErr('Cannot reach server. Please check your connection and try again.'); }
-    finally { btn.disabled = false; btn.textContent = 'Sign In'; }
+    } catch { showErr(t('login.err_network')); }
+    finally { btn.disabled = false; btn.textContent = t('login.btn_signin'); }
   }
 
   // Allow Enter key

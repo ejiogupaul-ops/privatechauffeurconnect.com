@@ -37,43 +37,74 @@
     <img src="/logo.png?v=5" alt="Private Chauffeur Connect" />
   </a>
 
+  <div id="pcc-lang-mount"></div>
+
   <div class="card">
     <!-- Loading state -->
     <div id="loading" class="show">
       <div class="spinner"></div>
-      <h1>Verifying your email…</h1>
-      <p>Please wait while we confirm your email address.</p>
+      <h1 data-i18n="verify.loading_title">Verifying your email…</h1>
+      <p data-i18n="verify.loading_text">Please wait while we confirm your email address.</p>
     </div>
 
     <!-- Success state -->
     <div id="success">
       <span class="icon">✅</span>
-      <h1>Email Verified!</h1>
-      <p>Your email address has been confirmed. You can now log in to the Private Chauffeur Connect app and complete your registration.</p>
-      <a href="/#access" class="btn">Go to Login</a>
-      <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="btn btn-outline">📱 Download the App</a>
+      <h1 data-i18n="verify.success_title">Email Verified!</h1>
+      <p data-i18n="verify.success_text">Your email address has been confirmed. You can now log in to the Private Chauffeur Connect app and complete your registration.</p>
+      <a href="/#access" class="btn" data-i18n="verify.btn_login">Go to Login</a>
+      <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="btn btn-outline" data-i18n="verify.btn_download">📱 Download the App</a>
     </div>
 
     <!-- Error state -->
     <div id="error">
       <span class="icon">❌</span>
-      <h1 id="error-title">Verification Failed</h1>
-      <p id="error-msg">This link may have expired or already been used. Please register again or contact support.</p>
-      <a href="/#access" class="btn">Back to Registration</a>
+      <h1 id="error-title" data-i18n="verify.error_title_default">Verification Failed</h1>
+      <p id="error-msg" data-i18n="verify.error_msg_default">This link may have expired or already been used. Please register again or contact support.</p>
+      <a href="/#access" class="btn" data-i18n="verify.btn_back">Back to Registration</a>
     </div>
   </div>
 
+  <script src="/i18n.js"></script>
   <script>
     const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
+    pccRenderSwitcher('#pcc-lang-mount', 'flat');
+
+    let currentErrorKind = null; // 'invalid_link' | 'server' | 'network' | null
+    let currentErrorRawMsg = null;
+
+    function renderError() {
+      const titleEl = document.getElementById('error-title');
+      const msgEl = document.getElementById('error-msg');
+      if (currentErrorKind === 'invalid_link') {
+        titleEl.textContent = t('verify.error_invalid_link_title');
+        msgEl.textContent = t('verify.error_invalid_link_msg');
+      } else if (currentErrorKind === 'server') {
+        titleEl.textContent = t('verify.error_title_default');
+        msgEl.textContent = currentErrorRawMsg || t('verify.error_generic_msg');
+      } else if (currentErrorKind === 'network') {
+        titleEl.textContent = t('verify.error_title_default');
+        msgEl.textContent = t('verify.error_network_msg');
+      }
+    }
+
+    function showError(kind, rawMsg) {
+      currentErrorKind = kind;
+      currentErrorRawMsg = rawMsg || null;
+      renderError();
+      show('error');
+    }
+
+    window.addEventListener('pcc:langchange', function () {
+      if (currentErrorKind) renderError();
+    });
 
     async function verify() {
       const params = new URLSearchParams(window.location.search);
       const token = params.get('token');
 
       if (!token) {
-        show('error');
-        document.getElementById('error-title').textContent = 'Invalid Link';
-        document.getElementById('error-msg').textContent = 'No verification token found. Please check the link in your email.';
+        showError('invalid_link');
         return;
       }
 
@@ -83,12 +114,10 @@
         if (res.ok) {
           show('success');
         } else {
-          show('error');
-          document.getElementById('error-msg').textContent = data.error || data.message || 'Verification failed. Please try again.';
+          showError('server', data.error || data.message);
         }
       } catch (e) {
-        show('error');
-        document.getElementById('error-msg').textContent = 'Could not reach the server. Please check your connection and try again.';
+        showError('network');
       }
     }
 

@@ -151,6 +151,9 @@
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
     .footer-links a { font-size: 13px; color: var(--muted); transition: color .2s; }
     .footer-links a:hover { color: var(--gold); }
+
+    /* RTL overrides */
+    [dir="rtl"] .faq-a ul, [dir="rtl"] .faq-a ol { padding-left:0; padding-right:18px; }
   </style>
 </head>
 <body>
@@ -161,29 +164,30 @@
   </a>
   <a href="/" class="nav-back">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    Back to Home
+    <span data-i18n="common.back_to_home_plain">Back to Home</span>
   </a>
+  <div id="pcc-lang-mount"></div>
 </nav>
 
 <div class="faq-hero">
-  <div class="eyebrow">FAQs</div>
-  <h1>Frequently Asked <em>Questions</em></h1>
-  <p class="tagline">Everything you need to know before getting started.</p>
+  <div class="eyebrow" data-i18n="faq.eyebrow">FAQs</div>
+  <h1 data-i18n-html="faq.title_html">Frequently Asked <em>Questions</em></h1>
+  <p class="tagline" data-i18n="faq.tagline">Everything you need to know before getting started.</p>
 </div>
 
 <div class="tab-wrap">
 
   <!-- TAB SWITCHER -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('owners', this)">🔑 Vehicle Owners</button>
-    <button class="tab-btn" onclick="switchTab('chauffeurs', this)">🚗 Chauffeurs</button>
+    <button class="tab-btn active" data-i18n="faq.tab_owners" onclick="switchTab('owners', this)">🔑 Vehicle Owners</button>
+    <button class="tab-btn" data-i18n="faq.tab_chauffeurs" onclick="switchTab('chauffeurs', this)">🚗 Chauffeurs</button>
   </div>
 
   <!-- VEHICLE OWNERS PANEL -->
   <div class="tab-panel active" id="panel-owners">
     <div class="section-label">
       <div class="section-icon">🔑</div>
-      <h2>Vehicle Owners</h2>
+      <h2 data-i18n="faq.owners_heading">Vehicle Owners</h2>
     </div>
     <div class="faq-divider"></div>
 
@@ -191,135 +195,135 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What is Private Chauffeur Connect?</span>
+          <span data-i18n="faq.o_q1_q">What is Private Chauffeur Connect?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Private Chauffeur Connect is a platform that connects vehicle owners with vetted, independent professional chauffeurs. You use your own vehicle, while a professional chauffeur provides the driving service.</p>
+          <p data-i18n="faq.o_q1_a">Private Chauffeur Connect is a platform that connects vehicle owners with vetted, independent professional chauffeurs. You use your own vehicle, while a professional chauffeur provides the driving service.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What services can I book?</span>
+          <span data-i18n="faq.o_q2_q">What services can I book?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>You can book chauffeurs for:</p>
+          <p data-i18n="faq.o_q2_intro">You can book chauffeurs for:</p>
           <ul>
-            <li>Airport transfers</li>
-            <li>Business travel</li>
-            <li>Special events</li>
-            <li>Weddings</li>
-            <li>Evening engagements</li>
-            <li>Medical appointments</li>
-            <li>Long-distance journeys</li>
-            <li>Vehicle return services</li>
-            <li>Hourly chauffeur hire</li>
+            <li data-i18n="faq.o_q2_li1">Airport transfers</li>
+            <li data-i18n="faq.o_q2_li2">Business travel</li>
+            <li data-i18n="faq.o_q2_li3">Special events</li>
+            <li data-i18n="faq.o_q2_li4">Weddings</li>
+            <li data-i18n="faq.o_q2_li5">Evening engagements</li>
+            <li data-i18n="faq.o_q2_li6">Medical appointments</li>
+            <li data-i18n="faq.o_q2_li7">Long-distance journeys</li>
+            <li data-i18n="faq.o_q2_li8">Vehicle return services</li>
+            <li data-i18n="faq.o_q2_li9">Hourly chauffeur hire</li>
           </ul>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>How do I book a chauffeur?</span>
+          <span data-i18n="faq.o_q3_q">How do I book a chauffeur?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Simply:</p>
+          <p data-i18n="faq.o_q3_intro">Simply:</p>
           <ol>
-            <li>Enter your journey details.</li>
-            <li>Choose the service you require.</li>
-            <li>Review the price.</li>
-            <li>Confirm and pay securely.</li>
+            <li data-i18n="faq.o_q3_li1">Enter your journey details.</li>
+            <li data-i18n="faq.o_q3_li2">Choose the service you require.</li>
+            <li data-i18n="faq.o_q3_li3">Review the price.</li>
+            <li data-i18n="faq.o_q3_li4">Confirm and pay securely.</li>
           </ol>
-          <p>A qualified chauffeur will be assigned to your booking.</p>
+          <p data-i18n="faq.o_q3_outro">A qualified chauffeur will be assigned to your booking.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>Can I track my vehicle?</span>
+          <span data-i18n="faq.o_q4_q">Can I track my vehicle?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Yes. During an active booking, you can view the chauffeur's live location through the app.</p>
-          <p>For Airport Drop-Off with Vehicle Return bookings, tracking continues while your vehicle is being returned until the booking is completed.</p>
+          <p data-i18n="faq.o_q4_a1">Yes. During an active booking, you can view the chauffeur's live location through the app.</p>
+          <p data-i18n="faq.o_q4_a2">For Airport Drop-Off with Vehicle Return bookings, tracking continues while your vehicle is being returned until the booking is completed.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What if my flight is delayed or cancelled?</span>
+          <span data-i18n="faq.o_q5_q">What if my flight is delayed or cancelled?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Depending on your booking, airport waiting time can be extended (additional charges may apply). If your flight is cancelled, please contact your chauffeur or our support team through the app as soon as possible.</p>
+          <p data-i18n="faq.o_q5_a">Depending on your booking, airport waiting time can be extended (additional charges may apply). If your flight is cancelled, please contact your chauffeur or our support team through the app as soon as possible.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What happens if I need to cancel?</span>
+          <span data-i18n="faq.o_q6_q">What happens if I need to cancel?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>You can cancel your booking through the app. Refunds are calculated based on:</p>
+          <p data-i18n="faq.o_q6_intro">You can cancel your booking through the app. Refunds are calculated based on:</p>
           <ul>
-            <li>Time before pickup</li>
-            <li>Booking status</li>
-            <li>Whether the chauffeur has started travelling</li>
+            <li data-i18n="faq.o_q6_li1">Time before pickup</li>
+            <li data-i18n="faq.o_q6_li2">Booking status</li>
+            <li data-i18n="faq.o_q6_li3">Whether the chauffeur has started travelling</li>
           </ul>
-          <p>Any applicable cancellation charges will be shown before you confirm cancellation.</p>
+          <p data-i18n="faq.o_q6_outro">Any applicable cancellation charges will be shown before you confirm cancellation.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>Is my payment secure?</span>
+          <span data-i18n="faq.o_q7_q">Is my payment secure?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Yes. All payments are processed securely through our payment provider. Your payment is held and managed in accordance with our booking and cancellation policies.</p>
+          <p data-i18n="faq.o_q7_a">Yes. All payments are processed securely through our payment provider. Your payment is held and managed in accordance with our booking and cancellation policies.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What insurance is required?</span>
+          <span data-i18n="faq.o_q8_q">What insurance is required?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Private Chauffeur Connect is developing an insurance solution specifically for bookings made through the platform. Where applicable, insurance requirements will be communicated before your booking is confirmed.</p>
+          <p data-i18n="faq.o_q8_a">Private Chauffeur Connect is developing an insurance solution specifically for bookings made through the platform. Where applicable, insurance requirements will be communicated before your booking is confirmed.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>How are chauffeurs vetted?</span>
+          <span data-i18n="faq.o_q9_q">How are chauffeurs vetted?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Every chauffeur must complete our onboarding process, which may include:</p>
+          <p data-i18n="faq.o_q9_intro">Every chauffeur must complete our onboarding process, which may include:</p>
           <ul>
-            <li>Identity verification</li>
-            <li>Licence checks</li>
-            <li>Right-to-work verification</li>
-            <li>Background screening (where applicable)</li>
-            <li>Document verification</li>
-            <li>Agreement to our platform standards</li>
+            <li data-i18n="faq.o_q9_li1">Identity verification</li>
+            <li data-i18n="faq.o_q9_li2">Licence checks</li>
+            <li data-i18n="faq.o_q9_li3">Right-to-work verification</li>
+            <li data-i18n="faq.o_q9_li4">Background screening (where applicable)</li>
+            <li data-i18n="faq.o_q9_li5">Document verification</li>
+            <li data-i18n="faq.o_q9_li6">Agreement to our platform standards</li>
           </ul>
-          <p>All requirements must be satisfied before a chauffeur can accept bookings.</p>
+          <p data-i18n="faq.o_q9_outro">All requirements must be satisfied before a chauffeur can accept bookings.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What happens if there's a problem during my booking?</span>
+          <span data-i18n="faq.o_q10_q">What happens if there's a problem during my booking?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>If you experience an issue, you can report it directly through the app. Our support team will investigate using booking records, GPS history and other available evidence before reaching a decision.</p>
+          <p data-i18n="faq.o_q10_a">If you experience an issue, you can report it directly through the app. Our support team will investigate using booking records, GPS history and other available evidence before reaching a decision.</p>
         </div>
       </div>
 
@@ -330,7 +334,7 @@
   <div class="tab-panel" id="panel-chauffeurs">
     <div class="section-label">
       <div class="section-icon">🚗</div>
-      <h2>Chauffeurs</h2>
+      <h2 data-i18n="faq.chauffeurs_heading">Chauffeurs</h2>
     </div>
     <div class="faq-divider"></div>
 
@@ -338,128 +342,128 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>Who can join Private Chauffeur Connect?</span>
+          <span data-i18n="faq.c_q1_q">Who can join Private Chauffeur Connect?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Professional independent chauffeurs who meet our onboarding requirements and agree to our platform standards.</p>
+          <p data-i18n="faq.c_q1_a">Professional independent chauffeurs who meet our onboarding requirements and agree to our platform standards.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>Am I employed by Private Chauffeur Connect?</span>
+          <span data-i18n="faq.c_q2_q">Am I employed by Private Chauffeur Connect?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>No. Chauffeurs remain independent contractors and are responsible for managing their own business and tax affairs.</p>
+          <p data-i18n="faq.c_q2_a">No. Chauffeurs remain independent contractors and are responsible for managing their own business and tax affairs.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>How do I receive bookings?</span>
+          <span data-i18n="faq.c_q3_q">How do I receive bookings?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Bookings are offered through the app based on availability and other operational factors. You can accept or decline available bookings.</p>
+          <p data-i18n="faq.c_q3_a">Bookings are offered through the app based on availability and other operational factors. You can accept or decline available bookings.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>How do payouts work?</span>
+          <span data-i18n="faq.c_q4_q">How do payouts work?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Payments are made to your chauffeur wallet after completed bookings. Funds are then transferred according to the platform's payout schedule. Where applicable, cancellation compensation is also credited to your wallet.</p>
+          <p data-i18n="faq.c_q4_a">Payments are made to your chauffeur wallet after completed bookings. Funds are then transferred according to the platform's payout schedule. Where applicable, cancellation compensation is also credited to your wallet.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>How much commission does the platform charge?</span>
+          <span data-i18n="faq.c_q5_q">How much commission does the platform charge?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Private Chauffeur Connect deducts its agreed platform commission before calculating chauffeur earnings. Your earnings are displayed before you accept each booking.</p>
+          <p data-i18n="faq.c_q5_a">Private Chauffeur Connect deducts its agreed platform commission before calculating chauffeur earnings. Your earnings are displayed before you accept each booking.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What happens if a Vehicle Owner cancels?</span>
+          <span data-i18n="faq.c_q6_q">What happens if a Vehicle Owner cancels?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Depending on the timing and booking status, you may receive cancellation compensation in accordance with our cancellation policy. If compensation is due, it will be added to your wallet for your next payout.</p>
+          <p data-i18n="faq.c_q6_a">Depending on the timing and booking status, you may receive cancellation compensation in accordance with our cancellation policy. If compensation is due, it will be added to your wallet for your next payout.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What if I need to cancel a booking?</span>
+          <span data-i18n="faq.c_q7_q">What if I need to cancel a booking?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>You should only cancel when absolutely necessary. Repeated cancellations may affect your platform rating and could result in temporary suspension or account review.</p>
+          <p data-i18n="faq.c_q7_a">You should only cancel when absolutely necessary. Repeated cancellations may affect your platform rating and could result in temporary suspension or account review.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What happens if there's an accident?</span>
+          <span data-i18n="faq.c_q8_q">What happens if there's an accident?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>You must:</p>
+          <p data-i18n="faq.c_q8_intro">You must:</p>
           <ol>
-            <li>Ensure everyone is safe.</li>
-            <li>Contact emergency services where required.</li>
-            <li>Notify the Vehicle Owner.</li>
-            <li>Report the incident through the app immediately.</li>
-            <li>Follow our incident reporting procedure.</li>
+            <li data-i18n="faq.c_q8_li1">Ensure everyone is safe.</li>
+            <li data-i18n="faq.c_q8_li2">Contact emergency services where required.</li>
+            <li data-i18n="faq.c_q8_li3">Notify the Vehicle Owner.</li>
+            <li data-i18n="faq.c_q8_li4">Report the incident through the app immediately.</li>
+            <li data-i18n="faq.c_q8_li5">Follow our incident reporting procedure.</li>
           </ol>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What if I can't return the keys as instructed?</span>
+          <span data-i18n="faq.c_q9_q">What if I can't return the keys as instructed?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>If you cannot safely follow the Vehicle Owner's Key Return Instructions, contact the Vehicle Owner through the app before taking any alternative action. Never leave keys unattended unless specifically authorised.</p>
+          <p data-i18n="faq.c_q9_a">If you cannot safely follow the Vehicle Owner's Key Return Instructions, contact the Vehicle Owner through the app before taking any alternative action. Never leave keys unattended unless specifically authorised.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>Can I take another passenger while returning the owner's vehicle?</span>
+          <span data-i18n="faq.c_q10_q">Can I take another passenger while returning the owner's vehicle?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>No. Only authorised occupants connected with the booking may be carried. Unauthorised passengers are strictly prohibited.</p>
+          <p data-i18n="faq.c_q10_a">No. Only authorised occupants connected with the booking may be carried. Unauthorised passengers are strictly prohibited.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>Am I tracked during bookings?</span>
+          <span data-i18n="faq.c_q11_q">Am I tracked during bookings?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Yes. GPS tracking remains active throughout active bookings to support journey monitoring, booking records and dispute resolution.</p>
+          <p data-i18n="faq.c_q11_a">Yes. GPS tracking remains active throughout active bookings to support journey monitoring, booking records and dispute resolution.</p>
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="toggle(this)">
-          <span>What support is available?</span>
+          <span data-i18n="faq.c_q12_q">What support is available?</span>
           <div class="faq-chevron">▾</div>
         </div>
         <div class="faq-a">
-          <p>Our support team is available to assist with booking issues, payment queries, incidents and disputes through the app.</p>
+          <p data-i18n="faq.c_q12_a">Our support team is available to assist with booking issues, payment queries, incidents and disputes through the app.</p>
         </div>
       </div>
 
@@ -471,17 +475,19 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-links">
-      <a href="/">Home</a>
-      <a href="/about.html">About Us</a>
-      <a href="/faq.html">FAQs</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms &amp; Conditions</a>
+      <a href="/" data-i18n="common.nav_home">Home</a>
+      <a href="/about.html" data-i18n="common.nav_about">About Us</a>
+      <a href="/faq.html" data-i18n="common.nav_faqs">FAQs</a>
+      <a href="/privacy.html" data-i18n="common.nav_privacy">Privacy Policy</a>
+      <a href="/terms.html" data-i18n="common.nav_terms">Terms &amp; Conditions</a>
     </div>
-    <p>&copy; 2026 Private Chauffeur Connect Ltd. All rights reserved. Company No. 17332607 (England &amp; Wales).</p>
+    <p data-i18n="about.footer_copyright_html">© 2026 Private Chauffeur Connect Ltd. All rights reserved. Company No. 17332607 (England & Wales).</p>
   </div>
 </footer>
 
+<script src="/i18n.js"></script>
 <script>
+pccRenderSwitcher('#pcc-lang-mount');
 function toggle(el){
   const item = el.closest('.faq-item');
   item.classList.toggle('open');

@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Download App — Private Chauffeur Connect</title>
-  <link rel=”icon” type=”image/png” href=”/logo.png” />
-  <link rel=”apple-touch-icon” href=”/logo.png” />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -64,6 +64,9 @@
     footer p { font-size:12px; color:var(--muted); }
     footer a { color:var(--muted); margin:0 12px; font-size:12px; transition:color .2s; }
     footer a:hover { color:var(--gold); }
+
+    /* RTL overrides */
+    [dir="rtl"] .steps { text-align:right; }
   </style>
 </head>
 <body>
@@ -74,18 +77,19 @@
   </a>
   <a href="/" class="nav-back">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    Back to Home
+    <span data-i18n="common.back_to_home_plain">Back to Home</span>
   </a>
+  <div id="pcc-lang-mount"></div>
 </nav>
 
 <div class="hero">
-  <div class="eyebrow">Android App</div>
-  <h1>Download Private Chauffeur Connect</h1>
-  <p>The app for vehicle owners and professional chauffeurs. Install directly on your Android device.</p>
+  <div class="eyebrow" data-i18n="download.eyebrow">Android App</div>
+  <h1 data-i18n="download.title">Download Private Chauffeur Connect</h1>
+  <p data-i18n="download.subtitle">The app for vehicle owners and professional chauffeurs. Install directly on your Android device.</p>
 
   <div class="version-badge">
     <span class="version-dot"></span>
-    Always the latest version
+    <span data-i18n="download.version_badge">Always the latest version</span>
   </div>
 
   <a class="dl-btn" href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" download="PrivateChauffeurConnect.apk">
@@ -94,38 +98,38 @@
       <polyline points="7 10 12 15 17 10"/>
       <line x1="12" y1="15" x2="12" y2="3"/>
     </svg>
-    Download APK
+    <span data-i18n="download.btn_download">Download APK</span>
   </a>
-  <p class="dl-size">Android 8.0 and above Â· Free to install</p>
+  <p class="dl-size" data-i18n="download.size_note">Android 8.0 and above · Free to install</p>
 
-  <p class="steps-title">How to install</p>
+  <p class="steps-title" data-i18n="download.steps_title">How to install</p>
   <div class="steps">
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <strong>Tap the download button above</strong>
-        <span>Your browser will download the APK file. If Chrome asks to confirm, tap <em>Download anyway</em>.</span>
+        <strong data-i18n="download.step1_title">Tap the download button above</strong>
+        <span data-i18n-html="download.step1_desc_html">Your browser will download the APK file. If Chrome asks to confirm, tap <em>Download anyway</em>.</span>
       </div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <strong>Open the downloaded file</strong>
-        <span>Pull down your notification bar and tap the downloaded APK, or open it from your Downloads folder.</span>
+        <strong data-i18n="download.step2_title">Open the downloaded file</strong>
+        <span data-i18n="download.step2_desc">Pull down your notification bar and tap the downloaded APK, or open it from your Downloads folder.</span>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <strong>Allow installation from this source</strong>
-        <span>If prompted, go to <em>Settings â†’ Install unknown apps</em>, select your browser, and toggle <em>Allow from this source</em>. Then return and tap Install.</span>
+        <strong data-i18n="download.step3_title">Allow installation from this source</strong>
+        <span data-i18n-html="download.step3_desc_html">If prompted, go to <em>Settings → Install unknown apps</em>, select your browser, and toggle <em>Allow from this source</em>. Then return and tap Install.</span>
       </div>
     </div>
     <div class="step">
       <div class="step-num">4</div>
       <div class="step-body">
-        <strong>Open the app and register</strong>
-        <span>Create your account as a Vehicle Owner or Chauffeur and complete your profile.</span>
+        <strong data-i18n="download.step4_title">Open the app and register</strong>
+        <span data-i18n="download.step4_desc">Create your account as a Vehicle Owner or Chauffeur and complete your profile.</span>
       </div>
     </div>
   </div>
@@ -133,13 +137,17 @@
 
 <footer>
   <p>
-    <a href="/">Home</a>
-    <a href="/privacy.html">Privacy Policy</a>
-    <a href="mailto:support@privatechauffeurconnect.com">Contact</a>
+    <a href="/" data-i18n="common.nav_home">Home</a>
+    <a href="/privacy.html" data-i18n="common.nav_privacy">Privacy Policy</a>
+    <a href="mailto:support@privatechauffeurconnect.com" data-i18n="common.nav_contact">Contact</a>
   </p>
-  <p style="margin-top:10px;">© 2026 Private Chauffeur Connect Ltd. Company No. 17332607.</p>
+  <p style="margin-top:10px;" data-i18n="download.footer_copyright">© 2026 Private Chauffeur Connect Ltd. Company No. 17332607.</p>
 </footer>
 
+<script src="/i18n.js"></script>
+<script>
+  pccRenderSwitcher('#pcc-lang-mount');
+</script>
 </body>
 </html>
 

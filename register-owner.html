@@ -267,6 +267,11 @@
       font-family: 'Inter',sans-serif;
     }
     .cs-modal button:hover { background: var(--gold2); }
+
+    /* RTL overrides */
+    [dir="rtl"] .pw-wrap input { padding-right:16px; padding-left:48px; }
+    [dir="rtl"] .pw-eye { right:auto; left:14px; }
+    [dir="rtl"] .plain-english { border-left:none; border-right:3px solid rgba(80,200,140,.4); border-radius:8px 0 0 8px; }
   </style>
 </head>
 <body>
@@ -278,8 +283,9 @@
   </a>
   <a href="/" class="nav-back">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    Back to Home
+    <span data-i18n="common.back_to_home_plain">Back to Home</span>
   </a>
+  <div id="pcc-lang-mount"></div>
 </nav>
 
 <!-- HERO -->
@@ -287,43 +293,43 @@
   <div class="hero-inner">
     <!-- Left: copy -->
     <div>
-      <div class="hero-badge"><span class="crown">👑</span> For Vehicle Owners</div>
-      <h1>Your Vehicle.<br><em>Expert, Trusted Hands.</em></h1>
-      <p class="hero-sub">Register your vehicle and get access to professional, fully vetted chauffeurs who drive it with the same care you would. Safe, tracked, and completely accountable from pickup to return.</p>
+      <div class="hero-badge"><span class="crown">👑</span> <span data-i18n="register_owner.hero_badge">For Vehicle Owners</span></div>
+      <h1 data-i18n-html="register_owner.hero_title_html">Your Vehicle.<br><em>Expert, Trusted Hands.</em></h1>
+      <p class="hero-sub" data-i18n="register_owner.hero_sub">Register your vehicle and get access to professional, fully vetted chauffeurs who drive it with the same care you would. Safe, tracked, and completely accountable from pickup to return.</p>
       <div class="hero-trust">
-        <div class="trust-pill"><span>🛡️</span> Fully Vetted Chauffeurs</div>
-        <div class="trust-pill"><span>📍</span> Live GPS Tracking</div>
-        <div class="trust-pill"><span>🔒</span> Secure Payments</div>
+        <div class="trust-pill"><span>🛡️</span> <span data-i18n="register_owner.trust_vetted">Fully Vetted Chauffeurs</span></div>
+        <div class="trust-pill"><span>📍</span> <span data-i18n="register_owner.trust_gps">Live GPS Tracking</span></div>
+        <div class="trust-pill"><span>🔒</span> <span data-i18n="register_owner.trust_secure">Secure Payments</span></div>
       </div>
     </div>
     <!-- Right: service preview -->
     <div class="hero-visual">
-      <div class="hv-label-top">Your journey, protected</div>
+      <div class="hv-label-top" data-i18n="register_owner.visual_label">Your journey, protected</div>
       <div class="hv-row">
         <div class="hv-icon">🔍</div>
         <div>
-          <div class="hv-title">Chauffeur Verification</div>
-          <div class="hv-sub">Every chauffeur is identity-checked and vetted before they can accept bookings on our platform.</div>
+          <div class="hv-title" data-i18n="register_owner.visual_row1_title">Chauffeur Verification</div>
+          <div class="hv-sub" data-i18n="register_owner.visual_row1_desc">Every chauffeur is identity-checked and vetted before they can accept bookings on our platform.</div>
         </div>
       </div>
       <div class="hv-row">
         <div class="hv-icon">📱</div>
         <div>
-          <div class="hv-title">Book in Minutes</div>
-          <div class="hv-sub">Request a chauffeur through the app and get matched instantly. Track your journey live.</div>
+          <div class="hv-title" data-i18n="register_owner.visual_row2_title">Book in Minutes</div>
+          <div class="hv-sub" data-i18n="register_owner.visual_row2_desc">Request a chauffeur through the app and get matched instantly. Track your journey live.</div>
         </div>
       </div>
       <div class="hv-row">
         <div class="hv-icon">🚘</div>
         <div>
-          <div class="hv-title">Vehicle Returned Safely</div>
-          <div class="hv-sub">Post-trip photos, GPS records and key handover confirmation are recorded every time, without fail.</div>
+          <div class="hv-title" data-i18n="register_owner.visual_row3_title">Vehicle Returned Safely</div>
+          <div class="hv-sub" data-i18n="register_owner.visual_row3_desc">Post-trip photos, GPS records and key handover confirmation are recorded every time, without fail.</div>
         </div>
       </div>
       <div class="hv-divider"></div>
       <div class="hv-footer">
-        <span>Trusted by vehicle owners across the UK</span>
-        <strong>4.9 ★</strong>
+        <span data-i18n="register_owner.visual_footer_text">Trusted by vehicle owners across the UK</span>
+        <strong data-i18n="register_owner.visual_rating">4.9 ★</strong>
       </div>
     </div>
   </div>
@@ -331,132 +337,133 @@
 
 <!-- FORM -->
 <div class="form-section">
-  <p class="section-label">Create Your Account</p>
-  <h2 class="section-title">Register as a Vehicle Owner</h2>
+  <p class="section-label" data-i18n="register_owner.section_label">Create Your Account</p>
+  <h2 class="section-title" data-i18n="register_owner.section_title">Register as a Vehicle Owner</h2>
 
   <div class="reg-card">
     <div id="owner-form-area">
       <div class="access-err" id="ow-err"></div>
 
       <div class="form-field" style="position:relative;z-index:50;">
-        <label>Country of Location</label>
+        <label data-i18n="common.reg.country_label">Country of Location</label>
         <div class="country-selector" id="ow-country-selector" onclick="toggleCountryDrop('ow')">
-          <span id="ow-country-label">Select your country…</span>
+          <span id="ow-country-label" data-i18n="common.reg.country_placeholder">Select your country…</span>
           <span class="country-drop-arrow">▼</span>
         </div>
         <div class="country-dropdown" id="ow-country-dropdown">
-          <div style="padding:12px 16px;font-size:12px;color:#4a4060;">Loading countries…</div>
+          <div style="padding:12px 16px;font-size:12px;color:#4a4060;" data-i18n="common.reg.country_loading">Loading countries…</div>
         </div>
       </div>
 
       <div class="form-field">
-        <label>Full Name</label>
-        <input type="text" id="ow-name" placeholder="Your full name" autocomplete="name" />
+        <label data-i18n="common.reg.label_full_name">Full Name</label>
+        <input type="text" id="ow-name" placeholder="Your full name" data-i18n-placeholder="common.reg.placeholder_full_name" autocomplete="name" />
       </div>
       <div class="form-field">
-        <label>Email Address</label>
-        <input type="email" id="ow-email" placeholder="your@email.com" autocomplete="email" />
+        <label data-i18n="common.reg.label_email">Email Address</label>
+        <input type="email" id="ow-email" placeholder="your@email.com" data-i18n-placeholder="common.reg.placeholder_email" autocomplete="email" />
       </div>
       <div class="form-field">
-        <label>Phone Number</label>
-        <input type="tel" id="ow-phone" placeholder="+44 7XXX XXXXXX" autocomplete="tel" />
+        <label data-i18n="common.reg.label_phone">Phone Number</label>
+        <input type="tel" id="ow-phone" placeholder="+44 7XXX XXXXXX" data-i18n-placeholder="common.reg.placeholder_phone" autocomplete="tel" />
       </div>
       <div class="form-field">
-        <label>Password</label>
+        <label data-i18n="common.reg.label_password">Password</label>
         <div class="pw-wrap">
-          <input type="password" id="ow-pw" placeholder="Min. 8 characters" autocomplete="new-password" />
+          <input type="password" id="ow-pw" placeholder="Min. 8 characters" data-i18n-placeholder="common.reg.placeholder_password" autocomplete="new-password" />
           <button class="pw-eye" type="button" onclick="togglePw('ow-pw', this)" title="Show/hide">👁</button>
         </div>
       </div>
 
       <div class="liability-box">
         <div class="liability-header" onclick="toggleLiability('ow-liability')">
-          <span>📋 Transfer of Liability Agreement</span>
-          <button class="liability-toggle" id="ow-liability-btn">▼ Read</button>
+          <span data-i18n="common.reg.liability_header">📋 Transfer of Liability Agreement</span>
+          <button class="liability-toggle" id="ow-liability-btn" data-i18n="common.reg.liability_read">▼ Read</button>
         </div>
         <div class="liability-body" id="ow-liability">
-          <div class="liability-section-lbl">Your Responsibilities as a Vehicle Owner</div>
+          <div class="liability-section-lbl" data-i18n="register_owner.liability_sec1_heading">Your Responsibilities as a Vehicle Owner</div>
           <div class="plain-english">
-            <div class="pe-label">💬 In plain English</div>
-            <p>Your vehicle must be roadworthy, have a valid MOT, and be insured for hire & reward use before it can be used for bookings. Any fines the car receives when a chauffeur is not driving it on a booking are yours to deal with.</p>
+            <div class="pe-label" data-i18n="common.reg.pe_label">💬 In plain English</div>
+            <p data-i18n="register_owner.liability_sec1_plain">Your vehicle must be roadworthy, have a valid MOT, and be insured for hire & reward use before it can be used for bookings. Any fines the car receives when a chauffeur is not driving it on a booking are yours to deal with.</p>
           </div>
-          <p class="legal-text">The vehicle owner is responsible for providing a roadworthy vehicle with valid MOT, road tax, and hire & reward insurance; any fines received when the vehicle is not on a booking; ensuring the vehicle is licensed for private hire use.</p>
+          <p class="legal-text" data-i18n="register_owner.liability_sec1_legal">The vehicle owner is responsible for providing a roadworthy vehicle with valid MOT, road tax, and hire & reward insurance; any fines received when the vehicle is not on a booking; ensuring the vehicle is licensed for private hire use.</p>
 
-          <div class="liability-section-lbl" style="margin-top:16px;">Chauffeur Liability</div>
+          <div class="liability-section-lbl" style="margin-top:16px;" data-i18n="register_owner.liability_sec2_heading">Chauffeur Liability</div>
           <div class="plain-english">
-            <div class="pe-label">💬 In plain English</div>
-            <p>When a chauffeur is driving your vehicle on a booking, they are responsible for any fines they receive, any damage they cause, and any problems arising from them not having the right documents or licences.</p>
+            <div class="pe-label" data-i18n="common.reg.pe_label">💬 In plain English</div>
+            <p data-i18n="register_owner.liability_sec2_plain">When a chauffeur is driving your vehicle on a booking, they are responsible for any fines they receive, any damage they cause, and any problems arising from them not having the right documents or licences.</p>
           </div>
-          <p class="legal-text">The chauffeur accepts full responsibility for any traffic violations, PCNs, or parking fines during a booking; any damage to the vehicle; and any liability from operating without valid documentation.</p>
+          <p class="legal-text" data-i18n="register_owner.liability_sec2_legal">The chauffeur accepts full responsibility for any traffic violations, PCNs, or parking fines during a booking; any damage to the vehicle; and any liability from operating without valid documentation.</p>
 
-          <div class="liability-section-lbl" style="margin-top:16px;">Platform Role</div>
+          <div class="liability-section-lbl" style="margin-top:16px;" data-i18n="register_owner.liability_sec3_heading">Platform Role</div>
           <div class="plain-english">
-            <div class="pe-label">💬 In plain English</div>
-            <p>We connect you with vetted chauffeurs and manage the booking process. We're not the employer or insurer of the chauffeur. If a dispute arises over damage or money, that's a matter between you and the chauffeur to resolve directly.</p>
+            <div class="pe-label" data-i18n="common.reg.pe_label">💬 In plain English</div>
+            <p data-i18n="register_owner.liability_sec3_plain">We connect you with vetted chauffeurs and manage the booking process. We're not the employer or insurer of the chauffeur. If a dispute arises over damage or money, that's a matter between you and the chauffeur to resolve directly.</p>
           </div>
-          <p class="legal-text">Private Chauffeur Connect connects vehicle owners with chauffeurs. Any disputes over fines, damage, or money are between the owner and chauffeur directly. The platform is not liable for what happens during a booking.</p>
+          <p class="legal-text" data-i18n="register_owner.liability_sec3_legal">Private Chauffeur Connect connects vehicle owners with chauffeurs. Any disputes over fines, damage, or money are between the owner and chauffeur directly. The platform is not liable for what happens during a booking.</p>
         </div>
         <div class="consent-row" onclick="toggleConsent('ow-liability-check', 'ow-btn', 'ow-tc-check')">
           <div class="consent-box" id="ow-liability-check"></div>
-          <p>I have read and agree to the Transfer of Liability terms above</p>
+          <p data-i18n="common.reg.liability_consent">I have read and agree to the Transfer of Liability terms above</p>
         </div>
       </div>
 
       <div class="liability-box">
         <div class="liability-header" onclick="toggleLiability('ow-tc')">
-          <span>📜 Terms &amp; Conditions</span>
-          <button class="liability-toggle" id="ow-tc-btn">▼ Read</button>
+          <span data-i18n="common.reg.tc_header">📜 Terms &amp; Conditions</span>
+          <button class="liability-toggle" id="ow-tc-btn" data-i18n="common.reg.liability_read">▼ Read</button>
         </div>
         <div class="liability-body" id="ow-tc">
-          <div class="liability-section-lbl">Use of Platform</div>
+          <div class="liability-section-lbl" data-i18n="register_owner.tc_sec1_heading">Use of Platform</div>
           <div class="plain-english">
-            <div class="pe-label">💬 In plain English</div>
-            <p>Use the platform honestly and lawfully. Don't provide false information about yourself or your vehicle, and don't try to misuse the system in any way.</p>
+            <div class="pe-label" data-i18n="common.reg.pe_label">💬 In plain English</div>
+            <p data-i18n="register_owner.tc_sec1_plain">Use the platform honestly and lawfully. Don't provide false information about yourself or your vehicle, and don't try to misuse the system in any way.</p>
           </div>
-          <p class="legal-text">By registering you agree to use Private Chauffeur Connect solely for lawful purposes. You must not misuse the platform, impersonate others, or submit false information.</p>
+          <p class="legal-text" data-i18n="register_owner.tc_sec1_legal">By registering you agree to use Private Chauffeur Connect solely for lawful purposes. You must not misuse the platform, impersonate others, or submit false information.</p>
 
-          <div class="liability-section-lbl" style="margin-top:16px;">Bookings &amp; Payments</div>
+          <div class="liability-section-lbl" style="margin-top:16px;" data-i18n="register_owner.tc_sec2_heading">Bookings &amp; Payments</div>
           <div class="plain-english">
-            <div class="pe-label">💬 In plain English</div>
-            <p>All bookings depend on chauffeur availability. Payments are handled securely through the platform. The cancellation policy for each booking will be shown clearly before you confirm it.</p>
+            <div class="pe-label" data-i18n="common.reg.pe_label">💬 In plain English</div>
+            <p data-i18n="register_owner.tc_sec2_plain">All bookings depend on chauffeur availability. Payments are handled securely through the platform. The cancellation policy for each booking will be shown clearly before you confirm it.</p>
           </div>
-          <p class="legal-text">All bookings are subject to availability. Payments are processed securely through the platform. Cancellation terms apply as stated at time of booking.</p>
+          <p class="legal-text" data-i18n="register_owner.tc_sec2_legal">All bookings are subject to availability. Payments are processed securely through the platform. Cancellation terms apply as stated at time of booking.</p>
 
-          <div class="liability-section-lbl" style="margin-top:16px;">Account Responsibility</div>
+          <div class="liability-section-lbl" style="margin-top:16px;" data-i18n="register_owner.tc_sec3_heading">Account Responsibility</div>
           <div class="plain-english">
-            <div class="pe-label">💬 In plain English</div>
-            <p>Keep your login details private. You're responsible for anything that happens under your account. If you break the platform rules, we may suspend or close your account.</p>
+            <div class="pe-label" data-i18n="common.reg.pe_label">💬 In plain English</div>
+            <p data-i18n="register_owner.tc_sec3_plain">Keep your login details private. You're responsible for anything that happens under your account. If you break the platform rules, we may suspend or close your account.</p>
           </div>
-          <p class="legal-text">You are responsible for maintaining the confidentiality of your account credentials. Private Chauffeur Connect reserves the right to suspend accounts that breach these terms.</p>
+          <p class="legal-text" data-i18n="register_owner.tc_sec3_legal">You are responsible for maintaining the confidentiality of your account credentials. Private Chauffeur Connect reserves the right to suspend accounts that breach these terms.</p>
 
-          <div class="liability-section-lbl" style="margin-top:16px;">Changes to Terms</div>
+          <div class="liability-section-lbl" style="margin-top:16px;" data-i18n="common.reg.changes_heading">Changes to Terms</div>
           <div class="plain-english">
-            <div class="pe-label">💬 In plain English</div>
-            <p>We may update these terms from time to time. If you continue using the platform after changes are made, that means you accept the updated terms.</p>
+            <div class="pe-label" data-i18n="common.reg.pe_label">💬 In plain English</div>
+            <p data-i18n="common.reg.changes_plain">We may update these terms from time to time. If you continue using the platform after changes are made, that means you accept the updated terms.</p>
           </div>
-          <p class="legal-text">We may update these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
+          <p class="legal-text" data-i18n="common.reg.changes_legal">We may update these terms at any time. Continued use of the platform after changes constitutes acceptance of the new terms.</p>
         </div>
         <div class="consent-row" onclick="toggleConsent('ow-tc-check', 'ow-btn', 'ow-liability-check')">
           <div class="consent-box" id="ow-tc-check"></div>
-          <p>I have read and agree to the Terms &amp; Conditions of Private Chauffeur Connect</p>
+          <p data-i18n="common.reg.tc_consent">I have read and agree to the Terms &amp; Conditions of Private Chauffeur Connect</p>
         </div>
       </div>
 
-      <button class="submit-btn" id="ow-btn" onclick="doRegister()" disabled>Register as Vehicle Owner</button>
+      <button class="submit-btn" id="ow-btn" data-i18n="register_owner.submit_btn" onclick="doRegister()" disabled>Register as Vehicle Owner</button>
 
-      <p class="switch-link" style="margin-top:22px;">Already have an account? <a href="/login.html">Log in</a></p>
-      <p class="switch-link" style="margin-top:10px;">Registering as a Chauffeur? <a href="/register-chauffeur.html">Register here →</a></p>
+      <p class="switch-link" style="margin-top:22px;"><span data-i18n="common.reg.already_have_account">Already have an account?</span> <a href="/login.html" data-i18n="common.reg.log_in">Log in</a></p>
+      <p class="switch-link" style="margin-top:10px;"><span data-i18n="register_owner.switch_to_chauffeur">Registering as a Chauffeur?</span> <a href="/register-chauffeur.html" data-i18n="register_owner.switch_to_chauffeur_link">Register here →</a></p>
     </div>
 
     <div class="access-success" id="owner-success">
       <div class="s-icon">✅</div>
-      <h4>Account Created!</h4>
-      <p>We've sent a verification link to <strong id="ow-success-email"></strong>.<br><br>
-      <strong style="color:var(--text);">Next steps:</strong><br>
-      1. Check your email and click the verification link to activate your account.<br>
-      2. Once verified, sign in below to access your Owner Dashboard.
+      <h4 data-i18n="register_owner.success_title">Account Created!</h4>
+      <p>
+      <span data-i18n="register_owner.success_intro">We've sent a verification link to</span> <strong id="ow-success-email"></strong>.<br><br>
+      <strong style="color:var(--text);" data-i18n="register_owner.success_next_steps_label">Next steps:</strong><br>
+      <span data-i18n="register_owner.success_step1">1. Check your email and click the verification link to activate your account.</span><br>
+      <span data-i18n="register_owner.success_step2">2. Once verified, sign in below to access your Owner Dashboard.</span>
       </p>
-      <a href="/owner.html" style="display:inline-block;margin-top:22px;background:var(--gold);color:#000;border-radius:10px;padding:13px 28px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;">Go to Owner Sign In &rarr;</a>
+      <a href="/owner.html" data-i18n="register_owner.success_btn" style="display:inline-block;margin-top:22px;background:var(--gold);color:#000;border-radius:10px;padding:13px 28px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;">Go to Owner Sign In &rarr;</a>
     </div>
   </div>
 </div>
@@ -465,43 +472,45 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-links">
-      <a href="/">Home</a>
-      <a href="/about.html">About Us</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms &amp; Conditions</a>
+      <a href="/" data-i18n="common.nav_home">Home</a>
+      <a href="/about.html" data-i18n="common.nav_about">About Us</a>
+      <a href="/privacy.html" data-i18n="common.nav_privacy">Privacy Policy</a>
+      <a href="/terms.html" data-i18n="common.nav_terms">Terms &amp; Conditions</a>
     </div>
-    <p>&copy; 2026 Private Chauffeur Connect Ltd. All rights reserved. Company No. 17332607 (England &amp; Wales).</p>
+    <p data-i18n="about.footer_copyright_html">© 2026 Private Chauffeur Connect Ltd. All rights reserved. Company No. 17332607 (England & Wales).</p>
   </div>
 </footer>
 
 <!-- Coming Soon modal -->
 <div class="cs-modal-overlay" id="cs-modal-overlay" onclick="closeComingSoon()">
   <div class="cs-modal" onclick="event.stopPropagation()">
-    <h3>Coming Soon</h3>
-    <p id="cs-modal-msg">Private Chauffeur Connect is not currently active in this country. Please select an available country or check back soon.</p>
-    <button onclick="closeComingSoon()">OK</button>
+    <h3 data-i18n="common.reg.coming_soon_title">Coming Soon</h3>
+    <p id="cs-modal-msg" data-i18n="common.reg.coming_soon_msg_default">Private Chauffeur Connect is not currently active in this country. Please select an available country or check back soon.</p>
+    <button onclick="closeComingSoon()" data-i18n="common.reg.coming_soon_ok">OK</button>
   </div>
 </div>
 
+<script src="/i18n.js"></script>
 <script>
 const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
 let owCountries = [], owSelectedCountry = null;
+pccRenderSwitcher('#pcc-lang-mount');
 
 // Fetch countries and populate dropdown. Called on load, then again every time the
 // dropdown is opened, so an admin toggling a country's status shows up without a refresh.
 async function loadCountries(showLoading){
   const drop=document.getElementById('ow-country-dropdown');
-  if(showLoading) drop.innerHTML='<div style="padding:12px 16px;font-size:12px;color:#4a4060;">Refreshing…</div>';
+  if(showLoading) drop.innerHTML='<div style="padding:12px 16px;font-size:12px;color:#4a4060;">'+t('common.reg.country_refreshing')+'</div>';
   try{
     const r=await fetch(`${API}/countries`);
     owCountries=await r.json();
   }catch{ owCountries=[{country_name:'United Kingdom',country_code:'GB',status:'active'}]; }
-  if(!owCountries.length){ drop.innerHTML='<div style="padding:12px 16px;font-size:12px;color:#e94560;">Could not load countries</div>'; return; }
+  if(!owCountries.length){ drop.innerHTML='<div style="padding:12px 16px;font-size:12px;color:#e94560;">'+t('common.reg.country_load_error')+'</div>'; return; }
   drop.innerHTML=owCountries.map(c=>{
     const isActive=c.status==='active';
     return `<div class="country-option${isActive?'':' dim'}" onclick="selectCountry('ow','${c.country_code}','${c.country_name}',${isActive})">
       <span>${c.country_name}</span>
-      ${!isActive?'<span class="cs-badge">Coming Soon</span>':''}
+      ${!isActive?'<span class="cs-badge">'+t('common.reg.coming_soon_badge')+'</span>':''}
     </div>`;
   }).join('');
   // If the already-selected country went inactive in the meantime, clear it and say why.
@@ -510,9 +519,9 @@ async function loadCountries(showLoading){
     if(!match||match.status!=='active'){
       owSelectedCountry=null;
       document.getElementById('ow-country-selector').classList.remove('selected');
-      document.getElementById('ow-country-label').textContent='Select your country…';
+      document.getElementById('ow-country-label').textContent=t('common.reg.country_placeholder');
       recheckBtn();
-      showErr('Your selected country is no longer available. Please choose another.');
+      showErr(t('common.reg.err_country_unavailable'));
     }
   }
 }
@@ -527,7 +536,7 @@ function toggleCountryDrop(prefix){
 function selectCountry(prefix,code,name,isActive){
   document.getElementById(prefix+'-country-dropdown').classList.remove('open');
   if(!isActive){
-    document.getElementById('cs-modal-msg').textContent=`Private Chauffeur Connect is not currently active in ${name}. Please select an available country or check back soon.`;
+    document.getElementById('cs-modal-msg').textContent=t('common.reg.coming_soon_msg', {country: name});
     document.getElementById('cs-modal-overlay').classList.add('open');
     return;
   }
@@ -555,7 +564,7 @@ function recheckBtn(){
 }
 
 function togglePw(id, btn) { const i=document.getElementById(id); const s=i.type==='password'; i.type=s?'text':'password'; btn.textContent=s?'🙈':'👁'; }
-function toggleLiability(id) { const b=document.getElementById(id); const btn=document.getElementById(id+'-btn'); const o=b.classList.toggle('open'); if(btn) btn.textContent=o?'▲ Hide':'▼ Read'; }
+function toggleLiability(id) { const b=document.getElementById(id); const btn=document.getElementById(id+'-btn'); const o=b.classList.toggle('open'); if(btn) btn.textContent=o?t('common.reg.liability_hide'):t('common.reg.liability_read'); }
 function toggleConsent(id, btnId, otherId) {
   document.getElementById(id).classList.toggle('checked');
   recheckBtn();
@@ -568,11 +577,11 @@ async function doRegister(){
   const email=document.getElementById('ow-email').value.trim();
   const phone=document.getElementById('ow-phone').value.trim();
   const pw=document.getElementById('ow-pw').value;
-  if(!owSelectedCountry) return showErr('Please select your country of location.');
-  if(!name||!email||!phone||!pw) return showErr('All fields are required.');
-  if(pw.length<8) return showErr('Password must be at least 8 characters.');
+  if(!owSelectedCountry) return showErr(t('common.reg.err_country_required'));
+  if(!name||!email||!phone||!pw) return showErr(t('common.reg.err_all_fields_required'));
+  if(pw.length<8) return showErr(t('common.reg.err_password_length'));
   const btn=document.getElementById('ow-btn');
-  btn.disabled=true; btn.textContent='Creating account…';
+  btn.disabled=true; btn.textContent=t('common.reg.btn_creating');
   const payload=JSON.stringify({full_name:name,email,phone,password:pw,role:'owner',country_code:owSelectedCountry.country_code,liability_consent_at:new Date().toISOString(),tc_consent_at:new Date().toISOString()});
   async function attempt(){
     const ctrl=new AbortController();
@@ -585,7 +594,7 @@ async function doRegister(){
     try{ res=await attempt(); }
     catch{
       // First attempt failed (network error / cold-start timeout) — retry once
-      btn.textContent='Retrying…';
+      btn.textContent=t('common.reg.btn_retrying');
       await new Promise(r=>setTimeout(r,3000));
       wasRetry=true;
       res=await attempt();
@@ -605,12 +614,12 @@ async function doRegister(){
       // lost". A same-attempt "already exists" is a genuine pre-existing account.
       showSuccess(email);
     } else if((data.error||'').toLowerCase().includes('already exists')){
-      showErr('An account with this email already exists. Please sign in instead, or use "Forgot password" if needed.');
+      showErr(t('common.reg.err_already_exists'));
     } else {
-      showErr(data.error||data.message||'Registration failed.');
+      showErr(data.error||data.message||t('common.reg.err_registration_failed'));
     }
-  }catch{ showErr('Cannot reach server. Please check your internet connection and try again.'); }
-  finally{ btn.disabled=false; btn.textContent='Register as Vehicle Owner'; }
+  }catch{ showErr(t('common.reg.err_network')); }
+  finally{ btn.disabled=false; btn.textContent=t('register_owner.submit_btn'); }
 }
 </script>
 </body>

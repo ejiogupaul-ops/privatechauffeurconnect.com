@@ -705,6 +705,23 @@
     .pay-success-amount-box { background:#13132a; border:1px solid rgba(233,69,96,.19); border-radius:16px; padding:24px 40px; margin-bottom:16px; width:100%; box-sizing:border-box; }
     .pay-find-btn { background:#e94560; color:#fff; border:none; border-radius:14px; padding:16px 40px; font-size:16px; font-weight:700; letter-spacing:.6px; cursor:pointer; font-family:'Inter',sans-serif; }
     .pay-find-btn:hover { opacity:.9; }
+
+    /* RTL overrides */
+    [dir="rtl"] .field select { background-position: left 14px center; padding-right:0; padding-left:36px; }
+    [dir="rtl"] .pw-wrap input { padding-right:16px; padding-left:48px; }
+    [dir="rtl"] .pw-eye { right:auto; left:14px; }
+    [dir="rtl"] .wait-stat + .wait-stat { border-left:none; border-right:1px solid rgba(255,255,255,.07); }
+    [dir="rtl"] .wait-extend-opt { text-align:right; }
+    [dir="rtl"] .rv-amount-prefix { left:auto; right:14px; }
+    [dir="rtl"] .rv-amount-input { padding: 12px 30px 12px 14px; }
+    [dir="rtl"] .br-right { text-align:left; }
+    [dir="rtl"] .kr-radio { margin-left:0; margin-right:auto; }
+    [dir="rtl"] .cal-dropdown { left:auto; right:0; }
+    [dir="rtl"] .srch-tick { right:auto; left:2px; }
+    [dir="rtl"] .cancel-recommended { margin-left:0; margin-right:6px; }
+    [dir="rtl"] .cancel-preview-label.sm { padding-left:0; padding-right:14px; }
+    [dir="rtl"] .pay-fare-row span:first-child { margin-right:0; margin-left:8px; }
+    [dir="rtl"] .pay-saved-radio { margin-right:0; margin-left:12px; }
   </style>
 </head>
 <body>
@@ -713,27 +730,28 @@
 <div id="view-login">
   <div class="login-panel">
     <div class="lp-content">
-      <div class="lp-tag"><div class="lp-dot"></div><span>Trusted Platform</span></div>
+      <div class="lp-tag"><div class="lp-dot"></div><span data-i18n="owner.login_tag">Trusted Platform</span></div>
       <div class="lp-divider"></div>
-      <h1>Welcome Back to<br><em>Private Chauffeur</em><br>Connect</h1>
-      <p>Sign in to book chauffeurs, track journeys, approve vehicle condition photos and manage your bookings, all from one place.</p>
+      <h1 data-i18n-html="owner.login_h1_html">Welcome Back to<br><em>Private Chauffeur</em><br>Connect</h1>
+      <p data-i18n="owner.login_sub">Sign in to book chauffeurs, track journeys, approve vehicle condition photos and manage your bookings, all from one place.</p>
       <div class="lp-features">
-        <div class="lp-feat"><div class="lp-feat-icon">📅</div><div class="lp-feat-text"><div class="ft">Book Chauffeurs</div><div class="fs">Airport transfers, events, regular trips and more.</div></div></div>
-        <div class="lp-feat"><div class="lp-feat-icon">📍</div><div class="lp-feat-text"><div class="ft">Live Tracking</div><div class="fs">Follow your chauffeur in real time from pickup to destination.</div></div></div>
-        <div class="lp-feat"><div class="lp-feat-icon">📸</div><div class="lp-feat-text"><div class="ft">Photo Approval</div><div class="fs">Review pre and post-trip vehicle inspection photos.</div></div></div>
+        <div class="lp-feat"><div class="lp-feat-icon">📅</div><div class="lp-feat-text"><div class="ft" data-i18n="owner.feat1_title">Book Chauffeurs</div><div class="fs" data-i18n="owner.feat1_desc">Airport transfers, events, regular trips and more.</div></div></div>
+        <div class="lp-feat"><div class="lp-feat-icon">📍</div><div class="lp-feat-text"><div class="ft" data-i18n="owner.feat2_title">Live Tracking</div><div class="fs" data-i18n="owner.feat2_desc">Follow your chauffeur in real time from pickup to destination.</div></div></div>
+        <div class="lp-feat"><div class="lp-feat-icon">📸</div><div class="lp-feat-text"><div class="ft" data-i18n="owner.feat3_title">Photo Approval</div><div class="fs" data-i18n="owner.feat3_desc">Review pre and post-trip vehicle inspection photos.</div></div></div>
       </div>
+      <div id="pcc-lang-mount-login" style="margin-top:28px;"></div>
     </div>
   </div>
   <div class="form-panel">
     <div class="form-box">
-      <h2>Sign In</h2>
-      <p class="sub" id="login-sub">Sign in to your vehicle owner account to access your dashboard.</p>
+      <h2 data-i18n="owner.signin_heading">Sign In</h2>
+      <p class="sub" id="login-sub" data-i18n="owner.signin_sub_default">Sign in to your vehicle owner account to access your dashboard.</p>
       <div id="login-notice" style="display:none;background:rgba(76,175,80,.08);border:1px solid rgba(76,175,80,.25);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#80c0a0;line-height:1.6;"></div>
       <div class="err" id="login-err"></div>
-      <div class="field"><label>Email Address</label><input type="email" id="login-email" placeholder="your@email.com" autocomplete="email" /></div>
-      <div class="field"><label>Password</label><div class="pw-wrap"><input type="password" id="login-pw" placeholder="••••••••" autocomplete="current-password" /><button class="pw-eye" type="button" onclick="togglePw('login-pw',this)">👁</button></div></div>
-      <button class="btn-primary" id="login-btn" onclick="doLogin()">Sign In</button>
-      <div class="reg-link">Don't have an account? <a href="/register-owner.html">Register as Vehicle Owner</a></div>
+      <div class="field"><label data-i18n="common.reg.label_email">Email Address</label><input type="email" id="login-email" placeholder="your@email.com" data-i18n-placeholder="common.reg.placeholder_email" autocomplete="email" /></div>
+      <div class="field"><label data-i18n="common.reg.label_password">Password</label><div class="pw-wrap"><input type="password" id="login-pw" placeholder="••••••••" autocomplete="current-password" /><button class="pw-eye" type="button" onclick="togglePw('login-pw',this)">👁</button></div></div>
+      <button class="btn-primary" id="login-btn" onclick="doLogin()" data-i18n="login.btn_signin">Sign In</button>
+      <div class="reg-link"><span data-i18n="owner.no_account">Don't have an account?</span> <a href="/register-owner.html" data-i18n="owner.reg_link_cta">Register as Vehicle Owner</a></div>
     </div>
   </div>
 </div>
@@ -743,8 +761,9 @@
   <header class="app-header">
     <a href="/"><img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="app-header-logo" /></a>
     <div class="app-header-right">
+      <div id="pcc-lang-mount-app"></div>
       <span class="app-user-name" id="header-name"></span>
-      <button class="btn-logout" onclick="logout()">Sign Out</button>
+      <button class="btn-logout" onclick="logout()" data-i18n="owner.btn_sign_out">Sign Out</button>
     </div>
   </header>
 
@@ -752,22 +771,22 @@
   <div id="panel-onboard-vehicle" style="display:none;">
     <div class="onboard-card">
       <div class="onboard-steps"><div class="onboard-step done"></div><div class="onboard-step"></div></div>
-      <h2>Register Your Vehicle</h2>
-      <p class="sub">Before you can book a chauffeur, we need to know which vehicle they'll be driving.</p>
+      <h2 data-i18n="owner.onboard_vehicle_title">Register Your Vehicle</h2>
+      <p class="sub" data-i18n="owner.onboard_vehicle_sub">Before you can book a chauffeur, we need to know which vehicle they'll be driving.</p>
       <div class="err" id="veh-err"></div>
       <div class="form-row">
-        <div class="field"><label>Registration Plate <span style="color:var(--red)">*</span></label><input type="text" id="veh-reg" placeholder="e.g. AB12 CDE" /></div>
-        <div class="field"><label>Make (Brand) <span style="color:var(--red)">*</span></label><input type="text" id="veh-make" placeholder="e.g. BMW" /></div>
+        <div class="field"><label><span data-i18n="owner.label_reg_plate">Registration Plate</span> <span style="color:var(--red)">*</span></label><input type="text" id="veh-reg" placeholder="e.g. AB12 CDE" /></div>
+        <div class="field"><label><span data-i18n="owner.label_make">Make (Brand)</span> <span style="color:var(--red)">*</span></label><input type="text" id="veh-make" placeholder="e.g. BMW" /></div>
       </div>
       <div class="form-row">
-        <div class="field"><label>Model</label><input type="text" id="veh-model" placeholder="e.g. 5 Series" /></div>
-        <div class="field"><label>Year</label><input type="number" id="veh-year" placeholder="e.g. 2021" min="1990" max="2030" /></div>
+        <div class="field"><label data-i18n="owner.label_model">Model</label><input type="text" id="veh-model" placeholder="e.g. 5 Series" /></div>
+        <div class="field"><label data-i18n="owner.label_year">Year</label><input type="number" id="veh-year" placeholder="e.g. 2021" min="1990" max="2030" /></div>
       </div>
       <div class="form-row">
-        <div class="field"><label>Colour</label><input type="text" id="veh-color" placeholder="e.g. Black" /></div>
-        <div class="field"><label>Gearbox <span style="color:var(--red)">*</span></label><select id="veh-gear"><option value="Automatic">Automatic</option><option value="Manual">Manual</option></select></div>
+        <div class="field"><label data-i18n="owner.label_colour">Colour</label><input type="text" id="veh-color" placeholder="e.g. Black" /></div>
+        <div class="field"><label><span data-i18n="owner.label_gearbox">Gearbox</span> <span style="color:var(--red)">*</span></label><select id="veh-gear"><option value="Automatic" data-i18n="owner.opt_automatic">Automatic</option><option value="Manual" data-i18n="owner.opt_manual">Manual</option></select></div>
       </div>
-      <button class="btn-primary" id="veh-btn" onclick="doAddVehicle()">Save Vehicle &amp; Continue →</button>
+      <button class="btn-primary" id="veh-btn" onclick="doAddVehicle()" data-i18n="owner.btn_save_vehicle">Save Vehicle &amp; Continue →</button>
     </div>
   </div>
 
@@ -775,26 +794,26 @@
   <div id="panel-onboard-profile" style="display:none;">
     <div class="onboard-card">
       <div class="onboard-steps"><div class="onboard-step done"></div><div class="onboard-step done"></div></div>
-      <h2>Complete Your Profile</h2>
-      <p class="sub">We need your home address so chauffeurs know where to return your vehicle.</p>
+      <h2 data-i18n="owner.onboard_profile_title">Complete Your Profile</h2>
+      <p class="sub" data-i18n="owner.onboard_profile_sub">We need your home address so chauffeurs know where to return your vehicle.</p>
       <div class="err" id="prof-err"></div>
       <div class="form-row">
-        <div class="field"><label>Full Name</label><input type="text" id="prof-name" /></div>
-        <div class="field"><label>Phone</label><input type="tel" id="prof-phone" placeholder="+44 7XXX XXXXXX" /></div>
+        <div class="field"><label data-i18n="common.reg.label_full_name">Full Name</label><input type="text" id="prof-name" /></div>
+        <div class="field"><label data-i18n="common.reg.label_phone">Phone</label><input type="tel" id="prof-phone" placeholder="+44 7XXX XXXXXX" /></div>
       </div>
-      <div class="field"><label>Home Address <span style="color:var(--red)">*</span></label><input type="text" id="prof-addr" placeholder="e.g. 12 Park Lane, Manchester" /></div>
-      <div class="field"><label>Home Postcode</label><input type="text" id="prof-postcode" placeholder="e.g. M1 2AB" /></div>
-      <button class="btn-primary" id="prof-btn" onclick="doSaveProfile()">Complete Setup →</button>
+      <div class="field"><label><span data-i18n="owner.label_home_address">Home Address</span> <span style="color:var(--red)">*</span></label><input type="text" id="prof-addr" placeholder="e.g. 12 Park Lane, Manchester" /></div>
+      <div class="field"><label data-i18n="owner.label_home_postcode">Home Postcode</label><input type="text" id="prof-postcode" placeholder="e.g. M1 2AB" /></div>
+      <button class="btn-primary" id="prof-btn" onclick="doSaveProfile()" data-i18n="owner.btn_complete_setup">Complete Setup →</button>
     </div>
   </div>
 
   <!-- MAIN APP -->
   <div id="panel-main" style="display:none;">
     <nav class="tab-nav">
-      <button class="tab-btn active" id="tnav-dash" onclick="showTab('dash')">🏠 Dashboard</button>
-      <button class="tab-btn" id="tnav-book" onclick="showTab('book')">📅 Book a Chauffeur</button>
-      <button class="tab-btn" id="tnav-active" onclick="showTab('active')" style="display:none;">📍 Active Trip <span class="tab-badge" id="active-badge">●</span></button>
-      <button class="tab-btn" id="tnav-history" onclick="showTab('history')">📋 My Bookings</button>
+      <button class="tab-btn active" id="tnav-dash" onclick="showTab('dash')" data-i18n="owner.tab_dash">🏠 Dashboard</button>
+      <button class="tab-btn" id="tnav-book" onclick="showTab('book')" data-i18n="owner.tab_book">📅 Book a Chauffeur</button>
+      <button class="tab-btn" id="tnav-active" onclick="showTab('active')" style="display:none;"><span data-i18n="owner.tab_active">📍 Active Trip</span> <span class="tab-badge" id="active-badge">●</span></button>
+      <button class="tab-btn" id="tnav-history" onclick="showTab('history')" data-i18n="owner.tab_history">📋 My Bookings</button>
     </nav>
 
     <div class="app-content">
@@ -802,25 +821,25 @@
       <!-- ── DASHBOARD ── -->
       <div class="tab-panel active" id="tab-dash">
         <div class="dash-greeting">
-          <h2>Good to see you, <span id="dash-name"></span> 👋</h2>
-          <p>Here's an overview of your account.</p>
+          <h2><span data-i18n="owner.dash_greeting">Good to see you,</span> <span id="dash-name"></span> 👋</h2>
+          <p data-i18n="owner.dash_overview">Here's an overview of your account.</p>
         </div>
         <div id="dash-active-card" style="display:none;">
-          <div class="card-title">Active Booking</div>
+          <div class="card-title" data-i18n="owner.active_booking_label">Active Booking</div>
           <div id="dash-active-content"></div>
         </div>
         <div id="dash-no-active">
           <div class="card">
             <div class="dash-cta">
               <div class="icon">🚗</div>
-              <h3>Ready to Book a Chauffeur?</h3>
-              <p>Enter your journey details, get an instant price, and a vetted chauffeur will be matched to your vehicle.</p>
-              <button class="btn-primary" style="max-width:240px;" onclick="showTab('book')">Book a Chauffeur →</button>
+              <h3 data-i18n="owner.ready_to_book_title">Ready to Book a Chauffeur?</h3>
+              <p data-i18n="owner.ready_to_book_desc">Enter your journey details, get an instant price, and a vetted chauffeur will be matched to your vehicle.</p>
+              <button class="btn-primary" style="max-width:240px;" onclick="showTab('book')" data-i18n="owner.btn_book_cta">Book a Chauffeur →</button>
             </div>
           </div>
         </div>
         <div class="card" style="margin-top:16px;">
-          <div class="card-title">Recent Bookings</div>
+          <div class="card-title" data-i18n="owner.recent_bookings_label">Recent Bookings</div>
           <div id="dash-recent"></div>
         </div>
       </div>
@@ -828,55 +847,55 @@
       <!-- ── BOOK ── -->
       <div class="tab-panel" id="tab-book">
         <div class="card">
-          <div class="card-title">New Booking</div>
+          <div class="card-title" data-i18n="owner.new_booking_label">New Booking</div>
 
           <!-- Step 1: Journey details -->
           <div class="booking-step active" id="book-step-1">
             <div class="trip-type-tabs">
-              <button class="tt-btn active" id="tt-regular" onclick="setTripType('regular',this)">🚗 Regular Journey</button>
-              <button class="tt-btn" id="tt-airport_drop" onclick="setTripType('airport_drop',this)">✈️ Airport Drop-Off</button>
-              <button class="tt-btn" id="tt-airport_roundtrip" onclick="setTripType('airport_roundtrip',this)">🔄 Airport Return</button>
+              <button class="tt-btn active" id="tt-regular" onclick="setTripType('regular',this)" data-i18n="owner.tt_regular">🚗 Regular Journey</button>
+              <button class="tt-btn" id="tt-airport_drop" onclick="setTripType('airport_drop',this)" data-i18n="owner.tt_airport_drop">✈️ Airport Drop-Off</button>
+              <button class="tt-btn" id="tt-airport_roundtrip" onclick="setTripType('airport_roundtrip',this)" data-i18n="owner.tt_airport_roundtrip">🔄 Airport Return</button>
             </div>
             <div class="err" id="book-err-1"></div>
 
             <!-- PICKUP: address + postcode -->
             <div class="form-row">
-              <div class="field"><label>Pickup Street Address <span style="color:var(--red)">*</span></label><input type="text" id="bk-pickup" placeholder="e.g. 12 Park Lane" /></div>
-              <div class="field"><label>Pickup Postcode <span style="color:var(--red)">*</span></label><div class="pc-wrap"><input type="text" id="bk-pickup-pc" placeholder="e.g. M1 2AB" style="text-transform:uppercase;" autocomplete="off" oninput="this.value=this.value.toUpperCase();pcFetch('bk-pickup-pc','pc-drop-pickup')" /><div class="pc-suggestions" id="pc-drop-pickup" style="display:none;"></div></div></div>
+              <div class="field"><label><span data-i18n="owner.label_pickup_address">Pickup Street Address</span> <span style="color:var(--red)">*</span></label><input type="text" id="bk-pickup" placeholder="e.g. 12 Park Lane" /></div>
+              <div class="field"><label><span data-i18n="owner.label_pickup_postcode">Pickup Postcode</span> <span style="color:var(--red)">*</span></label><div class="pc-wrap"><input type="text" id="bk-pickup-pc" placeholder="e.g. M1 2AB" style="text-transform:uppercase;" autocomplete="off" oninput="this.value=this.value.toUpperCase();pcFetch('bk-pickup-pc','pc-drop-pickup')" /><div class="pc-suggestions" id="pc-drop-pickup" style="display:none;"></div></div></div>
             </div>
 
             <!-- DESTINATION: Airport dropdown (airport trips) -->
             <div id="bk-dest-airport-wrap" style="display:none;">
               <div class="field" style="position:relative;">
-                <label>Airport <span style="color:var(--red)">*</span></label>
+                <label><span data-i18n="owner.label_airport">Airport</span> <span style="color:var(--red)">*</span></label>
                 <div class="airport-trigger" id="bk-airport-trigger" onclick="toggleAirportPicker(event)">
-                  <span id="bk-airport-display" style="color:var(--muted);">Select airport…</span>
+                  <span id="bk-airport-display" style="color:var(--muted);" data-i18n="owner.airport_select_placeholder">Select airport…</span>
                   <span style="color:var(--gold);font-size:11px;">▼</span>
                 </div>
                 <div class="airport-dropdown" id="bk-airport-dropdown" style="display:none;">
-                  <input type="text" id="bk-airport-search" placeholder="Search by name or city…" oninput="filterAirports()" autocomplete="off" />
+                  <input type="text" id="bk-airport-search" placeholder="Search by name or city…" data-i18n-placeholder="owner.airport_search_placeholder" oninput="filterAirports()" autocomplete="off" />
                   <div id="bk-airport-list"></div>
                 </div>
               </div>
               <div id="bk-airport-pc-confirm" style="display:none;font-size:12px;color:var(--muted);padding:4px 2px 8px;">
-                📍 Postcode: <strong id="bk-airport-pc-val" style="color:var(--text);"></strong>
+                <span data-i18n="owner.airport_pc_label">📍 Postcode:</span> <strong id="bk-airport-pc-val" style="color:var(--text);"></strong>
               </div>
             </div>
 
             <!-- DESTINATION: Regular address + postcode -->
             <div id="bk-dest-regular-wrap">
               <div class="form-row">
-                <div class="field"><label>Destination Address <span style="color:var(--red)">*</span></label><input type="text" id="bk-dest" placeholder="e.g. 25 Baker Street, London" /></div>
-                <div class="field"><label>Destination Postcode <span style="color:var(--red)">*</span></label><div class="pc-wrap"><input type="text" id="bk-dest-pc" placeholder="e.g. NW1 6XE" style="text-transform:uppercase;" autocomplete="off" oninput="this.value=this.value.toUpperCase();pcFetch('bk-dest-pc','pc-drop-dest')" /><div class="pc-suggestions" id="pc-drop-dest" style="display:none;"></div></div></div>
+                <div class="field"><label><span data-i18n="owner.label_dest_address">Destination Address</span> <span style="color:var(--red)">*</span></label><input type="text" id="bk-dest" placeholder="e.g. 25 Baker Street, London" /></div>
+                <div class="field"><label><span data-i18n="owner.label_dest_postcode">Destination Postcode</span> <span style="color:var(--red)">*</span></label><div class="pc-wrap"><input type="text" id="bk-dest-pc" placeholder="e.g. NW1 6XE" style="text-transform:uppercase;" autocomplete="off" oninput="this.value=this.value.toUpperCase();pcFetch('bk-dest-pc','pc-drop-dest')" /><div class="pc-suggestions" id="pc-drop-dest" style="display:none;"></div></div></div>
               </div>
             </div>
 
             <!-- Date picker -->
             <div class="field">
-              <label>Date <span style="color:var(--red)">*</span></label>
+              <label><span data-i18n="owner.label_date">Date</span> <span style="color:var(--red)">*</span></label>
               <div class="cal-wrap">
                 <div class="cal-trigger" onclick="toggleCalendar(event)">
-                  <span id="cal-display" style="color:var(--muted);">Select date…</span>
+                  <span id="cal-display" style="color:var(--muted);" data-i18n="owner.date_select_placeholder">Select date…</span>
                   <span style="font-size:14px;">📅</span>
                 </div>
                 <div class="cal-dropdown" id="cal-dropdown" style="display:none;">
@@ -893,18 +912,18 @@
             <!-- Time + Duration row -->
             <div class="time-row">
               <div class="field">
-                <label>Time (24HR) <span style="color:var(--red)">*</span></label>
+                <label><span data-i18n="owner.label_time">Time (24HR)</span> <span style="color:var(--red)">*</span></label>
                 <input type="hidden" id="bk-time" />
                 <div class="tp-trigger" id="tp-trigger" onclick="tpOpen()">
-                  <span id="tp-display" style="color:#666">Select a time (24hr)</span>
+                  <span id="tp-display" style="color:#666" data-i18n="owner.time_select_placeholder">Select a time (24hr)</span>
                   <span style="font-size:16px;opacity:.55;">🕐</span>
                 </div>
                 <div class="tp-hint-inline" id="tp-hint" style="display:none;"></div>
               </div>
               <div class="field" id="bk-duration-wrap">
-                <label>Duration (hours) <span style="color:var(--red)">*</span></label>
+                <label><span data-i18n="owner.label_duration">Duration (hours)</span> <span style="color:var(--red)">*</span></label>
                 <select id="bk-duration">
-                  <option value="">Select…</option>
+                  <option value="" data-i18n="owner.duration_select_placeholder">Select…</option>
                   <option value="1">1 hour</option><option value="2">2 hours</option><option value="3">3 hours</option>
                   <option value="4">4 hours</option><option value="5">5 hours</option><option value="6">6 hours</option>
                   <option value="7">7 hours</option><option value="8">8 hours</option><option value="9">9 hours</option>
@@ -915,46 +934,46 @@
             <!-- Airport return: does owner return with chauffeur? -->
             <div id="bk-return-with-wrap" style="display:none;">
               <div class="field">
-                <label>Will you be returning home with the chauffeur?</label>
+                <label data-i18n="owner.label_returning_question">Will you be returning home with the chauffeur?</label>
                 <div style="display:flex;gap:10px;margin-top:8px;">
-                  <button class="tt-btn active" id="rw-yes" onclick="setReturnWith(true)">✈️ 🔄 Yes, I'm returning</button>
-                  <button class="tt-btn" id="rw-no" onclick="setReturnWith(false)">🔑 🚗 No, return my car</button>
+                  <button class="tt-btn active" id="rw-yes" onclick="setReturnWith(true)" data-i18n="owner.rw_yes">✈️ 🔄 Yes, I'm returning</button>
+                  <button class="tt-btn" id="rw-no" onclick="setReturnWith(false)" data-i18n="owner.rw_no">🔑 🚗 No, return my car</button>
                 </div>
               </div>
               <!-- Unaccompanied: Key Return Method -->
               <div id="bk-key-return-wrap" style="display:none;">
-                <label style="display:block;font-size:13px;color:#99a;margin:14px 0 4px;">Key Return Method <span style="color:var(--gold)">*</span></label>
-                <p class="kr-hint">How should the chauffeur secure your key after returning the vehicle?</p>
+                <label style="display:block;font-size:13px;color:#99a;margin:14px 0 4px;"><span data-i18n="owner.label_key_return_method">Key Return Method</span> <span style="color:var(--gold)">*</span></label>
+                <p class="kr-hint" data-i18n="owner.key_return_hint">How should the chauffeur secure your key after returning the vehicle?</p>
 
                 <!-- Method cards -->
                 <div class="kr-method-card" id="kr-card-direct" onclick="selectKeyReturnMethod('direct')">
                   <span class="kr-method-icon">🤝</span>
-                  <div style="flex:1"><div class="kr-method-label">Return directly to me</div><div class="kr-method-desc">Chauffeur meets you in person to hand over the key</div></div>
+                  <div style="flex:1"><div class="kr-method-label" data-i18n="owner.kr_direct_label">Return directly to me</div><div class="kr-method-desc" data-i18n="owner.kr_direct_desc">Chauffeur meets you in person to hand over the key</div></div>
                   <div class="kr-radio" id="kr-radio-direct"><div class="kr-radio-dot" style="display:none"></div></div>
                 </div>
                 <div class="kr-method-card" id="kr-card-letterbox" onclick="selectKeyReturnMethod('letterbox')">
                   <span class="kr-method-icon">📬</span>
-                  <div style="flex:1"><div class="kr-method-label">Post through letterbox</div><div class="kr-method-desc">Chauffeur posts key through your front door</div></div>
+                  <div style="flex:1"><div class="kr-method-label" data-i18n="owner.kr_letterbox_label">Post through letterbox</div><div class="kr-method-desc" data-i18n="owner.kr_letterbox_desc">Chauffeur posts key through your front door</div></div>
                   <div class="kr-radio" id="kr-radio-letterbox"><div class="kr-radio-dot" style="display:none"></div></div>
                 </div>
                 <div class="kr-method-card" id="kr-card-key_safe" onclick="selectKeyReturnMethod('key_safe')">
                   <span class="kr-method-icon">🔐</span>
-                  <div style="flex:1"><div class="kr-method-label">Leave in a key safe</div><div class="kr-method-desc">Chauffeur deposits key in your key safe</div></div>
+                  <div style="flex:1"><div class="kr-method-label" data-i18n="owner.kr_key_safe_label">Leave in a key safe</div><div class="kr-method-desc" data-i18n="owner.kr_key_safe_desc">Chauffeur deposits key in your key safe</div></div>
                   <div class="kr-radio" id="kr-radio-key_safe"><div class="kr-radio-dot" style="display:none"></div></div>
                 </div>
                 <div class="kr-method-card" id="kr-card-authorised_person" onclick="selectKeyReturnMethod('authorised_person')">
                   <span class="kr-method-icon">👤</span>
-                  <div style="flex:1"><div class="kr-method-label">Hand to authorised person</div><div class="kr-method-desc">A trusted person you nominate will receive the key</div></div>
+                  <div style="flex:1"><div class="kr-method-label" data-i18n="owner.kr_authorised_label">Hand to authorised person</div><div class="kr-method-desc" data-i18n="owner.kr_authorised_desc">A trusted person you nominate will receive the key</div></div>
                   <div class="kr-radio" id="kr-radio-authorised_person"><div class="kr-radio-dot" style="display:none"></div></div>
                 </div>
                 <div class="kr-method-card" id="kr-card-concierge" onclick="selectKeyReturnMethod('concierge')">
                   <span class="kr-method-icon">🏢</span>
-                  <div style="flex:1"><div class="kr-method-label">Leave with building concierge</div><div class="kr-method-desc">Concierge will hold the key on your behalf</div></div>
+                  <div style="flex:1"><div class="kr-method-label" data-i18n="owner.kr_concierge_label">Leave with building concierge</div><div class="kr-method-desc" data-i18n="owner.kr_concierge_desc">Concierge will hold the key on your behalf</div></div>
                   <div class="kr-radio" id="kr-radio-concierge"><div class="kr-radio-dot" style="display:none"></div></div>
                 </div>
                 <div class="kr-method-card" id="kr-card-other" onclick="selectKeyReturnMethod('other')">
                   <span class="kr-method-icon">📝</span>
-                  <div style="flex:1"><div class="kr-method-label">Other arrangements</div><div class="kr-method-desc">Describe your own key return arrangement</div></div>
+                  <div style="flex:1"><div class="kr-method-label" data-i18n="owner.kr_other_label">Other arrangements</div><div class="kr-method-desc" data-i18n="owner.kr_other_desc">Describe your own key return arrangement</div></div>
                   <div class="kr-radio" id="kr-radio-other"><div class="kr-radio-dot" style="display:none"></div></div>
                 </div>
 
@@ -1006,8 +1025,8 @@
                 </div>
               </div>
             </div>
-            <div class="field"><label>Purpose (optional)</label><input type="text" id="bk-purpose" placeholder="e.g. Airport transfer, Business meeting" /></div>
-            <button class="btn-primary" style="margin-top:8px;" onclick="getEstimate()">Get Price Estimate →</button>
+            <div class="field"><label data-i18n="owner.label_purpose">Purpose (optional)</label><input type="text" id="bk-purpose" placeholder="e.g. Airport transfer, Business meeting" /></div>
+            <button class="btn-primary" style="margin-top:8px;" onclick="getEstimate()" data-i18n="owner.btn_get_estimate">Get Price Estimate →</button>
           </div>
 
           <!-- Step 2: Confirm -->
@@ -1021,42 +1040,42 @@
             <div class="intercity-banner" id="bk-intercity-banner" style="display:none;">
               <div class="intercity-banner-head">
                 <span class="intercity-banner-icon">🌍</span>
-                <span class="intercity-banner-title">Intercity Booking</span>
+                <span class="intercity-banner-title" data-i18n="owner.intercity_banner_title">Intercity Booking</span>
               </div>
-              <div class="intercity-banner-body">
+              <div class="intercity-banner-body" data-i18n-html="owner.intercity_banner_body_html">
                 This trip exceeds 120 miles and is classified as an <strong style="color:#e94560;">intercity booking</strong>. The chauffeur will travel a long distance and may need to remain at the destination overnight.
               </div>
               <div class="intercity-hotel-box">
                 <span class="ih-icon">🏨</span>
                 <div class="ih-text">
-                  <strong>Accommodation Responsibility</strong>
-                  As the vehicle owner, you are responsible for arranging and funding the chauffeur's overnight accommodation at the destination if an overnight stay is required. We recommend booking a hotel near your destination before confirming this booking.
+                  <strong data-i18n="owner.intercity_accommodation_label">Accommodation Responsibility</strong>
+                  <span data-i18n="owner.intercity_accommodation_text">As the vehicle owner, you are responsible for arranging and funding the chauffeur's overnight accommodation at the destination if an overnight stay is required. We recommend booking a hotel near your destination before confirming this booking.</span>
                 </div>
               </div>
-              <a id="bk-hotel-search-btn" class="intercity-hotel-btn" target="_blank" rel="noopener noreferrer" style="display:none;">
+              <a id="bk-hotel-search-btn" class="intercity-hotel-btn" target="_blank" rel="noopener noreferrer" style="display:none;" data-i18n="owner.intercity_hotel_btn">
                 🔍&nbsp; Find Hotels Near Destination
               </a>
             </div>
             <div class="roadworthy-check" id="rw-check" onclick="toggleRoadworthy()">
               <div class="rw-box" id="rw-box"></div>
-              <p>I confirm that my vehicle is roadworthy, has a valid MOT, is properly insured, and is in a safe operating condition for this booking.</p>
+              <p data-i18n="owner.roadworthy_text">I confirm that my vehicle is roadworthy, has a valid MOT, is properly insured, and is in a safe operating condition for this booking.</p>
             </div>
             <div class="return-consent-row" id="bk-return-consent-row" style="display:none;" onclick="toggleReturnConsent()">
               <div class="rw-box" id="rc-box"></div>
-              <p>I expressly authorise the assigned chauffeur to drive and return my vehicle to the address specified, unaccompanied, following airport drop-off. I confirm I have removed valuables and provided accurate key return instructions. I understand the chauffeur must not use the vehicle for any unauthorised purpose. I have read and accept Section 14 of the Terms &amp; Conditions.</p>
+              <p data-i18n="owner.return_consent_text">I expressly authorise the assigned chauffeur to drive and return my vehicle to the address specified, unaccompanied, following airport drop-off. I confirm I have removed valuables and provided accurate key return instructions. I understand the chauffeur must not use the vehicle for any unauthorised purpose. I have read and accept Section 14 of the Terms &amp; Conditions.</p>
             </div>
             <div style="display:flex;gap:12px;">
-              <button class="btn-outline" onclick="goBookStep(1)">← Back</button>
-              <button class="btn-primary" id="bk-confirm-btn" onclick="createBooking()" disabled>Confirm Booking</button>
+              <button class="btn-outline" onclick="goBookStep(1)" data-i18n="owner.btn_back">← Back</button>
+              <button class="btn-primary" id="bk-confirm-btn" onclick="createBooking()" disabled data-i18n="owner.btn_confirm_booking">Confirm Booking</button>
             </div>
           </div>
 
           <!-- Step 3: Success -->
           <div class="booking-step" id="book-step-3" style="text-align:center;padding:24px 0;">
             <div style="font-size:56px;margin-bottom:16px;">✅</div>
-            <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin-bottom:10px;">Booking Confirmed!</h3>
-            <p style="font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.7;">We're finding a chauffeur for you now. You'll see updates here and on the Active Trip tab as soon as one is assigned.</p>
-            <button class="btn-primary" style="max-width:220px;" onclick="showTab('active')">Track My Booking →</button>
+            <h3 style="font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin-bottom:10px;" data-i18n="owner.booking_success_title">Booking Confirmed!</h3>
+            <p style="font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.7;" data-i18n="owner.booking_success_desc">We're finding a chauffeur for you now. You'll see updates here and on the Active Trip tab as soon as one is assigned.</p>
+            <button class="btn-primary" style="max-width:220px;" onclick="showTab('active')" data-i18n="owner.btn_track_booking">Track My Booking →</button>
           </div>
         </div>
       </div>
@@ -1065,14 +1084,14 @@
       <div class="tab-panel" id="tab-active">
         <div id="active-content">
           <div class="card" style="text-align:center;padding:36px 24px;">
-            <p style="color:var(--muted);">No active booking found. <a href="#" onclick="showTab('book');return false;" style="color:var(--gold);">Book a chauffeur →</a></p>
+            <p style="color:var(--muted);"><span data-i18n="owner.no_active_text">No active booking found.</span> <a href="#" onclick="showTab('book');return false;" style="color:var(--gold);" data-i18n="owner.book_cta_link">Book a chauffeur →</a></p>
           </div>
         </div>
       </div>
 
       <!-- ── HISTORY ── -->
       <div class="tab-panel" id="tab-history">
-        <div class="card-title" style="margin-bottom:14px;">All Bookings</div>
+        <div class="card-title" style="margin-bottom:14px;" data-i18n="owner.all_bookings_label">All Bookings</div>
         <div id="history-list"></div>
       </div>
 
@@ -1612,7 +1631,10 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/i18n.js"></script>
 <script>
+pccRenderSwitcher('#pcc-lang-mount-login');
+pccRenderSwitcher('#pcc-lang-mount-app');
 const API = 'https://private-chauffeur-backend-production.up.railway.app/api';
 const ACTIVE_STATUSES = ['pending','accepted','chauffeur_arriving','arrived_at_pickup','outbound_journey','at_destination','waiting_at_destination','return_ready_confirmation','return_journey'];
 // A completed booking whose payment is still held needs the owner review — treat it as active
@@ -1687,6 +1709,9 @@ function resetBookingForm() {
   returnConsentGiven = false;
   selectedAirport = null;
   lastEstimate = null;
+  // The pristine snapshot above was captured in English before i18n.js ran;
+  // re-translate the freshly-restored subtree into whichever language is active.
+  if (window.applyLanguage && window.pccCurrentLang) applyLanguage(window.pccCurrentLang);
 }
 let lastEstimate = null;
 let rvBookingId = null, rvPrePhotos = [], rvPostPhotos = [], rvPostVerified = false;

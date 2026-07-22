@@ -393,6 +393,10 @@
     .reveal-delay-1 { transition-delay: .1s; }
     .reveal-delay-2 { transition-delay: .2s; }
     .reveal-delay-3 { transition-delay: .3s; }
+
+    /* RTL overrides */
+    [dir="rtl"] .nav-register-dropdown { right:auto; left:0; }
+    [dir="rtl"] .nav-hamburger { margin-left:0; margin-right:auto; }
   </style>
 </head>
 <body>
@@ -403,33 +407,35 @@
     <img src="/logo.png?v=5" alt="Private Chauffeur Connect" class="nav-logo-img" />
   </div>
   <div class="nav-links">
-    <a href="#top">Home</a>
-    <a href="/about.html">About Us</a>
-    <a href="#contact">Contact</a>
-    <a href="/faq.html">FAQ</a>
+    <a href="#top" data-i18n="common.nav_home">Home</a>
+    <a href="/about.html" data-i18n="common.nav_about">About Us</a>
+    <a href="#contact" data-i18n="common.nav_contact">Contact</a>
+    <a href="/faq.html" data-i18n="index.nav_faq">FAQ</a>
     <div class="nav-register-wrap" id="nav-register-wrap">
       <button class="nav-register-btn" id="nav-register-btn" onclick="toggleRegisterMenu()">
-        Register with us <span class="reg-arrow">▾</span>
+        <span data-i18n="index.nav_register">Register with us</span> <span class="reg-arrow">▾</span>
       </button>
       <div class="nav-register-dropdown" id="nav-register-dropdown">
-        <a href="/register-chauffeur.html">🚗 Register as a Chauffeur</a>
-        <a href="/register-owner.html">🔑 Register as a Vehicle Owner</a>
+        <a href="/register-chauffeur.html" data-i18n="index.nav_register_chauffeur">🚗 Register as a Chauffeur</a>
+        <a href="/register-owner.html" data-i18n="index.nav_register_owner">🔑 Register as a Vehicle Owner</a>
       </div>
     </div>
-    <a href="/login.html" class="nav-login">Login</a>
+    <div id="pcc-lang-mount"></div>
+    <a href="/login.html" class="nav-login" data-i18n="index.nav_login">Login</a>
   </div>
   <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#top" onclick="closeMenu()">Home</a>
-  <a href="/about.html" onclick="closeMenu()">About Us</a>
-  <a href="#contact" onclick="closeMenu()">Contact</a>
-  <a href="/faq.html" onclick="closeMenu()">FAQ</a>
-  <a href="/register-chauffeur.html" onclick="closeMenu()" style="color:var(--gold);">Register as Chauffeur</a>
-  <a href="/register-owner.html" onclick="closeMenu()" style="color:var(--gold);">Register as Owner</a>
-  <a href="/login.html" class="nav-login" onclick="closeMenu()">Login</a>
+  <a href="#top" onclick="closeMenu()" data-i18n="common.nav_home">Home</a>
+  <a href="/about.html" onclick="closeMenu()" data-i18n="common.nav_about">About Us</a>
+  <a href="#contact" onclick="closeMenu()" data-i18n="common.nav_contact">Contact</a>
+  <a href="/faq.html" onclick="closeMenu()" data-i18n="index.nav_faq">FAQ</a>
+  <a href="/register-chauffeur.html" onclick="closeMenu()" style="color:var(--gold);" data-i18n="index.mobile_register_chauffeur">Register as Chauffeur</a>
+  <a href="/register-owner.html" onclick="closeMenu()" style="color:var(--gold);" data-i18n="index.mobile_register_owner">Register as Owner</a>
+  <div id="pcc-lang-mount-mobile"></div>
+  <a href="/login.html" class="nav-login" onclick="closeMenu()" data-i18n="index.nav_login">Login</a>
 </div>
 
 <!-- ══ HERO ══════════════════════════════════════ -->
@@ -439,12 +445,12 @@
     <div class="hero-content">
       <div class="hero-eyebrow reveal">
         <div class="hero-dot"></div>
-        <span>Now Available Across the UK</span>
+        <span data-i18n="index.hero_eyebrow">Now Available Across the UK</span>
       </div>
-      <h1 class="reveal reveal-delay-1">
+      <h1 class="reveal reveal-delay-1" data-i18n-html="index.hero_title_html">
         Premium Rides.<br><em>Professionally</em><br>Connected.
       </h1>
-      <p class="hero-sub reveal reveal-delay-2">
+      <p class="hero-sub reveal reveal-delay-2" data-i18n-html="index.hero_sub_html">
         Private Chauffeur Connect is the premium platform connecting vehicle owners with professional, fully vetted chauffeurs for safe, reliable and professional journeys across the UK.
         <br><br>
         Vehicle owners can register their vehicles, while qualified chauffeurs can apply to drive them. We facilitate secure connections and manage bookings, helping both parties deliver a professional chauffeur service.
@@ -486,42 +492,42 @@
     <div class="section-center reveal">
       <div class="section-eyebrow">
         <div class="line"></div>
-        <span>Built for Excellence</span>
+        <span data-i18n="index.excellence_eyebrow">Built for Excellence</span>
         <div class="line"></div>
       </div>
-      <h2 class="section-title">Everything You Need,<br><em>Nothing You Don't</em></h2>
-      <p class="section-sub">Empowering vehicle owners and chauffeurs with features that make every journey simple, reliable, and seamless.</p>
+      <h2 class="section-title" data-i18n-html="index.excellence_title_html">Everything You Need,<br><em>Nothing You Don't</em></h2>
+      <p class="section-sub" data-i18n="index.excellence_sub">Empowering vehicle owners and chauffeurs with features that make every journey simple, reliable, and seamless.</p>
     </div>
     <div class="excellence-grid">
       <div class="excellence-card reveal">
         <div class="excellence-icon">📅</div>
-        <h4>Easy Booking</h4>
-        <p>Book in just seconds or schedule trips with just a few taps.</p>
+        <h4 data-i18n="index.card1_title">Easy Booking</h4>
+        <p data-i18n="index.card1_desc">Book in just seconds or schedule trips with just a few taps.</p>
       </div>
       <div class="excellence-card reveal reveal-delay-1">
         <div class="excellence-icon">🛡️</div>
-        <h4>Trust &amp; Safety</h4>
-        <p>All chauffeurs are professionally vetted and fully verified.</p>
+        <h4 data-i18n="index.card2_title">Trust &amp; Safety</h4>
+        <p data-i18n="index.card2_desc">All chauffeurs are professionally vetted and fully verified.</p>
       </div>
       <div class="excellence-card reveal reveal-delay-2">
         <div class="excellence-icon">⭐</div>
-        <h4>Premium Experience</h4>
-        <p>High standards ensuring every journey delivers a truly exceptional experience.</p>
+        <h4 data-i18n="index.card3_title">Premium Experience</h4>
+        <p data-i18n="index.card3_desc">High standards ensuring every journey delivers a truly exceptional experience.</p>
       </div>
       <div class="excellence-card reveal reveal-delay-1">
         <div class="excellence-icon">📍</div>
-        <h4>Real-Time Tracking</h4>
-        <p>Track your chauffeur and know their arrival time for complete peace of mind.</p>
+        <h4 data-i18n="index.card4_title">Real-Time Tracking</h4>
+        <p data-i18n="index.card4_desc">Track your chauffeur and know their arrival time for complete peace of mind.</p>
       </div>
       <div class="excellence-card reveal reveal-delay-2">
         <div class="excellence-icon">💳</div>
-        <h4>Secure Payments</h4>
-        <p>Safe, seamless payments processed securely through our platform.</p>
+        <h4 data-i18n="index.card5_title">Secure Payments</h4>
+        <p data-i18n="index.card5_desc">Safe, seamless payments processed securely through our platform.</p>
       </div>
       <div class="excellence-card reveal reveal-delay-3">
         <div class="excellence-icon">🎧</div>
-        <h4>Dedicated Support</h4>
-        <p>Customer care available to help you 24/7, whenever you need us.</p>
+        <h4 data-i18n="index.card6_title">Dedicated Support</h4>
+        <p data-i18n="index.card6_desc">Customer care available to help you 24/7, whenever you need us.</p>
       </div>
     </div>
   </div>
@@ -533,10 +539,10 @@
     <div class="section-center reveal">
       <div class="section-eyebrow">
         <div class="line"></div>
-        <span>How It Works</span>
+        <span data-i18n="index.how_eyebrow">How It Works</span>
         <div class="line"></div>
       </div>
-      <h2 class="section-title">Up and Running<br><em>In Three Steps</em></h2>
+      <h2 class="section-title" data-i18n-html="index.how_title_html">Up and Running<br><em>In Three Steps</em></h2>
     </div>
 
     <!-- Steps -->
@@ -546,20 +552,20 @@
       <!-- Step 1 -->
       <div class="reveal" style="text-align:center;padding:0 16px;">
         <div style="width:80px;height:80px;border-radius:50%;background:var(--gold);color:#000;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;position:relative;z-index:1;">1</div>
-        <h3 style="font-size:18px;color:#fff;margin-bottom:10px;">Register</h3>
-        <p style="font-size:14px;color:var(--muted);line-height:1.7;">Create your account as a vehicle owner or chauffeur. Provide your details, vehicle info, and complete verification.</p>
+        <h3 style="font-size:18px;color:#fff;margin-bottom:10px;" data-i18n="index.how_step1_title">Register</h3>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;" data-i18n="index.how_step1_desc">Create your account as a vehicle owner or chauffeur. Provide your details, vehicle info, and complete verification.</p>
       </div>
       <!-- Step 2 -->
       <div class="reveal reveal-delay-1" style="text-align:center;padding:0 16px;">
         <div style="width:80px;height:80px;border-radius:50%;background:var(--dark3);border:2px solid var(--gold);color:var(--gold);font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;position:relative;z-index:1;">2</div>
-        <h3 style="font-size:18px;color:#fff;margin-bottom:10px;">Get Matched</h3>
-        <p style="font-size:14px;color:var(--muted);line-height:1.7;">Vehicle owners post a booking through the app. Our system connects them instantly with a vetted, available chauffeur nearby.</p>
+        <h3 style="font-size:18px;color:#fff;margin-bottom:10px;" data-i18n="index.how_step2_title">Get Matched</h3>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;" data-i18n="index.how_step2_desc">Vehicle owners post a booking through the app. Our system connects them instantly with a vetted, available chauffeur nearby.</p>
       </div>
       <!-- Step 3 -->
       <div class="reveal reveal-delay-2" style="text-align:center;padding:0 16px;">
         <div style="width:80px;height:80px;border-radius:50%;background:var(--dark3);border:2px solid var(--gold);color:var(--gold);font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;position:relative;z-index:1;">3</div>
-        <h3 style="font-size:18px;color:#fff;margin-bottom:10px;">Travel in Style</h3>
-        <p style="font-size:14px;color:var(--muted);line-height:1.7;">The chauffeur arrives at your location, drives your vehicle, and you track everything live from pickup to drop-off.</p>
+        <h3 style="font-size:18px;color:#fff;margin-bottom:10px;" data-i18n="index.how_step3_title">Travel in Style</h3>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;" data-i18n="index.how_step3_desc">The chauffeur arrives at your location, drives your vehicle, and you track everything live from pickup to drop-off.</p>
       </div>
     </div>
 
@@ -567,26 +573,26 @@
     <div class="section-center reveal" style="margin-bottom:40px;">
       <div class="section-eyebrow">
         <div class="line"></div>
-        <span>Who We Serve</span>
+        <span data-i18n="index.serve_eyebrow">Who We Serve</span>
         <div class="line"></div>
       </div>
-      <h2 class="section-title">Built For<br><em>Professionals</em></h2>
+      <h2 class="section-title" data-i18n-html="index.serve_title_html">Built For<br><em>Professionals</em></h2>
     </div>
     <div class="audience-grid">
       <div class="audience-card reveal" id="chauffeurs">
         <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80" alt="Professional chauffeur" class="audience-img" />
         <div class="audience-body">
-          <div class="audience-tag">For Chauffeurs</div>
-          <h3>Your Professional Chauffeur Network</h3>
-          <p>Join a growing community of independent chauffeurs. Connect with vehicle owners, manage bookings with ease and build your reputation through exceptional service.</p>
+          <div class="audience-tag" data-i18n="index.chauffeur_tag">For Chauffeurs</div>
+          <h3 data-i18n="index.chauffeur_title">Your Professional Chauffeur Network</h3>
+          <p data-i18n="index.chauffeur_desc">Join a growing community of independent chauffeurs. Connect with vehicle owners, manage bookings with ease and build your reputation through exceptional service.</p>
         </div>
       </div>
       <div class="audience-card reveal reveal-delay-1" id="owners">
         <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80" alt="Vehicle owner" class="audience-img" />
         <div class="audience-body">
-          <div class="audience-tag">For Vehicle Owners</div>
-          <h3>Book Professional Chauffeurs for Your Vehicle</h3>
-          <p>Connect with vetted independent chauffeurs to drive your own vehicle safely and professionally.</p>
+          <div class="audience-tag" data-i18n="index.owner_tag">For Vehicle Owners</div>
+          <h3 data-i18n="index.owner_title">Book Professional Chauffeurs for Your Vehicle</h3>
+          <p data-i18n="index.owner_desc">Connect with vetted independent chauffeurs to drive your own vehicle safely and professionally.</p>
         </div>
       </div>
     </div>
@@ -637,11 +643,11 @@
       <div class="mockups-text reveal reveal-delay-1">
         <div class="section-eyebrow">
           <div class="line"></div>
-          <span>The App</span>
+          <span data-i18n="index.mockups_eyebrow">The App</span>
         </div>
-        <h2 class="section-title">Everything in the<br><em>Palm of Your Hand</em></h2>
-        <p style="font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:32px;">From booking and live tracking to vehicle management, the Private Chauffeur Connect app puts full control in your hands. Available now for Android.</p>
-        <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="btn btn-gold">📱 Download for Android</a>
+        <h2 class="section-title" data-i18n-html="index.mockups_title_html">Everything in the<br><em>Palm of Your Hand</em></h2>
+        <p style="font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:32px;" data-i18n="index.mockups_desc">From booking and live tracking to vehicle management, the Private Chauffeur Connect app puts full control in your hands. Available now for Android.</p>
+        <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk" class="btn btn-gold" data-i18n="index.mockups_btn">📱 Download for Android</a>
       </div>
     </div>
   </div>
@@ -652,10 +658,10 @@
   <div class="inner">
     <div class="section-center reveal">
       <div class="section-eyebrow">
-        <div class="line"></div><span>See It In Action</span><div class="line"></div>
+        <div class="line"></div><span data-i18n="index.demo_eyebrow">See It In Action</span><div class="line"></div>
       </div>
-      <h2 class="section-title">From Booking to<br><em>Completion</em></h2>
-      <p style="color:var(--muted);font-size:15px;max-width:520px;margin:0 auto;line-height:1.7;">Watch how Private Chauffeur Connect works. Follow a booking from confirmation through chauffeur acceptance, passenger collection, the journey and successful completion.</p>
+      <h2 class="section-title" data-i18n-html="index.demo_title_html">From Booking to<br><em>Completion</em></h2>
+      <p style="color:var(--muted);font-size:15px;max-width:520px;margin:0 auto;line-height:1.7;" data-i18n="index.demo_desc">Watch how Private Chauffeur Connect works. Follow a booking from confirmation through chauffeur acceptance, passenger collection, the journey and successful completion.</p>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-top:64px;max-width:1200px;margin-left:auto;margin-right:auto;justify-items:center;" class="demo-grid">
@@ -683,8 +689,8 @@
         </div>
         <div style="text-align:center;">
           <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);color:#000;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">1</div>
-          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">Owner Books</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6;">Vehicle owner sets pickup location and requests a chauffeur</div>
+          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;" data-i18n="index.demo_step1_title">Owner Books</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;" data-i18n="index.demo_step1_desc">Vehicle owner sets pickup location and requests a chauffeur</div>
         </div>
       </div>
 
@@ -718,8 +724,8 @@
         </div>
         <div style="text-align:center;">
           <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);color:#000;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">2</div>
-          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">Chauffeur Accepts</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6;">Nearby chauffeur gets a notification and accepts the booking</div>
+          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;" data-i18n="index.demo_step2_title">Chauffeur Accepts</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;" data-i18n="index.demo_step2_desc">Nearby chauffeur gets a notification and accepts the booking</div>
         </div>
       </div>
 
@@ -748,8 +754,8 @@
         </div>
         <div style="text-align:center;">
           <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);color:#000;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">3</div>
-          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">Track Live</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6;">Owner watches the chauffeur arrive in real time, right inside the app</div>
+          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;" data-i18n="index.demo_step3_title">Track Live</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;" data-i18n="index.demo_step3_desc">Owner watches the chauffeur arrive in real time, right inside the app</div>
         </div>
       </div>
       <!-- ── PHONE 4: Return Journey ── -->
@@ -780,8 +786,8 @@
         </div>
         <div style="text-align:center;">
           <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);color:#000;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">4</div>
-          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">Return Journey</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6;">Chauffeur completes the outward trip and returns to the pickup point</div>
+          <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;" data-i18n="index.demo_step4_title">Return Journey</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;" data-i18n="index.demo_step4_desc">Chauffeur completes the outward trip and returns to the pickup point</div>
         </div>
       </div>
 
@@ -937,56 +943,56 @@
 <section style="background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 24px;">
   <div style="max-width:760px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:48px;">
-      <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:40px;padding:6px 18px;margin-bottom:20px;font-size:11px;color:var(--gold);font-weight:600;letter-spacing:2px;text-transform:uppercase;">Frequently Asked Questions</div>
-      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);color:#fff;margin-bottom:12px;">Everything you need to know<br>before getting started.</h2>
+      <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:40px;padding:6px 18px;margin-bottom:20px;font-size:11px;color:var(--gold);font-weight:600;letter-spacing:2px;text-transform:uppercase;" data-i18n="index.faq_badge">Frequently Asked Questions</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);color:#fff;margin-bottom:12px;" data-i18n-html="index.faq_title_html">Everything you need to know<br>before getting started.</h2>
     </div>
 
     <div id="home-faq-list">
 
       <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
         <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
-          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">How are chauffeurs vetted?</span>
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;" data-i18n="index.faq_q1">How are chauffeurs vetted?</span>
           <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
         </div>
-        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">Every chauffeur completes identity verification, document checks and our onboarding process before they can accept bookings through the platform.</div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;" data-i18n="index.faq_a1">Every chauffeur completes identity verification, document checks and our onboarding process before they can accept bookings through the platform.</div>
       </div>
 
       <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
         <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
-          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">Can I track my vehicle during a booking?</span>
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;" data-i18n="index.faq_q2">Can I track my vehicle during a booking?</span>
           <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
         </div>
-        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">Yes. Live GPS tracking is available throughout active bookings. For Airport Drop-Off with Vehicle Return services, tracking continues until your vehicle has been safely returned.</div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;" data-i18n="index.faq_a2">Yes. Live GPS tracking is available throughout active bookings. For Airport Drop-Off with Vehicle Return services, tracking continues until your vehicle has been safely returned.</div>
       </div>
 
       <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
         <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
-          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">What happens if I cancel a booking?</span>
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;" data-i18n="index.faq_q3">What happens if I cancel a booking?</span>
           <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
         </div>
-        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">You can cancel through the app. Any applicable refund or cancellation compensation will be calculated and shown before you confirm your cancellation.</div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;" data-i18n="index.faq_a3">You can cancel through the app. Any applicable refund or cancellation compensation will be calculated and shown before you confirm your cancellation.</div>
       </div>
 
       <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
         <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
-          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">How do chauffeurs get paid?</span>
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;" data-i18n="index.faq_q4">How do chauffeurs get paid?</span>
           <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
         </div>
-        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">Payments are securely processed through the platform. Chauffeurs receive earnings and any eligible cancellation compensation through their chauffeur wallet in line with the platform's payout schedule.</div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;" data-i18n="index.faq_a4">Payments are securely processed through the platform. Chauffeurs receive earnings and any eligible cancellation compensation through their chauffeur wallet in line with the platform's payout schedule.</div>
       </div>
 
       <div class="hfaq-item" style="border:1px solid rgba(201,168,76,.15);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02);overflow:hidden;">
         <div class="hfaq-q" onclick="htoggle(this)" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:16px;">
-          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;">What insurance is required?</span>
+          <span style="font-size:15px;font-weight:600;color:var(--text);flex:1;" data-i18n="index.faq_q5">What insurance is required?</span>
           <div class="hfaq-chev" style="width:22px;height:22px;border-radius:50%;border:1px solid rgba(201,168,76,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:12px;transition:transform .25s;">▾</div>
         </div>
-        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;">Private Chauffeur Connect is developing an insurance solution specifically for bookings made through the platform. Insurance requirements will be confirmed before eligible bookings are accepted.</div>
+        <div class="hfaq-a" style="display:none;padding:0 22px 20px;font-size:14px;color:#a0a0c0;line-height:1.85;" data-i18n="index.faq_a5">Private Chauffeur Connect is developing an insurance solution specifically for bookings made through the platform. Insurance requirements will be confirmed before eligible bookings are accepted.</div>
       </div>
 
     </div>
 
     <div style="text-align:center;margin-top:36px;">
-      <a href="/faq.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.35);color:var(--gold);border-radius:10px;padding:14px 28px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(201,168,76,.18)'" onmouseout="this.style.background='rgba(201,168,76,.1)'">View All FAQs →</a>
+      <a href="/faq.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.35);color:var(--gold);border-radius:10px;padding:14px 28px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(201,168,76,.18)'" onmouseout="this.style.background='rgba(201,168,76,.1)'" data-i18n="index.faq_view_all">View All FAQs →</a>
     </div>
   </div>
 </section>
@@ -1012,37 +1018,41 @@ function htoggle(el){
         <div class="footer-brand-logo">
           <img src="/logo.png?v=5" alt="Private Chauffeur Connect" style="height:95px;width:auto;mix-blend-mode:screen;filter:brightness(1.25) contrast(1.1) saturate(1.1);-webkit-mask-image:linear-gradient(to right,black 78%,transparent 95%);mask-image:linear-gradient(to right,black 78%,transparent 95%);" />
         </div>
-        <p>The premium platform connecting vehicle owners with professional, vetted chauffeurs across the UK.</p>
+        <p data-i18n="index.footer_brand_desc">The premium platform connecting vehicle owners with professional, vetted chauffeurs across the UK.</p>
       </div>
       <div class="footer-col">
-        <h5>Platform</h5>
-        <a href="#chauffeurs">For Chauffeurs</a>
-        <a href="#owners">Vehicle Owners</a>
-        <a href="/download.html">Download App</a>
+        <h5 data-i18n="index.footer_col_platform">Platform</h5>
+        <a href="#chauffeurs" data-i18n="index.footer_link_for_chauffeurs">For Chauffeurs</a>
+        <a href="#owners" data-i18n="index.footer_link_vehicle_owners">Vehicle Owners</a>
+        <a href="/download.html" data-i18n="common.nav_download">Download App</a>
       </div>
       <div class="footer-col">
-        <h5>Company</h5>
-        <a href="/about.html">About Us</a>
-        <a href="/faq.html">FAQs</a>
-        <a href="/register-chauffeur.html">Register as Chauffeur</a>
-        <a href="/register-owner.html">Register as Owner</a>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
+        <h5 data-i18n="index.footer_col_company">Company</h5>
+        <a href="/about.html" data-i18n="common.nav_about">About Us</a>
+        <a href="/faq.html" data-i18n="common.nav_faqs">FAQs</a>
+        <a href="/register-chauffeur.html" data-i18n="index.footer_link_register_chauffeur">Register as Chauffeur</a>
+        <a href="/register-owner.html" data-i18n="index.footer_link_register_owner">Register as Owner</a>
+        <a href="/privacy.html" data-i18n="common.nav_privacy">Privacy Policy</a>
+        <a href="/terms.html" data-i18n="index.footer_link_terms_of_service">Terms of Service</a>
       </div>
       <div class="footer-col">
-        <h5>Contact</h5>
+        <h5 data-i18n="index.footer_col_contact">Contact</h5>
         <a href="mailto:support@privatechauffeurconnect.com">support@privatechauffeurconnect.com</a>
-        <a href="#">Support 24/7</a>
+        <a href="#" data-i18n="index.footer_link_support">Support 24/7</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Private Chauffeur Connect Ltd. All rights reserved. Company No. 17332607 (England &amp; Wales).</p>
-      <p>Made with ♥ in the United Kingdom</p>
+      <p data-i18n="about.footer_copyright_html">© 2026 Private Chauffeur Connect Ltd. All rights reserved. Company No. 17332607 (England & Wales).</p>
+      <p data-i18n="index.footer_made_with_love">Made with ♥ in the United Kingdom</p>
     </div>
   </div>
 </footer>
 
+<script src="/i18n.js"></script>
 <script>
+  pccRenderSwitcher('#pcc-lang-mount');
+  pccRenderSwitcher('#pcc-lang-mount-mobile', 'flat');
+
   // Reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
