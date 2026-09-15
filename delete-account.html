@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Account — Private Chauffeur Connect</title>
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <meta name="description" content="Delete your Private Chauffeur Connect account and all associated personal data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:   #c9a84c;
+      --gold2:  #e2c06a;
+      --dark:   #0a0a12;
+      --dark2:  #0f0f1e;
+      --dark3:  #141428;
+      --border: rgba(201,168,76,.18);
+      --text:   #e8e8f0;
+      --muted:  #8080a8;
+      --red:    #e94560;
+    }
+    html { scroll-behavior: smooth; overflow-x: clip; }
+    body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,18,.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 90px;
+    }
+    .nav-logo img { height: 75px; width: auto; object-fit: contain; mix-blend-mode: screen; filter: brightness(1.25); }
+    .nav-back { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: .5px; transition: color .2s; }
+    .nav-back:hover { color: var(--gold); }
+    @media (max-width: 600px) { nav { padding: 0 20px; height: 70px; } .nav-logo img { height: 55px; } }
+
+    /* MAIN */
+    main {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 140px 20px 60px;
+    }
+    .card {
+      background: var(--dark2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 48px 40px;
+      width: 100%; max-width: 460px;
+    }
+    @media (max-width: 500px) { .card { padding: 32px 24px; } }
+
+    .card-icon { text-align: center; font-size: 40px; margin-bottom: 16px; }
+    .card-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--text); text-align: center; margin-bottom: 8px; }
+    .card-sub { font-size: 14px; color: var(--muted); text-align: center; line-height: 1.7; margin-bottom: 32px; }
+
+    label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    input {
+      width: 100%; background: var(--dark3); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px; padding: 14px 16px; font-size: 15px; color: var(--text);
+      font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s;
+      margin-bottom: 20px;
+    }
+    input:focus { border-color: var(--gold); }
+    input::placeholder { color: #444; }
+
+    .btn {
+      width: 100%; padding: 15px; border-radius: 12px; border: none;
+      font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: opacity .2s, transform .1s; letter-spacing: .5px;
+    }
+    .btn:active { transform: scale(.98); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .btn-red  { background: var(--red); color: #fff; }
+    .btn-gold { background: var(--gold); color: #000; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid rgba(255,255,255,.1); margin-top: 12px; }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,.2); }
+
+    .alert {
+      border-radius: 12px; padding: 16px 18px; margin-bottom: 20px;
+      font-size: 13px; line-height: 1.7;
+    }
+    .alert-red  { background: rgba(233,69,96,.1); border: 1px solid rgba(233,69,96,.3); color: #f87; }
+    .alert-gold { background: rgba(201,168,76,.08); border: 1px solid rgba(201,168,76,.25); color: var(--gold2); }
+    .alert-green { background: rgba(76,175,80,.08); border: 1px solid rgba(76,175,80,.25); color: #81c784; }
+
+    .divider { border: none; border-top: 1px solid rgba(255,255,255,.06); margin: 24px 0; }
+
+    .warn-title { font-size: 13px; font-weight: 700; color: var(--red); letter-spacing: .5px; margin-bottom: 6px; }
+    .warn-list { padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 2; }
+    .warn-list li { margin-bottom: 2px; }
+
+    /* steps */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+      border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer {
+      text-align: center; padding: 24px; font-size: 12px; color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/"><img src="/logo.png" alt="Private Chauffeur Connect" /></a>
+  <a class="nav-back" href="/">← Back to home</a>
+</nav>
+
+<main>
+  <div class="card">
+
+    <!-- STEP 1: Login -->
+    <div id="step-login" class="step active">
+      <div class="card-icon">🗑️</div>
+      <h1 class="card-title">Delete Your Account</h1>
+      <p class="card-sub">Sign in to verify your identity, then we'll walk you through the deletion process.</p>
+
+      <div id="login-error" class="alert alert-red" style="display:none;"></div>
+
+      <label for="email">Email address</label>
+      <input type="email" id="email" placeholder="your@email.com" autocomplete="email" />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+
+      <button class="btn btn-gold" id="login-btn" onclick="doLogin()">Sign In</button>
+    </div>
+
+    <!-- STEP 2: Confirm deletion -->
+    <div id="step-confirm" class="step">
+      <div class="card-icon">⚠️</div>
+      <h1 class="card-title">Confirm Deletion</h1>
+      <p class="card-sub">You are signed in as <strong id="confirm-email" style="color:var(--text);"></strong></p>
+
+      <div id="block-error" class="alert alert-gold" style="display:none;"></div>
+      <div id="confirm-error" class="alert alert-red" style="display:none;"></div>
+
+      <hr class="divider" />
+      <p class="warn-title">What will be permanently deleted:</p>
+      <ul class="warn-list">
+        <li>Your name, email address and phone number</li>
+        <li>Your profile photo and account credentials</li>
+        <li>Your login access — you will be signed out everywhere</li>
+      </ul>
+      <p style="font-size:12px;color:var(--muted);margin-top:14px;line-height:1.7;">
+        Past booking records are retained in anonymised form for legal and accounting purposes. This cannot be undone.
+      </p>
+      <hr class="divider" />
+
+      <button class="btn btn-red" id="delete-btn" onclick="doDelete()">Yes, Permanently Delete My Account</button>
+      <button class="btn btn-ghost" onclick="goBack()">Cancel — Go Back</button>
+    </div>
+
+    <!-- STEP 3: Success -->
+    <div id="step-done" class="step">
+      <div class="card-icon">✅</div>
+      <h1 class="card-title">Account Deleted</h1>
+      <p class="card-sub">Your account and personal data have been permanently deleted. We're sorry to see you go.</p>
+      <hr class="divider" />
+      <a href="/" class="btn btn-gold" style="display:block;text-align:center;padding:15px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;">Return to Home</a>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>Private Chauffeur Connect &mdash; <a href="/privacy.html">Privacy Policy</a> &middot; <a href="/terms.html">Terms</a></p>
+</footer>
+
+<script>
+  const API = 'https://private-chauffeur-backend-production.up.railway.app';
+  let jwt = null;
+  let userRole = null;
+
+  function show(stepId) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById(stepId).classList.add('active');
+  }
+
+  function setLoading(btnId, loading, text) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    btn.innerHTML = loading ? '<span class="spinner"></span>Please wait…' : text;
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function hideError(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  // Parse JWT payload without a library
+  function parseJwt(token) {
+    try {
+      return JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    } catch { return {}; }
+  }
+
+  async function doLogin() {
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    hideError('login-error');
+
+    if (!email || !password) {
+      showError('login-error', 'Please enter your email and password.');
+      return;
+    }
+
+    setLoading('login-btn', true, 'Sign In');
+    try {
+      const res  = await fetch(`${API}/api/auth/login`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Login failed. Please check your email and password.');
+
+      jwt      = data.token;
+      const payload = parseJwt(jwt);
+      userRole = payload.role || data.role || 'owner';
+
+      document.getElementById('confirm-email').textContent = email;
+      hideError('block-error');
+      hideError('confirm-error');
+      show('step-confirm');
+    } catch (e) {
+      showError('login-error', e.message);
+    } finally {
+      setLoading('login-btn', false, 'Sign In');
+    }
+  }
+
+  function goBack() {
+    show('step-login');
+    document.getElementById('password').value = '';
+    jwt = null;
+  }
+
+  async function doDelete() {
+    if (!jwt) { show('step-login'); return; }
+    hideError('block-error');
+    hideError('confirm-error');
+
+    const endpoint = userRole === 'chauffeur' ? '/api/chauffeurs/me' : '/api/users/me';
+
+    setLoading('delete-btn', true, 'Yes, Permanently Delete My Account');
+    try {
+      const res  = await fetch(`${API}${endpoint}`, {
+        method:  'DELETE',
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Block check errors (400) are shown as a warning, not a hard error
+        if (res.status === 400 && data.message) {
+          showError('block-error', data.message);
+        } else {
+          throw new Error(data.error || 'Something went wrong. Please try again.');
+        }
+        return;
+      }
+
+      show('step-done');
+    } catch (e) {
+      showError('confirm-error', e.message);
+    } finally {
+      setLoading('delete-btn', false, 'Yes, Permanently Delete My Account');
+    }
+  }
+
+  // Allow Enter key on login form
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('step-login').classList.contains('active')) {
+      doLogin();
+    }
+  });
+</script>
+
+</body>
+</html>
