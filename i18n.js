@@ -36,6 +36,7 @@
         nav_terms: 'Terms & Conditions',
         nav_download: 'Download App',
         nav_contact: 'Contact',
+        nav_delete_account: 'Delete Account',
         reg: {
           country_label: 'Country of Location',
           country_placeholder: 'Select your country…',
@@ -565,6 +566,7 @@
         nav_terms: '条款与条件',
         nav_download: '下载应用',
         nav_contact: '联系我们',
+        nav_delete_account: '删除账户',
         reg: {
           country_label: '所在国家',
           country_placeholder: '选择您的国家…',
@@ -1094,6 +1096,7 @@
         nav_terms: 'Regulamin',
         nav_download: 'Pobierz aplikację',
         nav_contact: 'Kontakt',
+        nav_delete_account: 'Usuń konto',
         reg: {
           country_label: 'Kraj zamieszkania',
           country_placeholder: 'Wybierz swój kraj…',
@@ -1623,6 +1626,7 @@
         nav_terms: 'الشروط والأحكام',
         nav_download: 'تحميل التطبيق',
         nav_contact: 'اتصل بنا',
+        nav_delete_account: 'حذف الحساب',
         reg: {
           country_label: 'بلد الإقامة',
           country_placeholder: 'اختر بلدك…',
@@ -2152,6 +2156,7 @@
         nav_terms: 'Términos y condiciones',
         nav_download: 'Descargar la aplicación',
         nav_contact: 'Contacto',
+        nav_delete_account: 'Eliminar cuenta',
         reg: {
           country_label: 'País de residencia',
           country_placeholder: 'Selecciona tu país…',
@@ -2681,6 +2686,7 @@
         nav_terms: 'Conditions générales',
         nav_download: "Télécharger l'application",
         nav_contact: 'Contact',
+        nav_delete_account: 'Supprimer le compte',
         reg: {
           country_label: 'Pays de résidence',
           country_placeholder: 'Sélectionnez votre pays…',
