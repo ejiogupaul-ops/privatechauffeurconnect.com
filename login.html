@@ -251,7 +251,7 @@
       document.getElementById('login-success').style.display = 'block';
       setTimeout(() => {
         if (role === 'owner') window.location.href = '/owner.html';
-        else window.location.href = '/';
+        else window.location.href = '/chauffeur-app.html';
       }, 1400);
     } catch { showErr(t('login.err_network')); }
     finally { btn.disabled = false; btn.textContent = t('login.btn_signin'); }

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chauffeur Portal — Private Chauffeur Connect</title>
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a84c; --gold2: #e2c06a;
+      --dark: #0a0a12; --dark2: #0f0f1e; --dark3: #141428;
+      --border: rgba(201,168,76,.18); --text: #e8e8f0; --muted: #8080a8;
+      --green: #4caf50; --red: #e94560; --amber: #f59e0b;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,18,.97); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 70px;
+    }
+    .nav-logo img { height: 54px; width: auto; mix-blend-mode: screen; filter: brightness(1.25); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-name { font-size: 13px; color: var(--muted); }
+    .btn-signout {
+      background: none; border: 1px solid rgba(255,255,255,.1); color: var(--muted);
+      border-radius: 6px; padding: 6px 14px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color .2s, color .2s;
+    }
+    .btn-signout:hover { border-color: var(--red); color: var(--red); }
+    @media (max-width: 600px) { nav { padding: 0 20px; } }
+
+    /* MAIN */
+    main { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 48px 20px 80px; }
+    .wrap { width: 100%; max-width: 560px; }
+
+    /* STATUS BANNER */
+    .status-banner {
+      border-radius: 16px; padding: 24px 28px; margin-bottom: 24px;
+      display: flex; align-items: flex-start; gap: 18px;
+    }
+    .status-banner.pending  { background: rgba(201,168,76,.07); border: 1px solid rgba(201,168,76,.25); }
+    .status-banner.approved { background: rgba(76,175,80,.07);  border: 1px solid rgba(76,175,80,.3);  }
+    .status-banner.rejected { background: rgba(233,69,96,.07);  border: 1px solid rgba(233,69,96,.25); }
+    .status-banner.revoked  { background: rgba(233,69,96,.07);  border: 1px solid rgba(233,69,96,.25); }
+    .status-icon { font-size: 32px; flex-shrink: 0; margin-top: 2px; }
+    .status-label {
+      display: inline-flex; align-items: center; gap: 7px;
+      border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .status-label.pending  { background: rgba(201,168,76,.15); color: var(--gold);  border: 1px solid rgba(201,168,76,.3); }
+    .status-label.approved { background: rgba(76,175,80,.15);  color: var(--green); border: 1px solid rgba(76,175,80,.3);  }
+    .status-label.rejected { background: rgba(233,69,96,.1);   color: var(--red);   border: 1px solid rgba(233,69,96,.25); }
+    .status-label.revoked  { background: rgba(233,69,96,.1);   color: var(--red);   border: 1px solid rgba(233,69,96,.25); }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .status-dot.pending  { background: var(--gold);  animation: pulse 2s infinite; }
+    .status-dot.approved { background: var(--green); }
+    .status-dot.rejected { background: var(--red); }
+    .status-dot.revoked  { background: var(--red); }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+    .status-title { font-family: 'Playfair Display', serif; font-size: 20px; color: #fff; margin-bottom: 6px; }
+    .status-desc  { font-size: 13px; color: var(--muted); line-height: 1.75; }
+
+    /* REASON BOX */
+    .reason-box {
+      background: rgba(233,69,96,.06); border: 1px solid rgba(233,69,96,.2);
+      border-radius: 12px; padding: 16px 18px; margin-bottom: 20px;
+    }
+    .reason-box .rb-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+    .reason-box .rb-text  { font-size: 13px; color: #c0a0a0; line-height: 1.7; }
+
+    /* APP CARD */
+    .app-card {
+      background: var(--dark2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px 28px; margin-bottom: 20px;
+    }
+    .app-card-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .app-card h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: #fff; margin-bottom: 10px; line-height: 1.3; }
+    .app-card p  { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+
+    .download-btn {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--gold); color: #000; border-radius: 12px;
+      padding: 14px 20px; font-weight: 700; font-size: 14px; width: 100%;
+      transition: background .2s; margin-bottom: 10px;
+    }
+    .download-btn:hover { background: var(--gold2); }
+    .download-btn .db-icon { font-size: 24px; flex-shrink: 0; }
+    .download-btn .db-text .db-sub { font-size: 11px; font-weight: 400; opacity: .7; display: block; margin-top: 1px; }
+
+    .open-btn {
+      display: flex; align-items: center; gap: 14px;
+      background: transparent; color: var(--gold); border: 1px solid rgba(201,168,76,.3);
+      border-radius: 12px; padding: 14px 20px; font-weight: 700; font-size: 14px; width: 100%;
+      transition: background .2s, border-color .2s; margin-bottom: 10px;
+    }
+    .open-btn:hover { background: rgba(201,168,76,.07); border-color: rgba(201,168,76,.5); }
+    .open-btn .db-icon { font-size: 24px; flex-shrink: 0; }
+    .open-btn .db-text .db-sub { font-size: 11px; font-weight: 400; opacity: .6; display: block; margin-top: 1px; }
+
+    /* INFO ROWS */
+    .info-card {
+      background: var(--dark2); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; margin-bottom: 20px;
+    }
+    .info-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .ir-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+    .ir-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+    .ir-value { font-size: 14px; color: var(--text); font-weight: 500; }
+
+    /* SUPPORT */
+    .support-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.7; }
+    .support-note a { color: var(--gold); }
+
+    /* LOADING / ERROR */
+    .loader { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; gap: 18px; }
+    .spinner { width: 40px; height: 40px; border: 3px solid rgba(201,168,76,.2); border-top-color: var(--gold); border-radius: 50%; animation: spin .9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader p { font-size: 14px; color: var(--muted); }
+
+    .error-card { background: rgba(233,69,96,.08); border: 1px solid rgba(233,69,96,.25); border-radius: 16px; padding: 28px; text-align: center; }
+    .error-card h3 { color: var(--red); font-size: 18px; margin-bottom: 8px; }
+    .error-card p  { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+    footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+    footer a { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/"><img src="/logo.png" alt="Private Chauffeur Connect" /></a>
+  <div class="nav-right">
+    <span class="nav-name" id="nav-name"></span>
+    <button class="btn-signout" onclick="signOut()">Sign Out</button>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+
+    <!-- Loading state -->
+    <div class="loader" id="view-loading">
+      <div class="spinner"></div>
+      <p>Loading your account…</p>
+    </div>
+
+    <!-- Error state -->
+    <div id="view-error" style="display:none;">
+      <div class="error-card">
+        <h3>Unable to load your profile</h3>
+        <p id="error-msg">Please try signing out and signing in again. If the problem persists, contact support.</p>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div id="view-main" style="display:none;">
+
+      <!-- Status banner -->
+      <div class="status-banner" id="status-banner">
+        <div class="status-icon" id="status-icon"></div>
+        <div>
+          <div class="status-label" id="status-label">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="status-label-text"></span>
+          </div>
+          <div class="status-title" id="status-title"></div>
+          <div class="status-desc"  id="status-desc"></div>
+        </div>
+      </div>
+
+      <!-- Rejection reason (shown only when rejected/revoked) -->
+      <div class="reason-box" id="reason-box" style="display:none;">
+        <div class="rb-label">Reason</div>
+        <div class="rb-text" id="reason-text"></div>
+      </div>
+
+      <!-- App download card -->
+      <div class="app-card">
+        <div class="app-card-eyebrow">Private Chauffeur Connect App</div>
+        <h2>Manage Your Bookings on the Go</h2>
+        <p>All chauffeur features — accepting bookings, navigation, earnings, and availability — are exclusively available through the Private Chauffeur Connect mobile app.</p>
+
+        <a href="https://github.com/ejiogupaul-ops/private-chauffeur-releases/releases/latest/download/app-release.apk"
+           class="download-btn" id="dl-apk">
+          <span class="db-icon">📱</span>
+          <span class="db-text">
+            Download for Android
+            <span class="db-sub">APK — tap to install</span>
+          </span>
+        </a>
+
+        <a href="privatechauffeur://" class="open-btn" id="btn-open-app">
+          <span class="db-icon">🚀</span>
+          <span class="db-text">
+            Open the App
+            <span class="db-sub">If already installed on this device</span>
+          </span>
+        </a>
+      </div>
+
+      <!-- Account details -->
+      <div class="info-card">
+        <div class="info-row">
+          <div class="ir-icon">👤</div>
+          <div>
+            <div class="ir-label">Name</div>
+            <div class="ir-value" id="info-name">—</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="ir-icon">✉️</div>
+          <div>
+            <div class="ir-label">Email</div>
+            <div class="ir-value" id="info-email">—</div>
+          </div>
+        </div>
+        <div class="info-row" id="info-since-row" style="display:none;">
+          <div class="ir-icon">📅</div>
+          <div>
+            <div class="ir-label">Member since</div>
+            <div class="ir-value" id="info-since">—</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="support-note">
+        Need help? Contact us at <a href="mailto:support@privatechauffeurconnect.com">support@privatechauffeurconnect.com</a>
+      </p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>Private Chauffeur Connect &mdash; <a href="/privacy.html">Privacy Policy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/delete-account.html" style="color:var(--red);opacity:.75;">Delete Your Account</a></p>
+</footer>
+
+<script>
+  const API = 'https://private-chauffeur-backend-production.up.railway.app';
+
+  function parseJwt(token) {
+    try { return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))); }
+    catch { return {}; }
+  }
+
+  function signOut() {
+    localStorage.removeItem('pcc_owner_token');
+    localStorage.removeItem('pcc_owner_name');
+    localStorage.removeItem('pcc_owner_phone');
+    window.location.href = '/login.html';
+  }
+
+  function show(id) {
+    ['view-loading','view-error','view-main'].forEach(v => {
+      document.getElementById(v).style.display = v === id ? '' : 'none';
+    });
+  }
+
+  const STATUS_CONFIG = {
+    pending: {
+      icon: '⏳',
+      label: 'Under Review',
+      title: 'Your application is being reviewed',
+      desc: 'Our team is checking your submitted documents and details. This usually takes 1–3 working days. You will receive an email and an in-app notification once a decision has been made. Booking access will be available through the mobile app after approval.',
+    },
+    approved: {
+      icon: '✅',
+      label: 'Approved',
+      title: 'Your account is active',
+      desc: 'Your application has been approved. You can go online, receive booking requests, and manage your earnings — all from the Private Chauffeur Connect mobile app.',
+    },
+    rejected: {
+      icon: '✗',
+      label: 'Not Approved',
+      title: 'Your application was not approved',
+      desc: 'Unfortunately your application did not meet our current requirements. Please review the reason below. If resubmission is permitted, you may re-apply through the app. Contact support if you have questions.',
+    },
+    revoked: {
+      icon: '⛔',
+      label: 'Access Revoked',
+      title: 'Your account access has been suspended',
+      desc: 'Your chauffeur access has been revoked. Please review the reason below and contact support if you believe this is an error.',
+    },
+  };
+
+  async function loadProfile() {
+    const token = localStorage.getItem('pcc_owner_token');
+    if (!token) { window.location.href = '/login.html'; return; }
+
+    const payload = parseJwt(token);
+    if (payload.role !== 'chauffeur') {
+      window.location.href = '/owner.html';
+      return;
+    }
+
+    try {
+      const res  = await fetch(`${API}/api/chauffeurs/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.status === 401 || res.status === 403) { signOut(); return; }
+
+      if (!res.ok) {
+        show('view-error');
+        return;
+      }
+
+      const profile = await res.json();
+      const status  = profile.status || 'pending';
+      const cfg     = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
+      const name    = profile.users?.full_name || localStorage.getItem('pcc_owner_name') || 'Chauffeur';
+      const email   = profile.users?.email || '';
+
+      // Nav name
+      document.getElementById('nav-name').textContent = name;
+
+      // Status banner
+      const banner = document.getElementById('status-banner');
+      banner.className = `status-banner ${status}`;
+      document.getElementById('status-icon').textContent = cfg.icon;
+
+      const label = document.getElementById('status-label');
+      label.className = `status-label ${status}`;
+      document.getElementById('status-dot').className = `status-dot ${status}`;
+      document.getElementById('status-label-text').textContent = cfg.label;
+
+      document.getElementById('status-title').textContent = cfg.title;
+      document.getElementById('status-desc').textContent  = cfg.desc;
+
+      // Rejection reason
+      if ((status === 'rejected' || status === 'revoked') && profile.rejection_reason) {
+        const notes = profile.rejection_notes ? ` — ${profile.rejection_notes}` : '';
+        document.getElementById('reason-text').textContent = profile.rejection_reason + notes;
+        document.getElementById('reason-box').style.display = '';
+      }
+
+      // Account details
+      document.getElementById('info-name').textContent  = name;
+      document.getElementById('info-email').textContent = email;
+      if (profile.created_at) {
+        document.getElementById('info-since').textContent = new Date(profile.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        document.getElementById('info-since-row').style.display = '';
+      }
+
+      show('view-main');
+    } catch {
+      show('view-error');
+    }
+  }
+
+  loadProfile();
+</script>
+
+</body>
+</html>
